@@ -133,12 +133,7 @@
 - [ ] `sensors/system/dns_watcher.py` - DNS queries
 - [ ] `sensors/base. py` - base sensor class
 - [ ] `sensors/manager.py` - sensor orchestration
-- [ ] `sensors/system/process_monitor.py - monitorowanie procesów (nieznane/malware)
-- [ ] `sensors/system/rootkit_detector.py - wykrywanie rootkitów
-- [ ] `sensors/system/vulnerability_scanner.py - skanowanie luk (integracja z narzędziami)
-- [ ] `sensors/network/protocol_analyzer.py - głębsza analiza protokołów (Suricata/Snort-like)
-- [ ] `sensors/system/log_analyzer.py - centralna analiza logów systemowych
-- [ ] `sensors/system/behavior_anomaly.py - wykrywanie anomalii behawioralnych (UEBA basics)
+
 ---
 
 ## 🌊 FALA 2: KAMERY NA PODCZERWIEŃ
@@ -214,7 +209,7 @@ CONFIDENCE LEVEL          AKCJA
 ═══════════════════════════════════════════════════
 ≥ 90%                     🤖 AUTO-FIRE (nanobot działa sam)
 70-89%                    💡 PROPOSE (propozycja dla myśliwego)  
-< 55%                     👁️ OBSERVE (tylko monitoruj)
+< 70%                     👁️ OBSERVE (tylko monitoruj)
 ```
 
 ### 📋 Checklist Implementacji
@@ -670,9 +665,9 @@ Czujniki Kamery  Nanoboty  Broń    Baza DB  Tablet    AI
    - Testy przed merge
 
 2. **Tryb hybrydowy wszędzie**
-   - Auto-akcje tylko przy >90% confidence
-   - Propozycje przy 70-89%
-   - Obserwacja przy <70%
+   - Auto-akcje tylko przy >85% confidence
+   - Propozycje przy 70-85%
+   - Obserwacja przy <55%
 
 3. **Plamy są permanentne**
    - Raz oznaczony cel zostaje w bazie
