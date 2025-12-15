@@ -229,7 +229,13 @@ class SQLiteStore(BaseStore):
     def update_stain(self, tag_id: str, updates: Dict[str, Any]) -> bool:
         """Update an existing stain"""
         try:
-            # Build update query dynamically
+            # Whitelist of allowed column names to prevent SQL injection
+            allowed_columns = {
+                'marker_type', 'color', 'timestamp_first_seen', 'timestamp_last_seen',
+                'hit_count', 'weapon_used', 'threat_score', 'confidence',
+                'hunter_notes', 'detected_by', 'status'
+            }
+            
             set_clauses = []
             values = []
             
@@ -247,13 +253,17 @@ class SQLiteStore(BaseStore):
                     set_clauses.append("linked_tags = ?")
                     values.append(json.dumps(value))
                 elif key == 'stain':
-                    # Handle nested stain data
+                    # Handle nested stain data with column whitelist
                     for sub_key, sub_value in value.items():
-                        set_clauses.append(f"{sub_key} = ?")
-                        values.append(sub_value)
-                else:
+                        if sub_key in allowed_columns:
+                            set_clauses.append(f"{sub_key} = ?")
+                            values.append(sub_value)
+                elif key in allowed_columns:
                     set_clauses.append(f"{key} = ?")
                     values.append(value)
+            
+            if not set_clauses:
+                return False
             
             values.append(tag_id)
             query = f"UPDATE stains SET {', '.join(set_clauses)}, updated_at = CURRENT_TIMESTAMP WHERE tag_id = ?"

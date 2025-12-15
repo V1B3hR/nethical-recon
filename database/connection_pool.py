@@ -99,7 +99,12 @@ class ConnectionPool:
                 with self._lock:
                     self._current_size -= 1
         else:
-            # Connection is dead, create a new one
+            # Connection is dead, close it and decrement counter
+            if connection:
+                try:
+                    connection.disconnect()
+                except Exception:
+                    pass
             with self._lock:
                 self._current_size -= 1
     
