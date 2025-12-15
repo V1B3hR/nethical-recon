@@ -1,0 +1,8 @@
+# Nethical Recon - Sensors Module Requirements
+# Required for Fala 1: Czujniki Ruchu i Wibracji
+
+# System resource monitoring
+psutil>=5.8.0
+
+# Optional: For enhanced features (install as needed)
+# Note: Some features require system tools like tcpdump, zeek

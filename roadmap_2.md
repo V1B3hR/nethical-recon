@@ -259,17 +259,17 @@ POZIOM ZAGROŻENIA          DŹWIĘK PTAKA              AKCJA
 ### 📋 Checklist Implementacji
 
 **Czujniki Sieciowe:**
-- [ ] `sensors/network/traffic_monitor.py` - tcpdump wrapper
-- [ ] `sensors/network/anomaly_detector.py` - zeek integration
-- [ ] `sensors/network/port_scan_detector.py` - scan detection
-- [ ] `sensors/network/protocol_analyzer.py` - deep protocol analysis (Suricata-like)
+- [x] `sensors/network/traffic_monitor.py` - tcpdump wrapper ✅
+- [x] `sensors/network/anomaly_detector.py` - zeek integration ✅
+- [x] `sensors/network/port_scan_detector.py` - scan detection ✅
+- [x] `sensors/network/protocol_analyzer.py` - deep protocol analysis (Suricata-like) ✅
 
 **Czujniki Systemowe (podstawowe):**
-- [ ] `sensors/system/heartbeat_monitor.py` - service availability
-- [ ] `sensors/system/resource_monitor.py` - CPU/RAM spikes
-- [ ] `sensors/system/file_watcher.py` - file integrity
-- [ ] `sensors/system/auth_monitor.py` - auth failures
-- [ ] `sensors/system/dns_watcher.py` - DNS queries
+- [x] `sensors/system/heartbeat_monitor.py` - service availability ✅
+- [x] `sensors/system/resource_monitor.py` - CPU/RAM spikes ✅
+- [x] `sensors/system/file_watcher.py` - file integrity ✅
+- [x] `sensors/system/auth_monitor.py` - auth failures ✅
+- [x] `sensors/system/dns_watcher.py` - DNS queries ✅
 
 **Czujniki Systemowe (zaawansowane):**
 - [ ] `sensors/system/process_monitor.py` - unknown/malware process detection
@@ -279,8 +279,8 @@ POZIOM ZAGROŻENIA          DŹWIĘK PTAKA              AKCJA
 - [ ] `sensors/system/behavior_anomaly.py` - UEBA behavioral anomaly detection
 
 **Infrastruktura:**
-- [ ] `sensors/base. py` - base sensor class
-- [ ] `sensors/manager.py` - sensor orchestration
+- [x] `sensors/base.py` - base sensor class ✅
+- [x] `sensors/manager.py` - sensor orchestration ✅
 
 ---
 
