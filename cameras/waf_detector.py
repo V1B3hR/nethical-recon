@@ -22,6 +22,7 @@ class WAFDetector(BaseCamera):
         timeout: HTTP request timeout (default: 10)
         user_agent: Custom user agent (default: Nethical/2.0)
         test_payloads: Use test payloads for detection (default: True)
+        verify_ssl: Verify SSL certificates (default: False for recon)
     """
     
     def __init__(self, config: Dict[str, Any] = None):
@@ -29,6 +30,9 @@ class WAFDetector(BaseCamera):
         self.timeout = self.config.get('timeout', 10)
         self.user_agent = self.config.get('user_agent', 'Nethical/2.0')
         self.test_payloads = self.config.get('test_payloads', True)
+        # SSL verification disabled by default for reconnaissance
+        # Can be enabled via config if needed
+        self.verify_ssl = self.config.get('verify_ssl', False)
         
         # WAF signatures
         self.waf_signatures = self._load_waf_signatures()
@@ -169,17 +173,21 @@ class WAFDetector(BaseCamera):
             List of detected WAFs with confidence scores
         """
         import requests
+        import warnings
         
         detections = []
         
-        # Disable SSL warnings for testing
-        import urllib3
-        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+        # Suppress SSL warnings only if SSL verification is disabled
+        # This is intentional for reconnaissance but configurable
+        if not self.verify_ssl:
+            import urllib3
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", urllib3.exceptions.InsecureRequestWarning)
         
         try:
             # Normal request
             headers = {'User-Agent': self.user_agent}
-            response = requests.get(url, headers=headers, timeout=self.timeout, verify=False)
+            response = requests.get(url, headers=headers, timeout=self.timeout, verify=self.verify_ssl)
             
             # Check each WAF signature
             for waf_name, signatures in self.waf_signatures.items():
@@ -269,14 +277,14 @@ class WAFDetector(BaseCamera):
         ]
         
         try:
-            normal_response = requests.get(url, timeout=self.timeout, verify=False)
+            normal_response = requests.get(url, timeout=self.timeout, verify=self.verify_ssl)
             normal_status = normal_response.status_code
             
             for payload in payloads:
                 try:
                     # Send malicious request
                     test_url = f"{url}?test={payload}"
-                    response = requests.get(test_url, timeout=self.timeout, verify=False)
+                    response = requests.get(test_url, timeout=self.timeout, verify=self.verify_ssl)
                     
                     # Check if response is different
                     if response.status_code != normal_status:

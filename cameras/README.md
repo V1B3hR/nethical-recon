@@ -294,9 +294,12 @@ config = {
 config = {
     'timeout': 10,
     'user_agent': 'Nethical/2.0',
-    'test_payloads': True
+    'test_payloads': True,
+    'verify_ssl': False  # SSL verification (False by default for recon)
 }
 ```
+
+**Note on SSL Verification**: By default, `verify_ssl` is set to `False` for reconnaissance purposes to allow scanning of targets with self-signed or invalid certificates. This is intentional for security testing but can be enabled if needed: `config={'verify_ssl': True}`.
 
 ## 📊 Discovery Types
 
