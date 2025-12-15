@@ -1,8 +1,28 @@
-# Nethical Recon - Sensors Module Requirements
+# Nethical Recon - Requirements
 # Required for Fala 1: Czujniki Ruchu i Wibracji
+# Required for Fala 2: Kamery na Podczerwień
 
-# System resource monitoring
+# System resource monitoring (Fala 1)
 psutil>=5.8.0
 
+# Camera dependencies (Fala 2)
+# Shodan Eye - Night Vision
+shodan>=1.28.0
+
+# Censys Eye - Alternative Night Vision
+censys>=2.1.9
+
+# SSL Scanner - X-ray Vision
+# (uses standard library ssl module)
+
+# DNS Enumerator - Ghost Vision
+dnspython>=2.3.0
+
+# WAF Detector - Mask Detection
+requests>=2.28.0
+urllib3>=1.26.0
+
 # Optional: For enhanced features (install as needed)
-# Note: Some features require system tools like tcpdump, zeek
+# Note: Some features require system tools like:
+# - tcpdump, zeek (Fala 1)
+# - theHarvester (Fala 2 - Harvester Eye)
