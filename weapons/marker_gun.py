@@ -39,7 +39,12 @@ class MarkerGun:
         self.created_at = datetime.datetime.now()
         
     def _generate_serial(self) -> str:
-        """Generate unique serial number for weapon"""
+        """
+        Generate unique serial number for weapon
+        
+        Note: Uses MD5 for simplicity. For production, consider using
+        uuid.uuid4() or a more secure hash function like SHA256.
+        """
         timestamp = str(datetime.datetime.now().timestamp())
         return hashlib.md5(timestamp.encode()).hexdigest()[:8].upper()
     

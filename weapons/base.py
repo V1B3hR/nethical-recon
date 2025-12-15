@@ -83,7 +83,12 @@ class BaseTracer(ABC):
         self.use_count += 1
     
     def generate_tag_id(self, identifier: str) -> str:
-        """Generate unique tag ID"""
+        """
+        Generate unique tag ID
+        
+        Note: Tag IDs use MD5 hashes in tracers for identifier generation.
+        For production, consider using SHA256 or uuid for better collision resistance.
+        """
         date_str = datetime.datetime.now().strftime('%Y-%m-%d')
         return f"{self.marker_prefix}-{identifier}-{date_str}"
 

@@ -30,7 +30,12 @@ class Target:
         self.validated = False
     
     def _generate_id(self) -> str:
-        """Generate unique target ID"""
+        """
+        Generate unique target ID
+        
+        Note: Uses MD5 for simplicity. For production, consider using
+        uuid.uuid4() for better uniqueness guarantees.
+        """
         import hashlib
         timestamp = str(datetime.datetime.now().timestamp())
         return hashlib.md5(timestamp.encode()).hexdigest()[:12]
