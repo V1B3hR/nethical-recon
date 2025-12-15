@@ -568,67 +568,119 @@ CONFIDENCE LEVEL          AKCJA
 
 ---
 
+# Nethical-Recon Roadmap 2
+
 ## 🌊 FALA 6: STAIN DATABASE
 
-### 🗂️ System Przechowywania Plam
+### Overview
+Multi-backend database support for flexible deployment scenarios - from local development to enterprise-scale cloud deployments.
 
-> *"Raz oznaczony - na zawsze w rejestrze"*
+### Database Tiers
 
-#### Warstwa Lokalna (Single Hunter)
+#### 🏠 Local Development
+| Database | Use Case |
+|----------|----------|
+| **SQLite** | Single-user local development, testing, and small deployments |
 
-```
-┌─────────────────────────────────────────┐
-│  🗄️ SQLite (nethical_stains.db)        │
-│  ─────────────────────────────────────  │
-│  • Szybki dostęp lokalny                │
-│  • Zero konfiguracji                    │
-│  • Backup do JSON                       │
-└─────────────────────────────────────────┘
-```
+#### 🏢 Team/Enterprise
+| Database | Use Case |
+|----------|----------|
+| **PostgreSQL** | Primary relational database for team deployments with advanced features |
+| **MySQL** | Widely-adopted relational database, excellent for web-scale applications |
+| **MS SQL Server** | Enterprise Windows environments, .NET integration |
+| **Oracle** | Large enterprise deployments, mission-critical systems |
+| **IBM Db2** | Mainframe integration, legacy enterprise systems |
 
-#### Warstwa Zespołowa (Hunter Team)
+#### ☁️ Cloud/Analytics
+| Database | Use Case |
+|----------|----------|
+| **Snowflake** | Analytics warehouse for large-scale data analysis and reporting |
 
-```
-┌─────────────────────────────────────────┐
-│  🐘 PostgreSQL (team_stains)            │
-│  ─────────────────────────────────────  │
-│  • Współdzielona baza zespołu           │
-│  • Real-time sync                       │
-│  • Role-based access                    │
-└─────────────────────────────────────────┘
-```
+#### 📦 NoSQL/Cache
+| Database | Use Case |
+|----------|----------|
+| **MongoDB** | Flexible document storage for unstructured/semi-structured IOC data |
+| **Redis** | High-speed caching layer for frequently accessed data and session management |
 
-#### Warstwa Eksportu (Integration)
-
-```
-┌─────────────────────────────────────────┐
-│  📤 EXPORT FORMATS                      │
-│  ─────────────────────────────────────  │
-│  • STIX 2.1 (cyber threat intel)        │
-│  • MISP (threat sharing)                │
-│  • IOC (indicators of compromise)       │
-│  • JSON (universal)                     │
-│  • CSV (spreadsheets)                   │
-└─────────────────────────────────────────┘
-```
-
-### 📋 Checklist Implementacji
-
-- [ ] `database/models/stain.py` - stain data model
-- [ ] `database/models/target.py` - target data model
-- [ ] `database/models/evidence.py` - evidence data model
-- [ ] `database/models/forest_location.py` - forest location model (NEW)
-- [ ] `database/sqlite_store.py` - SQLite backend
-- [ ] `database/postgres_store.py` - PostgreSQL backend
-- [ ] `database/sync_manager.py` - team sync
-- [ ] `export/stix_exporter.py` - STIX 2.1 export
-- [ ] `export/misp_exporter.py` - MISP export
-- [ ] `export/ioc_exporter.py` - IOC export
-- [ ] `export/json_exporter.py` - JSON export
-- [ ] `export/csv_exporter.py` - CSV export
+#### 🔍 Search
+| Database | Use Case |
+|----------|----------|
+| **Elasticsearch** | Fast full-text IOC searches, log aggregation, and threat hunting |
 
 ---
 
+### Database Selection Matrix
+
+| Scenario | Recommended Database | Rationale |
+|----------|---------------------|-----------|
+| Local dev/testing | SQLite | Zero configuration, file-based |
+| Small team (< 10 users) | PostgreSQL | Open-source, feature-rich |
+| Web-scale application | MySQL | Proven scalability, wide hosting support |
+| Windows/.NET enterprise | MS SQL Server | Native integration, enterprise tooling |
+| Large enterprise/financial | Oracle | Maximum reliability, advanced security |
+| Mainframe integration | IBM Db2 | Legacy system compatibility |
+| Big data analytics | Snowflake | Scalable analytics, SQL interface |
+| Flexible IOC schemas | MongoDB | Schema-less, rapid iteration |
+| High-speed caching | Redis | Sub-millisecond latency |
+| Threat hunting/log search | Elasticsearch | Full-text search, aggregations |
+
+---
+
+### Implementation Checklist
+
+#### Core Database Stores
+- [ ] `database/sqlite_store.py` - SQLite implementation (existing)
+- [ ] `database/postgres_store.py` - PostgreSQL implementation (existing)
+- [ ] `database/mysql_store.py` - MySQL/MariaDB implementation
+- [ ] `database/mssql_store.py` - Microsoft SQL Server implementation
+- [ ] `database/oracle_store.py` - Oracle Database implementation
+- [ ] `database/db2_store.py` - IBM Db2 implementation
+
+#### Cloud & Analytics
+- [ ] `database/snowflake_store.py` - Snowflake data warehouse implementation
+
+#### NoSQL & Cache
+- [ ] `database/mongodb_store.py` - MongoDB document store implementation
+- [ ] `database/redis_cache.py` - Redis caching layer implementation
+
+#### Search
+- [ ] `database/elasticsearch_store.py` - Elasticsearch search implementation
+
+#### Unified Access Layer
+- [ ] `database/store_factory.py` - Factory pattern for unified database access
+- [ ] `database/base_store.py` - Abstract base class for all store implementations
+- [ ] `database/connection_pool.py` - Connection pooling management
+- [ ] `database/migrations/` - Database migration scripts for each backend
+
+---
+
+### Configuration Example
+
+```yaml
+# config.yaml
+database:
+  # Primary data store
+  primary:
+    backend: postgresql  # sqlite | postgresql | mysql | mssql | oracle | db2 | snowflake | mongodb
+    host: localhost
+    port: 5432
+    name: nethical_recon
+    user: ${DB_USER}
+    password: ${DB_PASSWORD}
+  
+  # Cache layer (optional)
+  cache:
+    backend: redis
+    host: localhost
+    port: 6379
+    ttl: 3600
+  
+  # Search backend (optional)
+  search:
+    backend: elasticsearch
+    hosts:
+      - http://localhost:9200
+    index_prefix: nethical_
 ## 🌊 FALA 7: TABLET MYŚLIWEGO - COMMAND CENTER
 
 ### 📱 Dashboard Real-Time
