@@ -86,10 +86,16 @@ class SSLScanner(BaseCamera):
             Dict with certificate information
         """
         try:
-            # Create SSL context
+            # Create SSL context with intentionally relaxed settings for reconnaissance
+            # This allows us to connect to and analyze servers with weak configurations
+            # Note: This is a security scanner - we WANT to connect to insecure servers
+            #       to identify and report their vulnerabilities
             context = ssl.create_default_context()
             context.check_hostname = False
             context.verify_mode = ssl.CERT_NONE
+            # Allow connection to servers using old TLS versions (TLSv1, TLSv1.1)
+            # so we can detect and report these as vulnerabilities
+            context.minimum_version = ssl.TLSVersion.TLSv1  # nosec - intentional for reconnaissance
             
             # Connect and get certificate
             with socket.create_connection((hostname, port), timeout=self.timeout) as sock:

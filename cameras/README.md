@@ -326,6 +326,18 @@ Cameras record different types of discoveries:
 3. **Rate Limiting**: Respect API rate limits (especially Shodan/Censys)
 4. **Legal Compliance**: Unauthorized scanning may be illegal in your jurisdiction
 5. **Privacy**: Be mindful of privacy when collecting email addresses and personal data
+6. **SSL/TLS Verification**: 
+   - WAF Detector: SSL verification is disabled by default for reconnaissance but can be enabled via `verify_ssl` config
+   - SSL Scanner: Intentionally connects to servers with weak SSL/TLS configurations (including old protocols like TLSv1) to identify and report vulnerabilities. This is necessary for security testing.
+
+### About SSL Scanner Security
+
+The SSL Scanner is designed as a **security analysis tool** that needs to connect to servers with weak or outdated SSL/TLS configurations. It intentionally:
+- Allows old protocol versions (TLSv1, TLSv1.1) to detect servers still using them
+- Disables certificate verification to analyze self-signed or expired certificates
+- Accepts weak ciphers to identify them as vulnerabilities
+
+This behavior is **correct and intended** for a reconnaissance tool. The scanner reports these configurations as security vulnerabilities, which is its purpose.
 
 ## 🔍 Advanced Usage
 
