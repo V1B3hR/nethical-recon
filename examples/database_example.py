@@ -18,7 +18,14 @@ from database import (
     ConnectionPool,
     PooledStore
 )
-from weapons import MarkerGun, WeaponMode, CO2SilentMode, RedTracer, OrangeTracer
+
+# Try to import weapons module, but make it optional
+try:
+    from weapons import MarkerGun, WeaponMode, CO2SilentMode, RedTracer, OrangeTracer
+    WEAPONS_AVAILABLE = True
+except ImportError:
+    WEAPONS_AVAILABLE = False
+    print("⚠️  Weapons module not available, skipping weapon integration example")
 
 
 def print_section(title):
@@ -106,6 +113,10 @@ def example_1_basic_sqlite():
 def example_2_weapon_integration():
     """Example 2: Integration with MarkerGun"""
     print_section("Example 2: MarkerGun + Database Integration")
+    
+    if not WEAPONS_AVAILABLE:
+        print("⚠️  Skipping - weapons module not available\n")
+        return
     
     # Setup weapon
     gun = MarkerGun("Silent Marker")

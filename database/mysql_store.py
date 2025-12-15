@@ -251,8 +251,17 @@ class MySQLStore(BaseStore):
             values = []
             
             for key, value in updates.items():
-                if key in ['target', 'forest_location', 'evidence', 'linked_tags']:
-                    set_clauses.append(f"{key}_data = %s")
+                if key == 'target':
+                    set_clauses.append("target_data = %s")
+                    values.append(json.dumps(value))
+                elif key == 'forest_location':
+                    set_clauses.append("forest_location = %s")
+                    values.append(json.dumps(value))
+                elif key == 'evidence':
+                    set_clauses.append("evidence = %s")
+                    values.append(json.dumps(value))
+                elif key == 'linked_tags':
+                    set_clauses.append("linked_tags = %s")
                     values.append(json.dumps(value))
                 elif key == 'stain':
                     for sub_key, sub_value in value.items():

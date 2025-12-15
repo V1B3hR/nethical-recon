@@ -234,8 +234,17 @@ class SQLiteStore(BaseStore):
             values = []
             
             for key, value in updates.items():
-                if key in ['target', 'forest_location', 'evidence', 'linked_tags']:
-                    set_clauses.append(f"{key}_data = ?")
+                if key == 'target':
+                    set_clauses.append("target_data = ?")
+                    values.append(json.dumps(value))
+                elif key == 'forest_location':
+                    set_clauses.append("forest_location = ?")
+                    values.append(json.dumps(value))
+                elif key == 'evidence':
+                    set_clauses.append("evidence = ?")
+                    values.append(json.dumps(value))
+                elif key == 'linked_tags':
+                    set_clauses.append("linked_tags = ?")
                     values.append(json.dumps(value))
                 elif key == 'stain':
                     # Handle nested stain data
