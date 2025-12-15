@@ -133,7 +133,12 @@
 - [ ] `sensors/system/dns_watcher.py` - DNS queries
 - [ ] `sensors/base. py` - base sensor class
 - [ ] `sensors/manager.py` - sensor orchestration
-
+- [ ] `sensors/system/process_monitor.py - monitorowanie procesów (nieznane/malware)
+- [ ] `sensors/system/rootkit_detector.py - wykrywanie rootkitów
+- [ ] `sensors/system/vulnerability_scanner.py - skanowanie luk (integracja z narzędziami)
+- [ ] `sensors/network/protocol_analyzer.py - głębsza analiza protokołów (Suricata/Snort-like)
+- [ ] `sensors/system/log_analyzer.py - centralna analiza logów systemowych
+- [ ] `sensors/system/behavior_anomaly.py - wykrywanie anomalii behawioralnych (UEBA basics)
 ---
 
 ## 🌊 FALA 2: KAMERY NA PODCZERWIEŃ
@@ -209,7 +214,7 @@ CONFIDENCE LEVEL          AKCJA
 ═══════════════════════════════════════════════════
 ≥ 90%                     🤖 AUTO-FIRE (nanobot działa sam)
 70-89%                    💡 PROPOSE (propozycja dla myśliwego)  
-< 70%                     👁️ OBSERVE (tylko monitoruj)
+< 55%                     👁️ OBSERVE (tylko monitoruj)
 ```
 
 ### 📋 Checklist Implementacji
