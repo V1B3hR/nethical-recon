@@ -41,7 +41,7 @@ class DNSWatcher(BaseSensor):
         self._monitor_thread = None
         self._stop_flag = False
         self._query_counts = Counter()  # Track query counts
-        self._suspicious_domains = Set()  # Track suspicious domains
+        self._suspicious_domains = set()  # Track suspicious domains
     
     def start(self) -> bool:
         """Start DNS monitoring"""
