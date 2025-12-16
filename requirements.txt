@@ -43,6 +43,10 @@ urllib3>=1.26.0
 # Elasticsearch
 # elasticsearch>=8.0.0
 
+# UI dependencies (Fala 7) - Command Center Dashboard
+rich>=13.0.0
+textual>=0.41.0
+
 # Optional: For enhanced features (install as needed)
 # Note: Some features require system tools like:
 # - tcpdump, zeek (Fala 1)
