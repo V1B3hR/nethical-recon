@@ -1,989 +1,421 @@
-# 🦾 NETHICAL HUNTER 3.0 - ROADMAP 2.0
-
-## 🎯 "MYŚLIWY PRZYSZŁOŚCI" - KOMPLETNA WIZJA
-
-> *"Jak myśliwi ze strzelbami, wabikami, dronami i psami - ale w cyberprzestrzeni"*
-> 
-> *"Z sokolim okiem obserwujemy las z lotu ptaka, tropimy kruki i sroki czyhające na gałęziach"*
+# 🦾 NETHICAL RECON — ROADMAP 2.0 (PROFESSIONAL-GRADE)
+**Repo:** `V1B3hR/nethical-recon`  
+**Date:** 2025-12-16  
+**Audience:** profesjonalni ethical hackers, red team / purple team, threat hunters, SOC/security engineers  
+**Cel:** przejście z “rozbudowanego prototypu + CLI toolkit” do **zintegrowanej, testowalnej, skalowalnej platformy** (CLI + TUI + API) z AI-driven threat intelligence i automatyzacją.
 
 ---
 
-## 📋 SPIS TREŚCI
+## 0) Zasady projektowe (non‑negotiables)
+### 0.1 Legal / Ethics by default
+- Wymuszona zgoda użytkownika + tryb “authorized-only” (już jest — utrzymać).
+- “Guard rails”:
+  - domyślnie ograniczony zakres skanów (rate limiting, concurrency cap),
+  - obowiązkowe logowanie działań (audit trail),
+  - “Rules of Engagement” (RoE) jako plik konfiguracyjny dla sesji.
+- “Evidence integrity”:
+  - hash wyników, podpisywanie raportów, spójność czasu (UTC).
 
-1. [Wizja Projektu](#-wizja-projektu)
-2. [Ekosystem Lasu Cybernetycznego](#-ekosystem-lasu-cybernetycznego)
-3. [Architektura Systemu](#-architektura-systemu)
-4. [Fala 1: Czujniki](#-fala-1-czujniki-ruchu-i-wibracji)
-5. [Fala 2: Kamery IR](#-fala-2-kamery-na-podczerwień)
-6. [Fala 3: Forest - Struktura Lasu](#-fala-3-forest---struktura-lasu)
-7. [Fala 4: Nanoboty](#-fala-4-nanoboty---automatyczna-odpowiedź)
-8. [Fala 5: Broń Markerowa](#-fala-5-broń-markerowa-silent-marker)
-9. [Fala 6: Baza Plam](#-fala-6-stain-database)
-10. [Fala 7: Tablet Myśliwego](#-fala-7-tablet-myśliwego---command-center)
-11. [Fala 8: Eye in the Sky](#-fala-8-eye-in-the-sky)
-12. [Fala 9: Sztuczna Inteligencja](#-fala-9-sztuczna-inteligencja)
-13. [Struktura Projektu](#-struktura-projektu)
-14. [Timeline](#-timeline)
-15. [Zasady Rozwoju](#-zasady-rozwoju)
-
----
-
-## 🎯 WIZJA PROJEKTU
-
-### Analogia Myśliwska
-
-| Element | Analogia | Funkcja w Nethical |
-|---------|----------|-------------------|
-| 🔭 Lornetka/Dron | Zwiad | Pasywny recon (Shodan, DNS) |
-| 📡 Czujniki ruchu | Perimeter security | Network traffic monitoring |
-| 📳 Czujniki wibracji | Ground sensors | System/host monitoring |
-| 🔴 Kamery IR | Night vision | Deep/dark discovery |
-| 🐕 Psy tropiące | Active hunters | Vulnerability scanners |
-| 🤖 Nanoboty | Antyciała | Automated response |
-| 🔫 Broń cicha | Marker gun | Threat tagging system |
-| 🎨 Farba niezmywalna | Permanent stain | IOC database |
-| 📱 Tablet | Command center | Dashboard UI |
-| 🌳 Las/Drzewa | Ekosystem | Infrastructure mapping |
-| 🦅 Orzeł/Sokół/Sowa | Eye in the Sky | Strategic oversight |
-
-### Główne Zasady
-
-```
-✅ CICHY    - Minimalna detekcja przez cel
-✅ TRWAŁY   - Plamy nie do zatarcia
-✅ SZYBKI   - Natychmiastowa reakcja nanobotów
-✅ MĄDRY    - AI-powered analysis
-✅ LEGALNY  - Tylko autoryzowane cele
-✅ WSZECHWIDZĄCY - Sokolim okiem z lotu ptaka
-```
+### 0.2 Product-grade engineering
+- Testy, CI, wydania, changelog, wersjonowanie semver.
+- Modularność: `core/services/adapters/cli/ui`.
+- Stabilny model danych i kontrakty API.
+- Observability: logging/metrics/traces.
+- Security hardening: sekrety, SAST/DAST, SBOM.
 
 ---
 
-## 🌲 EKOSYSTEM LASU CYBERNETYCZNEGO
+## 1) Docelowa architektura (Target Architecture)
+### 1.1 Warstwy
+- **core/**
+  - modele domenowe: Target, Asset, Finding, Evidence, ScanJob, ToolRun, IOC, Threat, Baseline
+  - walidacje, reguły scoringu, normalizacja danych
+- **services/**
+  - orkiestracja skanów, enrichment (Shodan/Censys/DNS), correlation, reporting
+  - “policy engine” (RoE, limity, allowlist/denylist)
+- **adapters/**
+  - integracje: nmap/nikto/dirb/sublist3r, shodan/censys, DB backends, LLM provider, SIEM
+- **api/**
+  - REST + OpenAPI (na start), opcjonalnie GraphQL później
+- **cli/**
+  - narzędzie w stylu `nethical` (Typer/Click) z subkomendami
+- **ui/**
+  - dashboard TUI (rich/textual), ewentualnie web UI później
+- **worker/**
+  - kolejka zadań (Celery/RQ/Arq) i scheduler (APScheduler/Celery beat)
+- **infra/**
+  - Docker, Helm, K8s manifests, compose dla lokalnego stacku
+- **docs/**
+  - Sphinx/MkDocs + OpenAPI + ADR (Architecture Decision Records)
 
-> *"Infrastruktura to las - każdy serwer to drzewo, każdy proces to gałąź, a zagrożenia czyhają w koronach"*
+### 1.2 Event bus / kolejka zadań
+- Cel: asynchroniczne, skalowalne uruchamianie skanów i enrichment.
+- Minimalny “bus”:
+  - `ScanRequested` → `ToolRunStarted` → `ToolRunFinished` → `FindingsNormalized` → `ReportGenerated`
+- Implementacja:
+  - **Celery + Redis** (szybki start) albo **RQ** (prościej), docelowo możliwość podmiany.
+- Idempotencja:
+  - każdy job ma `job_id`, każdy tool run `run_id`, retry bez duplikacji.
 
-### 🌳 Struktura Lasu
-
-```
-                            🦅 SOKÓŁ/ORZEŁ
-                         "EYE IN THE SKY"
-                     Widzi WSZYSTKO z góry
-                              │
-                              ▼
-    ☁️☁️☁️☁️☁️☁️☁️☁️☁️☁️☁️☁️☁️☁️☁️☁️☁️☁️☁️☁️☁️☁️☁️
-                              │
-          ┌───────────────────┼───────────────────┐
-          │                   │                   │
-          ▼                   ▼                   ▼
-      🌳 DRZEWO 1         🌳 DRZEWO 2         🌳 DRZEWO 3
-      "Server A"          "Server B"          "Network"
-          │                   │                   │
-    ┌─────┼─────┐       ┌─────┼─────┐       ┌─────┼─────┐
-    │     │     │       │     │     │       │     │     │
-   🌿    🌿    🌿      🌿    🌿    🌿      🌿    🌿    🌿
- Gałęzie=Procesy    Gałęzie=Usługi     Gałęzie=Połączenia
-    │     │     │       │     │     │       │     │     │
-   🍃    🍃    🍃      🍃    🍃    🍃      🍃    🍃    🍃
- Liście=Wątki     Liście=Sesje      Liście=Pakiety
-```
-
-### 🐦 Zagrożenia w Koronach Drzew
-
-| Zagrożenie | Analogia | Typ ataku | Zachowanie |
-|------------|----------|-----------|------------|
-| 🐦‍⬛ Kruk (Crow) | Czarny ptak czyhający | Malware | Cichy, cierpliwy, czeka na moment |
-| 🐦 Sroka (Magpie) | Kradnie błyszczące | Data Stealer | Szuka cennych danych |
-| 🐿️ Wiewiórka (Squirrel) | Skacze między gałęziami | Lateral Movement | Przemieszcza się po infrastrukturze |
-| 🐍 Wąż (Snake) | Pnie się po pniu | Rootkit | Ukrywa się głęboko w systemie |
-| 🐛 Pasożyt (Parasite) | Wysysa soki | Cryptominer | Kradnie zasoby |
-| 🦇 Nietoperz (Bat) | Aktywny nocą | Night-time attacks | Atakuje gdy nikt nie patrzy |
-
-### 🦅 Strażnicy Nieba
-
-```
-╔═══════════════════════════════════════════════════════════════════════╗
-║                    🦅 EYE IN THE SKY SYSTEM                           ║
-║                "Sokolim okiem widzę wszystko"                         ║
-╠═══════════════════════════════════════════════════════════════════════╣
-║                                                                       ║
-║   ┌─────────────────────────────────────────────────────────────┐    ║
-║   │  🦉 SOWA (OWL) - Nocny Obserwator                           │    ║
-║   │  ───────────────────────────────────────────────────────    │    ║
-║   │  • Widzi w ciemności (ukryte procesy)                       │    ║
-║   │  • Cichy lot (stealth monitoring)                           │    ║
-║   │  • Mądrość (korelacja zdarzeń)                              │    ║
-║   │  • Poluje gdy inni śpią (night shift monitoring)            │    ║
-║   └─────────────────────────────────────────────────────────────┘    ║
-║                                                                       ║
-║   ┌─────────────────────────────────────────────────────────────┐    ║
-║   │  🦅 SOKÓŁ (FALCON) - Szybki Zwiadowca                       │    ║
-║   │  ───────────────────────────────────────────────────────    │    ║
-║   │  • Najszybszy lot (real-time alerts)                        │    ║
-║   │  • Ostry wzrok (detail detection)                           │    ║
-║   │  • Pikowanie na cel (instant response)                      │    ║
-║   │  • Przenikliwy krzyk alarmu 🔊                              │    ║
-║   └─────────────────────────────────────────────────────────────┘    ║
-║                                                                       ║
-║   ┌─────────────────────────────────────────────────────────────┐    ║
-║   │  🦅 ORZEŁ (EAGLE) - Król Przestworzy                        │    ║
-║   │  ───────────────────────────────────────────────────────    │    ║
-║   │  • Widok z najwyższego pułapu (strategic overview)          │    ║
-║   │  • Kontrola całego terytorium (full infrastructure)         │    ║
-║   │  • Majestatyczny i potężny (executive dashboards)           │    ║
-║   │  • Decyzje o ataku/obronie (command & control)              │    ║
-║   └─────────────────────────────────────────────────────────────┘    ║
-║                                                                       ║
-╚═══════════════════════════════════════════════════════════════════════╝
-```
-
-### 🎵 System Alarmów - "Śpiew Ptaków"
-
-```
-POZIOM ZAGROŻENIA          DŹWIĘK PTAKA              AKCJA
-════════════════════════════════════════════════════════════════════
-
-🟢 INFO                    🐦 Świergot wróbla        Log only
-                           (soft chirp)              
-
-🟡 WARNING                 🦉 Pohukiwanie sowy       Alert + Watch
-                           (owl hoot)                
-
-🟠 ELEVATED                🦅 Krzyk sokoła           Alert + Nanoboty standby
-                           (falcon screech)          
-
-🔴 CRITICAL                🦅 Ryk orła               Full response + Hunter alert
-                           (eagle scream)            
-
-⚫ BREACH                  🐦‍⬛ Krakanie kruków        ALL HANDS ON DECK
-                           (crow chorus)             Wszystkie systemy reagują
-```
+### 1.3 Plugin system dla skanerów
+- Interfejs: `ScannerPlugin` z metodami:
+  - `validate_target()`, `build_command()`, `run()`, `parse_output()`, `to_findings()`
+- Rejestracja pluginów:
+  - entrypoints (setuptools) albo mechanizm “discover from folder”.
+- Cel: łatwo dodać np. `masscan`, `naabu`, `httpx`, `nuclei`, `ffuf`, `amass`.
 
 ---
 
-## 🏗️ ARCHITEKTURA SYSTEMU
-
-```
-                              🦅 EYE IN THE SKY
-                         ┌─────────────────────┐
-                         │  🦅 Orzeł (Command) │
-                         │  🦅 Sokół (Alerts)  │
-                         │  🦉 Sowa (Night)    │
-                         └──────────┬──────────┘
-                                    │
-                         ┌──────────▼──────────┐
-                         │   📱 TABLET         │
-                         │   MYŚLIWEGO         │
-                         │   (Dashboard)       │
-                         └──────────┬──────────┘
-                                    │
-        ┌───────────────────────────┼───────────────────────────┐
-        │                           │                           │
-        ▼                           ▼                           ▼
-┌───────────────┐          ┌───────────────┐          ┌───────────────┐
-│ 📡 CZUJNIKI   │          │ 🔴 KAMERY IR  │          │ 🤖 NANOBOTY   │
-│    RUCHU      │          │               │          │               │
-│ ───────────── │          │ ───────────── │          │ ───────────── │
-│ • tcpdump     │          │ • Shodan      │          │ • Auto-block  │
-│ • zeek        │          │ • Censys      │          │ • Rate limit  │
-│ • snort       │          │ • SSL scan    │          │ • Honeypot    │
-│ • protocol    │          │ • WAF detect  │          │ • Alert       │
-└───────┬───────┘          └───────┬───────┘          └───────┬───────┘
-        │                           │                           │
-        ▼                           ▼                           ▼
-┌───────────────┐          ┌───────────────┐          ┌───────────────┐
-│ 📳 CZUJNIKI   │          │ 🔫 BROŃ       │          │ 🗂️ STAIN DB   │
-│   WIBRACJI    │          │   MARKEROWA   │          │               │
-│ ───────────── │          │ ───────────── │          │ ───────────── │
-│ • CPU/RAM     │          │ • Pneumatic   │          │ • SQLite      │
-│ • File watch  │          │ • CO2 Silent  │          │ • PostgreSQL  │
-│ • Auth logs   │          │ • Electric    │          │ • STIX/MISP   │
-│ • Process mon │          │               │          │               │
-│ • Rootkit det │          │               │          │               │
-│ • Behavior    │          │               │          │               │
-└───────┬───────┘          └───────────────┘          └───────────────┘
-        │
-        ▼
-┌───────────────────────────────────────────────────────────────────┐
-│                        🌳 FOREST MODULE                           │
-│ ───────────────────────────────────────────────────────────────── │
-│  🌳 Trees (Hosts)  →  🌿 Branches (Processes)  →  🍃 Leaves       │
-│  🐦‍⬛ Crows (Malware)  🐿️ Squirrels (Lateral)  🐍 Snakes (Rootkit) │
-└───────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
-                         ┌─────────────────────┐
-                         │   🤖 AI ENGINE      │
-                         │   ─────────────     │
-                         │   • Reports         │
-                         │   • Analysis        │
-                         │   • Predictions     │
-                         │   • Hunt Strategy   │
-                         └─────────────────────┘
-```
+## 2) Roadmap 3.0 — Etapy (z kryteriami “Definition of Done”)
+Poniżej etapy są ułożone tak, by **szybko uzyskać profesjonalny “core”**, a potem skalować funkcje.
 
 ---
 
-## 🌊 FALA 1: CZUJNIKI RUCHU I WIBRACJI
+### PHASE A — Foundation & Repo Professionalization (2–4 tyg.)
+**Cel:** repo gotowe do rozwoju jak produkt.
 
-### 📡 Czujniki Ruchu (Network Monitoring)
+**A.1 Packaging & structure**
+- Migracja do `pyproject.toml` (Poetry lub uv/pip-tools).
+- Struktura `src/nethical_recon/...` + entrypoint `nethical`.
+- Konfiguracja `ruff`, `black`, `mypy` (opcjonalnie), `pre-commit`.
 
-> *"Każdy ruch w moim rewirze zostanie wykryty"*
+**A.2 CI/CD**
+- GitHub Actions:
+  - lint + tests,
+  - dependency scanning,
+  - build artifact (wheel),
+  - opcjonalnie publish do PyPI (później).
+- Security checks:
+  - **Bandit**, **pip-audit**, **Semgrep**.
 
-| Czujnik | Narzędzie | Wykrywa | Analogia |
-|---------|-----------|---------|----------|
-| 🚶 Traffic Monitor | `tcpdump` / `tshark` | Kto wchodzi/wychodzi | Kamera przy bramie |
-| 📊 Anomaly Detector | `zeek` (bro) | Nietypowe wzorce | Dziwne zachowania |
-| 🚨 Intrusion Alert | `snort` / `suricata` | Znane sygnatury ataków | Rozpoznane twarze |
-| 🔍 Port Scan Detector | Custom | Próby skanowania | Pukanie do drzwi |
-| 🔬 Protocol Analyzer | Suricata/Custom | Głęboka analiza protokołów | Analityk tropów |
+**A.3 Release discipline**
+- `CHANGELOG.md` (Keep a Changelog)
+- Tagowanie `v0.x` → `v1.0` po spełnieniu kryteriów stabilności.
 
-### 📳 Czujniki Wibracji (System Monitoring)
-
-> *"Czuję każde drżenie w infrastrukturze"*
-
-| Wibracja | Co monitoruje | Analogia |
-|----------|---------------|----------|
-| 💓 Heartbeat | Dostępność usług | Puls systemu |
-| 📈 Resource Spikes | CPU/RAM anomalie | Nerwowe ruchy |
-| 📁 File Integrity | Zmiany w plikach (AIDE/Tripwire) | Ślady na ziemi |
-| 🔐 Auth Monitor | Próby logowania | Trzask gałęzi |
-| 🌐 DNS Watcher | Podejrzane zapytania | Szepty w lesie |
-| ⚡ Port Knocker | Próby skanowania | Pukanie do drzwi |
-| 👣 Process Monitor | Nieznane/malware procesy | Obce zwierzęta w rewirze |
-| 🕳️ Rootkit Detector | Ukryte rootkity | Wykrywacz nor |
-| 🔓 Vulnerability Scanner | Luki w systemie | Inspektor ogrodzeń |
-| 📖 Log Analyzer | Centralna analiza logów | Kronikarz lasu |
-| 🧠 Behavior Anomaly | Anomalie behawioralne (UEBA) | Profiler zwierząt |
-
-### 📋 Checklist Implementacji
-
-**Czujniki Sieciowe:**
-- [x] `sensors/network/traffic_monitor.py` - tcpdump wrapper ✅
-- [x] `sensors/network/anomaly_detector.py` - zeek integration ✅
-- [x] `sensors/network/port_scan_detector.py` - scan detection ✅
-- [x] `sensors/network/protocol_analyzer.py` - deep protocol analysis (Suricata-like) ✅
-
-**Czujniki Systemowe (podstawowe):**
-- [x] `sensors/system/heartbeat_monitor.py` - service availability ✅
-- [x] `sensors/system/resource_monitor.py` - CPU/RAM spikes ✅
-- [x] `sensors/system/file_watcher.py` - file integrity ✅
-- [x] `sensors/system/auth_monitor.py` - auth failures ✅
-- [x] `sensors/system/dns_watcher.py` - DNS queries ✅
-
-**Czujniki Systemowe (zaawansowane):**
-- [ ] `sensors/system/process_monitor.py` - unknown/malware process detection
-- [ ] `sensors/system/rootkit_detector.py` - rootkit detection
-- [ ] `sensors/system/vulnerability_scanner.py` - vulnerability scanning integration
-- [ ] `sensors/system/log_analyzer.py` - centralized log analysis
-- [ ] `sensors/system/behavior_anomaly.py` - UEBA behavioral anomaly detection
-
-**Infrastruktura:**
-- [x] `sensors/base.py` - base sensor class ✅
-- [x] `sensors/manager.py` - sensor orchestration ✅
+**DoD PHASE A**
+- `pip install -e .` działa
+- `nethical --help` działa
+- CI przechodzi na PR
+- podstawowe testy smoke istnieją
 
 ---
 
-## 🌊 FALA 2: KAMERY NA PODCZERWIEŃ
+### PHASE B — Unified Data Model + Normalization (3–6 tyg.)
+**Cel:** wspólny model danych dla wszystkich modułów i narzędzi.
 
-### 🔴 Deep/Dark Discovery
+**B.1 Domain model**
+- Pydantic v2 modele:
+  - `Target` (domain/ip/cidr, scope)
+  - `ScanJob`, `ToolRun`, `Evidence`
+  - `Finding` (severity, confidence, tags, references)
+  - `Asset` (host/service/url)
+  - `IOC` (ip/domain/hash/url/email)
+- Normalizacja wyników skanerów do `Finding`.
 
-> *"Nie ważne jak się ukryjesz - znajdę Cię w nocy, w dzień i przy złej pogodzie"*
+**B.2 Storage**
+- Minimum: SQLite jako “dev default”.
+- Docelowo: Postgres jako rekomendowany backend.
+- SQLAlchemy + Alembic migracje.
+- “Multi-backend” zostaje w roadmap, ale najpierw jeden stabilny.
 
-| Tryb | Narzędzie | Co "widzi w ciemności" |
-|------|-----------|------------------------|
-| 🌙 Nocny | Shodan/Censys API | Ukryte usługi w Internecie |
-| 🌧️ Zła pogoda | theHarvester | OSINT przez "mgłę" |
-| 🔥 Termowizja | Masscan + banner grab | Gorące (aktywne) porty |
-| 👻 Widmo | DNS enumeration | Niewidoczne subdomeny |
-| 🕳️ Rentgen | SSL/TLS analysis | Przez szyfrowanie |
-| 🎭 Maska | WAF detection | Ukryte zabezpieczenia |
+**B.3 Evidence & provenance**
+- Każdy output ma:
+  - timestamp UTC,
+  - tool version,
+  - command line,
+  - hash pliku wynikowego,
+  - referencję do job/run.
 
-### 📋 Checklist Implementacji
-
-- [x] `cameras/shodan_eye.py` - Shodan API integration ✅
-- [x] `cameras/censys_eye.py` - Censys API integration ✅
-- [x] `cameras/harvester_eye.py` - theHarvester wrapper ✅
-- [x] `cameras/ssl_scanner.py` - SSL/TLS analysis ✅
-- [x] `cameras/dns_enum.py` - DNS enumeration ✅
-- [x] `cameras/waf_detector.py` - WAF detection ✅
-- [x] `cameras/base.py` - base camera class ✅
-- [x] `cameras/manager.py` - camera orchestration ✅
-- [x] `cameras/README.md` - comprehensive documentation ✅
-- [x] `examples/camera_basic_example.py` - working examples ✅
-
----
-
-## 🌊 FALA 3: FOREST - STRUKTURA LASU
-
-### 🌳 Mapowanie Infrastruktury
-
-> *"Każdy host to drzewo, każdy proces to gałąź, każdy wątek to liść - a zagrożenia czyhają w koronach"*
-
-```
-🌳 HIERARCHIA LASU
-════════════════════════════════════════════════════════════
-
-FOREST (Cały Las)
-    └── 🌳 TREE (Drzewo = Host/Server)
-            ├── 🪵 TRUNK (Pień = Kernel/OS)
-            ├── 👑 CROWN (Korona = Overview)
-            └── 🌿 BRANCH (Gałąź = Proces/Usługa)
-                    └── 🍃 LEAF (Liść = Wątek/Sesja/Pakiet)
-```
-
-### 🐦 Zagrożenia w Koronach
-
-```
-╔═══════════════════════════════════════════════════════════════════════╗
-║                    🐦 THREATS IN THE CANOPY                           ║
-╠═══════════════════════════════════════════════════════════════════════╣
-║                                                                       ║
-║   🐦‍⬛ CROW (Kruk)           - Malware czyhający cicho                  ║
-║   ─────────────────────────────────────────────────────────────────   ║
-║   • Cierpliwy, czeka na idealny moment                                ║
-║   • Ukrywa się w cieniu (obfuscation)                                 ║
-║   • Inteligentny, uczy się środowiska                                 ║
-║                                                                       ║
-║   🐦 MAGPIE (Sroka)         - Data Stealer                            ║
-║   ─────────────────────────────────────────────────────────────────   ║
-║   • Przyciągają ją "błyszczące" dane (credentials, PII)               ║
-║   • Szybko chwyta i ucieka (exfiltration)                             ║
-║   • Gromadzi skarby (data hoarding)                                   ║
-║                                                                       ║
-║   🐿️ SQUIRREL (Wiewiórka)   - Lateral Movement                        ║
-║   ─────────────────────────────────────────────────────────────────   ║
-║   • Skacze między gałęziami (host hopping)                            ║
-║   • Szuka dziupli (vulnerable services)                               ║
-║   • Zostawia zapasy (persistence)                                     ║
-║                                                                       ║
-║   🐍 SNAKE (Wąż)            - Rootkit                                 ║
-║   ─────────────────────────────────────────────────────────────────   ║
-║   • Pnie się po pniu (privilege escalation)                           ║
-║   • Ukrywa się w korze (kernel-level hiding)                          ║
-║   • Cichy i śmiertelnie niebezpieczny                                 ║
-║                                                                       ║
-║   🐛 PARASITE (Pasożyt)     - Cryptominer/Resource Abuse              ║
-║   ─────────────────────────────────────────────────────────────────   ║
-║   • Wysysa soki z drzewa (CPU/GPU drain)                              ║
-║   • Powoli osłabia gospodarza                                         ║
-║   • Trudny do wykrycia bez obserwacji zasobów                         ║
-║                                                                       ║
-║   🦇 BAT (Nietoperz)        - Night-time Attacks                      ║
-║   ─────────────────────────────────────────────────────────────────   ║
-║   • Aktywny gdy inni śpią (off-hours attacks)                         ║
-║   • Wykorzystuje zmniejszoną czujność                                 ║
-║   • Echolokacja (reconnaissance in darkness)                          ║
-║                                                                       ║
-╚═══════════════════════════════════════════════════════════════════════╝
-```
-
-### 📋 Checklist Implementacji
-
-**Struktura Drzew:**
-- [x] `forest/trees/tree.py` - klasa bazowa drzewa (host/server) ✅
-- [x] `forest/trees/trunk.py` - pień (kernel/OS core) ✅
-- [x] `forest/trees/branch.py` - gałąź (proces/usługa/połączenie) ✅
-- [x] `forest/trees/leaf.py` - liść (wątek/sesja/pakiet) ✅
-- [x] `forest/trees/crown.py` - korona (overview hosta) ✅
-- [x] `forest/trees/forest_map.py` - mapa całego lasu (infrastructure) ✅
-
-**Zagrożenia:**
-- [x] `forest/threats/crow.py` - kruk (malware czyhający) ✅
-- [x] `forest/threats/magpie.py` - sroka (data stealer) ✅
-- [x] `forest/threats/squirrel.py` - wiewiórka (lateral movement) ✅
-- [x] `forest/threats/snake.py` - wąż (rootkit) ✅
-- [x] `forest/threats/parasite.py` - pasożyt (cryptominer) ✅
-- [x] `forest/threats/bat.py` - nietoperz (night attacks) ✅
-- [x] `forest/threats/base.py` - bazowa klasa zagrożenia ✅
-- [x] `forest/threats/detector.py` - wykrywacz zagrożeń w koronach ✅
-
-**Infrastruktura:**
-- [x] `forest/base.py` - bazowa klasa forest ✅
-- [x] `forest/manager.py` - forest orchestration ✅
-- [x] `forest/health_check.py` - sprawdzanie zdrowia lasu ✅
+**DoD PHASE B**
+- Jedna komenda CLI potrafi uruchomić 2 narzędzia i zapisać wyniki jako zunifikowane `Findings`.
+- Można odtworzyć “co i czym było uruchomione” (auditability).
 
 ---
 
-## 🌊 FALA 4: NANOBOTY - AUTOMATYCZNA ODPOWIEDŹ
+### PHASE C — Worker Queue + Scheduler + Concurrency Policy (3–6 tyg.)
+**Cel:** skany asynchroniczne, stabilne, skalowalne, zgodne z RoE.
 
-### 🤖 System "Antyciał"
+**C.1 Queue**
+- Celery/RQ worker + Redis.
+- Zadania:
+  - `run_scan_job(job_id)`
+  - `run_tool(tool, job_id)`
+  - `normalize_results(run_id)`
+  - `generate_report(job_id)`
 
-> *"Niewidoczna chmura przy czujnikach - gotowa do natychmiastowej reakcji"*
+**C.2 Scheduler**
+- APScheduler/Celery beat:
+  - cykliczne recon (np. co 6h/24h),
+  - baseline update.
 
-```
-🦠 NANOBOTY - TRYBY DZIAŁANIA
-════════════════════════════════════════════════════════════
+**C.3 Policy engine (RoE)**
+- Limity: requests/sec, max parallel tools, allowlist networks.
+- Blokady “high-risk tools” bez wyraźnego flag/konfigu.
 
-┌─────────────────────────────────────────────────────────┐
-│  🛡️ DEFENSIVE MODE (Antyciała)                         │
-│  ─────────────────────────────────────────────────────  │
-│  • Auto-block suspicious IPs                            │
-│  • Rate limiting activation                             │
-│  • Honeypot deployment                                  │
-│  • Alert escalation                                     │
-└─────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────┐
-│  🔍 SCOUT MODE (Zwiadowcy)                              │
-│  ─────────────────────────────────────────────────────  │
-│  • Auto-enumerate discovered hosts                      │
-│  • Follow-up scans on anomalies                         │
-│  • Gather evidence automatically                        │
-│  • Track lateral movement                               │
-└─────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────┐
-│  🧬 ADAPTIVE MODE (Ewolucja)                            │
-│  ─────────────────────────────────────────────────────  │
-│  • Learn normal patterns (baseline)                     │
-│  • ML-based anomaly detection                           │
-│  • Auto-adjust sensitivity                              │
-│  • Predictive threat hunting                            │
-└─────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────┐
-│  🌳 FOREST GUARD MODE (Strażnicy Lasu)                  │
-│  ─────────────────────────────────────────────────────  │
-│  • Patrol tree branches                                 │
-│  • Hunt crows and magpies                               │
-│  • Protect crown integrity                              │
-│  • Report to Eye in the Sky                             │
-└─────────────────────────────────────────────────────────┘
-```
-
-### ⚖️ TRYB HYBRYDOWY (Decyzja)
-
-```
-CONFIDENCE LEVEL          AKCJA
-═══════════════════════════════════════════════════
-≥ 90%                     🤖 AUTO-FIRE (nanobot działa sam)
-70-89%                    💡 PROPOSE (propozycja dla myśliwego)  
-< 70%                     👁️ OBSERVE (tylko monitoruj)
-```
-
-### 📋 Checklist Implementacji
-
-- [x] `nanobots/swarm.py` - nanobot swarm manager ✅
-- [x] `nanobots/actions/block_ip.py` - IP blocking action ✅
-- [x] `nanobots/actions/rate_limit.py` - rate limiting ✅
-- [x] `nanobots/actions/honeypot.py` - honeypot deployment ✅
-- [x] `nanobots/actions/alert.py` - alert escalation ✅
-- [x] `nanobots/actions/enumerate.py` - auto enumeration ✅
-- [x] `nanobots/actions/forest_patrol.py` - patrol gałęzi drzew ✅
-- [x] `nanobots/actions/threat_hunt.py` - polowanie na kruki/sroki ✅
-- [x] `nanobots/rules/engine.py` - rules engine ✅
-- [x] `nanobots/rules/hybrid_mode.py` - hybrid decision logic ✅
-- [x] `nanobots/learning/baseline.py` - baseline learning ✅
-- [x] `nanobots/learning/anomaly_ml.py` - ML anomaly detection ✅
+**DoD PHASE C**
+- `nethical job submit ...` i `nethical job status ...` działają
+- Worker może odpalać równolegle, ale trzyma limity RoE
 
 ---
 
-## 🌊 FALA 5: BROŃ MARKEROWA (SILENT MARKER)
+### PHASE D — API (REST) + OpenAPI + Auth (4–8 tyg.)
+**Cel:** profesjonalna rozszerzalność i integracja z innymi systemami.
 
-### 🔫 Arsenal Cichego Myśliwego
+**D.1 REST API**
+- FastAPI:
+  - /targets, /jobs, /runs, /findings, /reports
+  - filtrowanie po czasie, severity, tagach, toolach
+- OpenAPI auto-generowane.
 
-> *"Cichy, z tłumikiem, naboje tracer - raz trafiony, zawsze widoczny"*
+**D.2 AuthN/AuthZ**
+- Start: API key / token (dev/pro).
+- Docelowo: OAuth2/JWT + role: viewer/operator/admin.
 
-```
-╔═══════════════════════════════════════════════════════════════════════╗
-║                    🔫 SILENT MARKER SYSTEM                            ║
-╠═══════════════════════════════════════════════════════════════════════╣
-║                                                                       ║
-║   ┌─────────────┐    ┌─────────────┐    ┌─────────────┐              ║
-║   │ 💨 PNEUMA   │    │ 🧊 CO2      │    │ ⚡ ELEKTRYK │              ║
-║   │ Soft Recon  │    │ Medium Hit  │    │ Hard Strike │              ║
-║   │ Whisper     │    │ Silent      │    │ Lightning   │              ║
-║   │ 0 dB        │    │ 10 dB       │    │ 20 dB       │              ║
-║   └─────────────┘    └─────────────┘    └─────────────┘              ║
-║                                                                       ║
-╚═══════════════════════════════════════════════════════════════════════╝
-```
+**D.3 Documentation**
+- Swagger/OpenAPI + przykładowe requesty
+- “Integration cookbook” (SIEM, ticketing, pipelines)
 
-### 🎨 Naboje TRACER - Typy Amunicji
-
-| Kolor | Typ | Tag Format | Cel |
-|-------|-----|------------|-----|
-| 🔴 Czerwony | MALWARE | `MAL-[HASH]-[DATE]` | Złośliwe pliki |
-| 🟣 Fioletowy | EVIL AI | `EAI-[PATTERN]-[DATE]` | Złośliwe AI/boty |
-| 🟠 Pomarańczowy | SUSPICIOUS IP | `SIP-[IP]-[SCORE]-[DATE]` | Podejrzane adresy |
-| 🟡 Żółty | BACKDOOR | `BKD-[PORT]-[CVE]-[DATE]` | Tylne furtki |
-| 🔵 Niebieski | HIDDEN SERVICE | `HID-[SERVICE]-[RISK]-[DATE]` | Ukryte usługi |
-| ⚪ Biały | UNKNOWN | `UNK-[ID]-[DATE]` | Nieznane zagrożenia |
-| 🖤 Czarny | CROW | `CRW-[TYPE]-[TREE]-[DATE]` | Kruki w koronach |
-| 🤎 Brązowy | SQUIRREL | `SQR-[PATH]-[DATE]` | Wiewiórki (lateral) |
-
-### 🎯 Struktura "Plamy"
-
-```python
-{
-    "tag_id": "MAL-a1b2c3d4-2025-12-15",
-    "marker_type": "MALWARE",
-    "color": "RED",
-    "timestamp_first_seen": "2025-12-15T14:30:00Z",
-    "timestamp_last_seen": "2025-12-15T16:45:00Z",
-    "hit_count": 3,
-    "weapon_used": "CO2_SILENT",
-    
-    "target":  {
-        "ip": "192.168.1.105",
-        "hostname": "suspicious-server. local",
-        "ports": [4444, 8080],
-        "file_hash": "a1b2c3d4e5f6..."
-    },
-    
-    "forest_location": {
-        "tree":  "web-server-01",
-        "branch": "nginx-worker",
-        "leaf": "session-4521",
-        "threat_type": "crow"
-    },
-    
-    "stain": {
-        "threat_score": 8. 7,
-        "confidence":  0.94,
-        "evidence": ["... "],
-        "linked_tags": ["SIP-192.168.1.105-HIGH-2025-12-15"]
-    },
-    
-    "hunter_notes": "Wykryty podczas nocnego patrolu.  Sowa zauważyła ruch.",
-    "detected_by": "owl",
-    "status": "ACTIVE_THREAT"
-}
-```
-
-### 📋 Checklist Implementacji
-
-- [x] `weapons/marker_gun.py` - main weapon class ✅
-- [x] `weapons/modes/pneumatic.py` - whisper mode (0 dB) ✅
-- [x] `weapons/modes/co2_silent.py` - silent mode (10 dB) ✅
-- [x] `weapons/modes/electric.py` - lightning mode (20 dB) ✅
-- [x] `weapons/ammo/tracer_red.py` - malware marker ✅
-- [x] `weapons/ammo/tracer_purple.py` - evil AI marker ✅
-- [x] `weapons/ammo/tracer_orange.py` - suspicious IP marker ✅
-- [x] `weapons/ammo/tracer_yellow.py` - backdoor marker ✅
-- [x] `weapons/ammo/tracer_blue.py` - hidden service marker ✅
-- [x] `weapons/ammo/tracer_white.py` - unknown threat marker (NEW) ✅
-- [x] `weapons/ammo/tracer_black.py` - crow marker (NEW) ✅
-- [x] `weapons/ammo/tracer_brown.py` - squirrel marker (NEW) ✅
-- [x] `weapons/targeting.py` - target acquisition system ✅
-- [x] `weapons/fire_control.py` - fire control system ✅
-- [x] `weapons/base.py` - base classes and stain system ✅
-- [x] `weapons/README.md` - comprehensive documentation ✅
-- [x] `examples/weapon_basic_example.py` - working examples ✅
+**DoD PHASE D**
+- Można odpalić job przez API i odebrać wyniki
+- OpenAPI kompletne, działa w CI jako “contract”
 
 ---
 
-# Nethical-Recon Roadmap 2
+### PHASE E — Observability: Logging + Metrics + Tracing (3–6 tyg.)
+**Cel:** debugowanie, monitoring, audyt w środowisku pro.
 
-## 🌊 FALA 6: STAIN DATABASE
+**E.1 Logging**
+- `structlog` + JSON logs (łatwe pod ELK).
+- Korelacja: `job_id`, `run_id`, `target_id`.
+- Poziomy: audit/security/ops.
 
-### Overview
-Multi-backend database support for flexible deployment scenarios - from local development to enterprise-scale cloud deployments.
+**E.2 Metrics**
+- Prometheus:
+  - czas trwania tool runs,
+  - liczba findings per job,
+  - error rate,
+  - queue depth.
 
-### Database Tiers
+**E.3 Dashboards & alerts**
+- Grafana dashboard template:
+  - throughput skanów,
+  - top failing tools,
+  - “noisy targets”.
 
-#### 🏠 Local Development
-| Database | Use Case |
-|----------|----------|
-| **SQLite** | Single-user local development, testing, and small deployments |
-
-#### 🏢 Team/Enterprise
-| Database | Use Case |
-|----------|----------|
-| **PostgreSQL** | Primary relational database for team deployments with advanced features |
-| **MySQL** | Widely-adopted relational database, excellent for web-scale applications |
-| **MS SQL Server** | Enterprise Windows environments, .NET integration |
-| **Oracle** | Large enterprise deployments, mission-critical systems |
-| **IBM Db2** | Mainframe integration, legacy enterprise systems |
-
-#### ☁️ Cloud/Analytics
-| Database | Use Case |
-|----------|----------|
-| **Snowflake** | Analytics warehouse for large-scale data analysis and reporting |
-
-#### 📦 NoSQL/Cache
-| Database | Use Case |
-|----------|----------|
-| **MongoDB** | Flexible document storage for unstructured/semi-structured IOC data |
-| **Redis** | High-speed caching layer for frequently accessed data and session management |
-
-#### 🔍 Search
-| Database | Use Case |
-|----------|----------|
-| **Elasticsearch** | Fast full-text IOC searches, log aggregation, and threat hunting |
+**DoD PHASE E**
+- Lokalny stack `docker compose` z Prometheus+Grafana i JSON logs do stdout
+- Metryki dostępne na `/metrics`
 
 ---
 
-### Database Selection Matrix
+### PHASE F — Docker / Kubernetes / Helm (4–8 tyg.)
+**Cel:** skalowalność i standard wdrożeń.
 
-| Scenario | Recommended Database | Rationale |
-|----------|---------------------|-----------|
-| Local dev/testing | SQLite | Zero configuration, file-based |
-| Small team (< 10 users) | PostgreSQL | Open-source, feature-rich |
-| Web-scale application | MySQL | Proven scalability, wide hosting support |
-| Windows/.NET enterprise | MS SQL Server | Native integration, enterprise tooling |
-| Large enterprise/financial | Oracle | Maximum reliability, advanced security |
-| Mainframe integration | IBM Db2 | Legacy system compatibility |
-| Big data analytics | Snowflake | Scalable analytics, SQL interface |
-| Flexible IOC schemas | MongoDB | Schema-less, rapid iteration |
-| High-speed caching | Redis | Sub-millisecond latency |
-| Threat hunting/log search | Elasticsearch | Full-text search, aggregations |
+**F.1 Docker**
+- Multi-stage build, minimalny obraz.
+- Oddzielne obrazy: `api`, `worker`, `scheduler`.
 
----
+**F.2 Kubernetes**
+- Helm chart:
+  - deployment api,
+  - deployment worker,
+  - cron/scheduler,
+  - secret management integration,
+  - HPA (autoscaling) dla workerów.
 
-### Implementation Checklist
+**F.3 Storage & networking**
+- Postgres jako StatefulSet/managed service.
+- Persistent volume na evidence/report artifacts (lub S3/MinIO).
 
-#### Core Database Stores
-- [x] `database/sqlite_store.py` - SQLite implementation ✅ PRODUCTION READY
-- [x] `database/postgres_store.py` - PostgreSQL implementation ✅ PRODUCTION READY
-- [x] `database/mysql_store.py` - MySQL/MariaDB implementation ✅ PRODUCTION READY
-- [x] `database/mssql_store.py` - Microsoft SQL Server stub (interface defined)
-- [x] `database/oracle_store.py` - Oracle Database stub (interface defined)
-- [x] `database/db2_store.py` - IBM Db2 stub (interface defined)
-
-#### Cloud & Analytics
-- [x] `database/snowflake_store.py` - Snowflake stub (interface defined)
-
-#### NoSQL & Cache
-- [x] `database/mongodb_store.py` - MongoDB stub (interface defined)
-- [x] `database/redis_cache.py` - Redis stub (interface defined)
-
-#### Search
-- [x] `database/elasticsearch_store.py` - Elasticsearch stub (interface defined)
-
-#### Unified Access Layer
-- [x] `database/store_factory.py` - Factory pattern for unified database access ✅
-- [x] `database/base_store.py` - Abstract base class for all store implementations ✅
-- [x] `database/connection_pool.py` - Connection pooling management ✅
-- [ ] `database/migrations/` - Database migration scripts for each backend (future)
-
-#### Documentation & Examples
-- [x] `database/README.md` - Comprehensive documentation ✅
-- [x] `examples/database_example.py` - Working examples ✅
+**DoD PHASE F**
+- `helm install nethical` wstaje w K8s i wykonuje job end-to-end
 
 ---
 
-### Configuration Example
+### PHASE G — Secrets Management (1–3 tyg. + ciągłe)
+**Cel:** bezpieczne zarządzanie kluczami API i tokenami.
 
-```yaml
-# config.yaml
-database:
-  # Primary data store
-  primary:
-    backend: postgresql  # sqlite | postgresql | mysql | mssql | oracle | db2 | snowflake | mongodb
-    host: localhost
-    port: 5432
-    name: nethical_recon
-    user: ${DB_USER}
-    password: ${DB_PASSWORD}
-  
-  # Cache layer (optional)
-  cache:
-    backend: redis
-    host: localhost
-    port: 6379
-    ttl: 3600
-  
-  # Search backend (optional)
-  search:
-    backend: elasticsearch
-    hosts:
-      - http://localhost:9200
-    index_prefix: nethical_
-## 🌊 FALA 7: TABLET MYŚLIWEGO - COMMAND CENTER
+**G.1 Minimalnie**
+- `.env` + env vars, brak sekretów w repo.
+- Wymuszenie: brak kluczy w logach.
 
-### 📱 Dashboard Real-Time
+**G.2 Docelowo**
+- HashiCorp Vault / Kubernetes External Secrets.
+- Rotacja sekretów.
+- “Secret scopes” per connector (Shodan, Censys, LLM).
 
-```
-╔═══════════════════════════════════════════════════════════════════════════╗
-║  🎯 NETHICAL HUNTER v3.0 - COMMAND CENTER                     [🔴 LIVE]   ║
-╠═══════════════════════════════════════════════════════════════════════════╣
-║                                                                           ║
-║  ┌─ THREAT LEVEL ─┐  ┌─ ACTIVE SENSORS ─┐  ┌─ NANOBOTS ──┐  ┌─ BIRDS ─┐  ║
-║  │   ⚠️ MEDIUM    │  │  📡 16/16 ONLINE │  │ 🤖 847 ACT  │  │🦅 PATROL│  ║
-║  │   Score: 6.2   │  │  🔴 4 CAMERAS ON │  │ 🛡️ DEFENSE  │  │🦉 WATCH │  ║
-║  └────────────────┘  └──────────────────┘  └─────────────┘  └─────────┘  ║
-║                                                                           ║
-║  ┌─ FOREST STATUS ──────────────────────────────────────────────────┐    ║
-║  │ 🌳 Trees: 12 healthy  🌿 Branches: 847  🍃 Leaves: 12,453        │    ║
-║  │ ⚠️ Threats: 🐦‍⬛x2 (crows)  🐿️x1 (squirrel)  🐛x0 (parasites)       │    ║
-║  └──────────────────────────────────────────────────────────────────┘    ║
-║                                                                           ║
-║  ┌─ BIRD SONGS (Recent Alerts) ─────────────────────────────────────┐    ║
-║  │ 🦅 14: 23 [SCREECH! ] Falcon:  Port scan from 192.168.1.105         │    ║
-║  │ 🦉 14:21 [hoot... ] Owl: Unusual night activity on DB-Server      │    ║
-║  │ 🦅 14:18 [ROAR!! ] Eagle: Lateral movement!  🐿️ on tree-03         │    ║
-║  │ 🐦 14:15 [chirp] Sparrow: Normal heartbeat all trees             │    ║
-║  └──────────────────────────────────────────────────────────────────┘    ║
-║                                                                           ║
-║  ┌─ WEAPON STATUS ──────────────────────────────────────────────────┐    ║
-║  │ 🔫 CO2 Silent [ARMED]    Ammo: 🔴x12 🟣x5 🟠x20 🟡x8 🖤x15 🤎x10 │    ║
-║  │ Stealth:  [🤫🤫🤫🤫🤫░░░░░] 50%                                   │    ║
-║  └──────────────────────────────────────────────────────────────────┘    ║
-║                                                                           ║
-║  [1]📡Sensors [2]🔴Cameras [3]🌳Forest [4]🦅Sky [5]🤖Nano [6]🔫Weapon    ║
-╚═══════════════════════════════════════════════════════════════════════════╝
-```
-
-### 🎯 Targeting Interface
-
-```
-╔═══════════════════════════════════════════════════════════════════════════╗
-║  🔫 TARGETING SYSTEM                                        [⚡ ARMED]    ║
-╠═══════════════════════════════════════════════════════════════════════════╣
-║                                                                           ║
-║  CURRENT TARGET:                                                           ║
-║  ┌───────────────────────────────────────────────────────────────────┐   ║
-║  │  🎯 192.168.1.105:4444                                            │   ║
-║  │  Type: SUSPECTED MALWARE C2                                       │   ║
-║  │  Forest: 🌳 web-server-01 → 🌿 suspicious-proc → 🍃 thread-42     │   ║
-║  │  Threat:  🐦‍⬛ CROW (malware waiting)                                │   ║
-║  │  Confidence: ████████░░ 87%                                       │   ║
-║  │  Previous stains: 0 (NEW TARGET)                                  │   ║
-║  │  Detected by: 🦅 Falcon (screech alert)                           │   ║
-║  └───────────────────────────────────────────────────────────────────┘   ║
-║                                                                           ║
-║  SELECT WEAPON:                           SELECT AMMO:                     ║
-║  ┌──────────────────────┐               ┌──────────────────────┐         ║
-║  │ [1] 💨 Pneumatic     │               │ [R] 🔴 Malware       │         ║
-║  │ [2] 🧊 CO2 Silent  ◀─│               │ [P] 🟣 Evil AI       │         ║
-║  │ [3] ⚡ Electric      │               │ [O] 🟠 Suspicious IP │         ║
-║  └──────────────────────┘               │ [Y] 🟡 Backdoor      │         ║
-║                                         │ [B] 🔵 Hidden Svc    │         ║
-║                                         │ [C] 🖤 Crow        ◀─│         ║
-║                                         │ [S] 🤎 Squirrel      │         ║
-║                                         └──────────────────────┘         ║
-║                                                                           ║
-║  [SPACE] 🔫 FIRE    [T] Track    [F] Forest View    [ESC] Back           ║
-╚═══════════════════════════════════════════════════════════════════════════╝
-```
-
-### 📊 Stain Report View
-
-```
-╔═══════════════════════════════════════════════════════════════════════════╗
-║  🎨 STAIN REPORT - Hunting Session 2025-12-15                             ║
-╠═══════════════════════════════════════════════════════════════════════════╣
-║                                                                           ║
-║  STATISTICS:                                                              ║
-║  ┌─────────────────┬─────────────────┬─────────────────┐                 ║
-║  │ 🔴 Malware:   3  │ 🟣 Evil AI:  1  │ 🟠 Susp IP:  7   │                 ║
-║  │ 🟡 Backdoor:  2  │ 🔵 Hidden:   4   │ 🖤 Crows: 5     │                 ║
-║  │ 🤎 Squirrels: 2 │                 │ ⚪ TOTAL: 24    │                 ║
-║  └─────────────────┴─────────────────┴─────────────────┘                 ║
-║                                                                           ║
-║  FOREST THREAT MAP:                                                       ║
-║  ┌───────────────────────────────────────────────────────────────────┐   ║
-║  │  🌳 web-01    🌳 db-01     🌳 api-01    🌳 mail-01   🌳 file-01   │   ║
-║  │    │🐦‍⬛         │           │🐿️          │            │🐛        │   ║
-║  │    └─🔴        └─✅        └─🟠         └─✅          └─🟡       │   ║
-║  └───────────────────────────────────────────────────────────────────┘   ║
-║                                                                           ║
-║  TOP THREATS (by Bird Detection):                                         ║
-║  ─────────────────────────────────────────────────────────────────────   ║
-║  🦅 CRW-trojan-web01  | 192.168.1.105 | Score: 9.2 | Crow on branch     ║
-║  🦉 SQR-lateral-api01 | internal      | Score: 8.5 | Squirrel jumping   ║
-║  🦅 MAL-e5f6g7h8      | evil. exe      | Score: 8.8 | RAT detected       ║
-║  ─────────────────────────────────────────────────────────────────────   ║
-║                                                                           ║
-║  [E] Export    [A] AI Analysis    [F] Forest View    [B] Back            ║
-╚═══════════════════════════════════════════════════════════════════════════╝
-```
-
-### 📋 Checklist Implementacji
-
-- [x] `ui/dashboard.py` - main dashboard (Rich/Textual) ✅
-- [x] `ui/panels/threat_level.py` - threat level panel ✅
-- [x] `ui/panels/sensors_status.py` - sensors status panel ✅
-- [x] `ui/panels/nanobots_status.py` - nanobots status panel ✅
-- [x] `ui/panels/alerts_feed.py` - alerts feed panel (bird songs) ✅
-- [x] `ui/panels/weapon_status.py` - weapon status panel ✅
-- [x] `ui/panels/forest_status.py` - forest overview panel (NEW) ✅
-- [x] `ui/panels/birds_status.py` - birds patrol status (NEW) ✅
-- [x] `ui/screens/targeting.py` - targeting screen ✅
-- [x] `ui/screens/stain_report.py` - stain report screen ✅
-- [x] `ui/screens/forest_view.py` - forest visualization screen (NEW) ✅
-- [x] `ui/screens/settings.py` - settings screen ✅
-- [x] `ui/widgets/progress_bars.py` - custom progress bars ✅
-- [x] `ui/widgets/threat_indicator.py` - threat indicator widget ✅
-- [x] `ui/widgets/tree_widget.py` - tree visualization widget (NEW) ✅
-- [x] `examples/dashboard_example.py` - comprehensive demo and examples ✅
+**DoD PHASE G**
+- Sekrety nie pojawiają się w outputach, test “secret-leak” w CI
 
 ---
 
-## 🌊 FALA 8: EYE IN THE SKY
+### PHASE H — AI-Driven Threat Intelligence (6–12 tyg.)
+**Cel:** AI jako realna przewaga, nie tylko metafora.
 
-### 🦅 System Obserwacji z Lotu Ptaka
+**H.1 Realistic AI layers**
+- **LLM**: raportowanie, triage, deduplikacja, summarization (z twardymi guardrails).
+- **Rules/heuristics**: szybka klasyfikacja i scoring.
+- **Statistical baseline**: anomaly detection (np. proste modele statystyczne).
+- **Graph correlation**: zależności IOC ↔ asset ↔ finding ↔ campaign.
 
-> *"Sokolim okiem widzę wszystko - każde drzewo, każdą gałąź, każdego kruka czyhającego w koronie"*
+**H.2 “Evidence-based LLM”**
+- LLM dostaje tylko:
+  - znormalizowane findings,
+  - dowody (wycinki), bez “zgadywania”.
+- Automatyczna walidacja: “no hallucination policy”:
+  - raport musi referencjonować evidence_id.
 
-```
-╔═══════════════════════════════════════════════════════════════════════════╗
-║  🦅 EYE IN THE SKY - FOREST OVERVIEW                      [🔴 LIVE]       ║
-╠═══════════════════════════════════════════════════════════════════════════╣
-║                                                                           ║
-║  BIRDS ON PATROL:                            FOREST STATUS:               ║
-║  ┌─────────────────────────┐               ┌─────────────────────────┐   ║
-║  │ 🦅 Eagle    [SOARING]   │               │ 🌳 Trees:   12 healthy   │   ║
-║  │ 🦅 Falcon   [HUNTING]   │               │ 🌿 Branches: 847 active │   ║
-║  │ 🦉 Owl      [WATCHING]  │               │ 🍃 Leaves: 12,453       │   ║
-║  └─────────────────────────┘               │ ⚠️ Threats: 3 detected  │   ║
-║                                            └─────────────────────────┘   ║
-║                                                                           ║
-║  SKY VIEW - THREAT MAP:                                                    ║
-║  ┌───────────────────────────────────────────────────────────────────┐   ║
-║  │                          ☁️ ☁️ ☁️                                  │   ║
-║  │                      🦅                                           │   ║
-║  │            ╱ ╲                                                     │   ║
-║  │           ╱   ╲              🦅 ← Falcon patroluje                │   ║
-║  │          ╱     ╲                                                   │   ║
-║  │    🌳────🌳────🌳────🌳────🌳────🌳                              │   ║
-║  │    ││    │⚠️   ││    ││    │🐿️  ││                               │   ║
-║  │   ┌┴┴┐  ┌┴┴┐  ┌┴┴┐  ┌┴┴┐  ┌┴┴┐  ┌┴┴┐                             │   ║
-║  │   DB    Web   API   Mail  File  Auth                              │   ║
-║  │         🐦‍⬛                    ↑                                   │   ║
-║  │         Crow detected!         Squirrel moving!                     │   ║
-║  └───────────────────────────────────────────────────────────────────┘   ║
-║                                                                           ║
-║  BIRD SONGS (Recent Alerts):                                              ║
-║  ┌───────────────────────────────────────────────────────────────────┐   ║
-║  │ 🦅 14:23 [SCREECH! ] Falcon:  Suspicious process on Web-Server      │   ║
-║  │ 🦉 14:21 [hoot...] Owl: Unusual night activity on DB-Server       │   ║
-║  │ 🦅 14:18 [ROAR!!] Eagle: Lateral movement detected!  🐿️            │   ║
-║  │ 🐦 14:15 [chirp] Sparrow: Normal heartbeat all trees              │   ║
-║  └───────────────────────────────────────────────────────────────────┘   ║
-║                                                                           ║
-║  [E]🦅Eagle View  [F]🦅Falcon Hunt  [O]🦉Owl Night  [T]🌳Tree Detail     ║
-╚═══════════════════════════════════════════════════════════════════════════╝
-```
+**H.3 Threat knowledge**
+- Integracja feedów:
+  - MISP (opcjonalnie),
+  - OpenCTI (opcjonalnie),
+  - STIX/TAXII (później).
+- Eksport do formatów SOC:
+  - STIX 2.1, JSON, Markdown, PDF.
 
-### 🦅 Tryby Ptaków
-
-```
-╔═══════════════════════════════════════════════════════════════════════╗
-║                    🦅 BIRD OPERATION MODES                            ║
-╠═══════════════════════════════════════════════════════════════════════╣
-║                                                                       ║
-║  🦅 EAGLE MODE - Strategic Command                                    ║
-║  ─────────────────────────────────────────────────────────────────    ║
-║  • Full infrastructure overview (widok z najwyższego pułapu)          ║
-║  • Executive dashboards and reports                                   ║
-║  • Cross-forest threat correlation                                    ║
-║  • Strategic hunting decisions                                        ║
-║  • Command & control center                                           ║
-║                                                                       ║
-║  🦅 FALCON MODE - Rapid Response                                      ║
-║  ─────────────────────────────────────────────────────────────────    ║
-║  • Real-time threat detection (ostry wzrok)                           ║
-║  • Instant alert system (przenikliwy krzyk)                           ║
-║  • Quick targeting and marking                                        ║
-║  • Active hunting patrols                                             ║
-║  • Fast evidence gathering                                            ║
-║                                                                       ║
-║  🦉 OWL MODE - Night Watch                                            ║
-║  ─────────────────────────────────────────────────────────────────    ║
-║  • Stealth monitoring (cichy lot)                                     ║
-║  • Night-time/off-hours surveillance                                  ║
-║  • Hidden process detection (widzi w ciemności)                       ║
-║  • Pattern correlation and wisdom                                     ║
-║  • Low-noise observation                                              ║
-║                                                                       ║
-║  🐦 SPARROW MODE - Routine Check                                      ║
-║  ─────────────────────────────────────────────────────────────────    ║
-║  • Regular heartbeat monitoring                                       ║
-║  • Basic health checks                                                ║
-║  • Routine log collection                                             ║
-║  • Soft chirp notifications                                           ║
-║                                                                       ║
-╚═══════════════════════════════════════════════════════════════════════╝
-```
-
-### 📋 Checklist Implementacji
-
-**Ptaki (Birds):**
-- [ ] `forest/sky/eagle.py` - orzeł (strategic command & overview)
-- [ ] `forest/sky/falcon.py` - sokół (fast response & real-time alerts)
-- [ ] `forest/sky/owl.py` - sowa (night watch & stealth monitoring)
-- [ ] `forest/sky/sparrow.py` - wróbel (routine checks & heartbeat)
-- [ ] `forest/sky/base_bird.py` - bazowa klasa ptaka
-
-**Koordynacja:**
-- [ ] `forest/sky/flight_controller.py` - koordynacja wszystkich ptaków
-- [ ] `forest/sky/patrol_scheduler.py` - harmonogram patroli
-- [ ] `forest/sky/territory_manager.py` - zarządzanie terytorium
-
-**Alarmy (Bird Songs):**
-- [ ] `forest/sky/bird_song. py` - system alarmów dźwiękowych
-- [ ] `forest/sky/alert_levels.py` - poziomy alarmów (chirp → screech → roar)
-- [ ] `forest/sky/notification_router.py` - routing powiadomień
-
-**Wizualizacja:**
-- [ ] `forest/visualization/sky_view.py` - widok z lotu ptaka
-- [ ] `forest/visualization/forest_view.py` - widok całego lasu
-- [ ] `forest/visualization/tree_view.py` - widok pojedynczego drzewa
-- [ ] `forest/visualization/threat_map.py` - mapa zagrożeń
+**DoD PHASE H**
+- AI raport jest “traceable”: każde twierdzenie wskazuje evidence/findings
+- Jest dedup i correlation (mniej szumu)
 
 ---
 
-## 🌊 FALA 9: SZTUCZNA INTELIGENCJA
+### PHASE I — Pro Recon Plugins (ciągłe, w paczkach)
+**Cel:** narzędzie realnie używalne przez pro red team/hunters.
 
-### 🤖 AI Engine Components
+**I.1 Nowe narzędzia (przykładowy backlog)**
+- Discovery: `masscan`, `naabu`
+- HTTP: `httpx`, `katana`
+- Vuln: `nuclei`
+- Content: `ffuf`
+- Subdomains: `amass` (alternatywa/uzupełnienie sublist3r)
+- OSINT: theHarvester (opcjonalnie), GitHub/ASN intel
 
-```
-┌───────────────────────────────────────────────────────────────────────┐
-│                      🤖 AI ENGINE                                     │
-├───────────────────────────────────────────────────────────────────────┤
-│                                                                       │
-│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐       │
-│  │ 📊 ANALYZER     │  │ 📝 REPORTER     │  │ 🔮 PREDICTOR    │       │
-│  │                 │  │                 │  │                 │       │
-│  │ • Threat score  │  │ • CVSS reports  │  │ • Next attack   │       │
-│  │ • Pattern match │  │ • Executive sum │  │ • Risk forecast │       │
-│  │ • Correlation   │  │ • Remediation   │  │ • Trend analysis│       │
-│  │ • Forest health │  │ • Bird reports  │  │ • Threat evolve │       │
-│  └─────────────────┘  └─────────────────┘  └─────────────────┘       │
-│                                                                       │
-│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐       │
-│  │ 🎯 ADVISOR      │  │ 🔗 CORRELATOR   │  │ 📚 LEARNER      │       │
-│  │                 │  │                 │  │                 │       │
-│  │ • Next action   │  │ • Link stains   │  │ • Pattern learn │       │
-│  │ • Best weapon   │  │ • Attack chain  │  │ • Baseline adj  │       │
-│  │ • Hunt strategy │  │ • Threat graph  │  │ • False pos red │       │
-│  │ • Bird deploy   │  │ • Forest map    │  │ • Crow patterns │       │
-│  └─────────────────┘  └─────────────────┘  └─────────────────┘       │
-│                                                                       │
-│  ┌─────────────────────────────────────────────────────────────┐     │
-│  │ 🌳 FOREST AI                                                 │     │
-│  │                                                              │     │
-│  │ • Tree health prediction    • Threat type classification    │     │
-│  │ • Branch anomaly detection  • Crow/Magpie behavior analysis │     │
-│  │ • Leaf pattern recognition  • Squirrel path prediction      │     │
-│  └─────────────────────────────────────────────────────────────┘     │
-│                                                                       │
-└───────────────────────────────────────────────────────────────────────┘
-```
+**I.2 Parsery**
+- Parsery output:
+  - JSON gdzie się da (`nmap -oX`/XML + parser),
+  - ujednolicone severity mapping.
 
-### 📋 Checklist Implementacji
-
-- [x] `ai/analyzer.py` - threat analysis engine ✅
-- [x] `ai/reporter.py` - AI report generator (enhanced) ✅
-- [x] `ai/predictor.py` - threat prediction ✅
-- [x] `ai/advisor.py` - hunt strategy advisor ✅
-- [x] `ai/correlator.py` - stain correlation ✅
-- [x] `ai/learner.py` - pattern learning ✅
-- [x] `ai/forest_ai.py` - forest-specific AI (NEW) ✅
-- [x] `ai/bird_coordinator.py` - AI bird deployment advisor (NEW) ✅
-- [x] `ai/threat_classifier.py` - crow/magpie/squirrel classification (NEW) ✅
-- [x] `ai/prompts/` - AI prompt templates ✅
-- [x] `ai/models/` - custom model configs ✅
+**DoD PHASE I**
+- Co najmniej 5 pluginów działa w jednym modelu Findings
 
 ---
 
-## 📁 STRUKTURA PROJEKTU
+## 3) Usprawnienia istniejących modułów (konkretne pomysły)
+### 3.1 `nethical_recon.py` → CLI “front-end”, nie monolit
+- Rozbić na:
+  - `cli/commands/*.py` (Typer)
+  - `adapters/tools/nmap.py`, `nikto.py` itd.
+  - `services/orchestrator.py`
+- Zachować menu jako opcjonalny tryb interaktywny (`nethical tui` lub `nethical interactive`).
 
-```
-nethical-recon/
-├── 📄 nethical_recon.py          # Main entry point (current)
-├── 📄 hunter.py                  # New Hunter CLI
-├── 📄 roadmap_2
+### 3.2 UI: Dashboard “prawdy danych”
+- Obecny TUI jest fajny, ale docelowo:
+  - dashboard ma czytać z API/DB (job status, findings, alerts),
+  - live feed na eventach (websocket lub polling).
+- Dodać:
+  - widok “Findings Explorer” (filtry: severity/tool/target),
+  - “Evidence viewer”,
+  - “RoE & limits” screen.
+
+### 3.3 AI: od heurystyk do “verified intelligence”
+- `ai/reporter.py`:
+  - dodać prawdziwy scoring pipeline: base severity + confidence + exploitability indicators
+  - “CVSS-like” może zostać, ale koniecznie z evidence references.
+- `ai/learner.py`:
+  - baseline: rozdzielić per target/segment,
+  - metryki: robust statistics (median, MAD) zamiast samych średnich.
+
+### 3.4 Forest metaphor: z “ładnej abstrakcji” do asset inventory
+- Forest = asset inventory + relationships:
+  - Trees = hosty,
+  - Branches = usługi/porty/procesy,
+  - Leaves = requesty/sesje/artefakty.
+- Dodać graf relacji:
+  - eksport do Graphviz,
+  - w DB trzymać relacje.
+
+### 3.5 Database module: pragmatyzm
+- Multi-backend to super wizja, ale:
+  - “Tier 1”: SQLite + Postgres (pełne wsparcie)
+  - “Tier 2”: reszta jako eksperymentalne pluginy
+- Migrations + indeksy pod query (po target_id, time, severity).
+
+---
+
+## 4) Security & Quality Plan (dla pro użycia)
+### 4.1 Testy
+- **Unit**: parsers, model validations, policy engine.
+- **Integration**: “run tool in container/mock”, DB migrations, API endpoints.
+- **Security scans**:
+  - Bandit, Semgrep, pip-audit,
+  - secret scanning (gitleaks).
+- Golden files:
+  - stałe próbki outputów nmap/nikto/nuclei jako fixtures.
+
+### 4.2 Threat model
+- Dokument “Threat Model”:
+  - ataki na pipeline (poisoning outputów, LLM prompt injection),
+  - ryzyka przechowywania evidence,
+  - ryzyka nadużyć przez użytkownika.
+
+### 4.3 Safe defaults
+- Domyślny tryb “low impact” (rate limiting).
+- Wymóg explicit flag na agresywne tryby.
+
+---
+
+## 5) Integracje pro (opcjonalne, ale bardzo pod “security pros”)
+- SIEM:
+  - Splunk HEC, Elastic, Sentinel (connectors)
+- Ticketing:
+  - Jira/GitHub Issues export (znormalizowane findings → ticket)
+- Reporting:
+  - PDF export (WeasyPrint) + “client-ready template”
+- Collaboration:
+  - multi-user (RBAC), namespaces/tenants
+
+---
+
+## 6) Mierniki sukcesu (KPIs)
+- **Noise ratio**: % zduplikowanych/low-confidence findings spada z czasem.
+- **Reproducibility**: każdy raport można odtworzyć z DB+evidence.
+- **Time-to-triage**: skrócony dzięki AI+dedup.
+- **Operator trust**: AI nie “zmyśla” — wszystko ma evidence.
+
+---
+
+## 7) Proponowana ścieżka wersji (SemVer)
+- `v0.1–0.3`: PHASE A–B (foundation + model)
+- `v0.4–0.6`: PHASE C (queue/scheduler)
+- `v0.7–0.9`: PHASE D–E (API + observability)
+- `v1.0`: stabilny core, API contract, test coverage, docker compose, podstawowe pluginy
+- `v1.1+`: K8s/Helm, advanced AI correlation, SIEM integrations
+
+---
+
+## 8) Backlog “nice to have” (wysoki impact)
+- SBOM (CycloneDX) + podpisywanie artefaktów.
+- “Replay mode”: odtworzenie joba z evidence bez ponownego skanowania.
+- “Attack surface diff”: porównanie wyników między tygodniami (co się zmieniło).
+- “Engagement profiles”: preset konfiguracji pod bug bounty / internal / red team.
+- “Scoping DSL”: opis zakresu i zasad w YAML (co wolno, czego nie).
+
+---
+
+## 9) Minimalny plan na najbliższe 2 tygodnie (praktycznie)
+1. `pyproject.toml`, reorganizacja katalogów do `src/`
+2. CLI na Typer: `nethical scan`, `nethical report`, `nethical job`
+3. Pydantic models: Target/Job/Run/Finding/Evidence
+4. SQLite storage + Alembic
+5. 1 parser w pełni: Nmap → Findings (XML preferowane)
+6. CI: lint + unit tests + security scans
+
+---
+
+**Efekt końcowy Roadmap 3.0:** Nethical Recon jako **profesjonalna platforma**:  
+- szybka w użyciu (CLI/TUI),  
+- rozszerzalna (pluginy + API),  
+- skalowalna (queue + Docker/K8s),  
+- obserwowalna (ELK/Prom/Grafana),  
+- bezpieczna (sekrety, SAST/DAST, policy engine),  
+- i z AI, które jest “evidence-based”, a nie “story-based”.
