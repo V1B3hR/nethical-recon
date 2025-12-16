@@ -38,7 +38,7 @@ class AlertsFeedPanel:
                 
                 # Format alert
                 time_str = alert.timestamp.strftime("%H:%M")
-                alert_text = f"{alert.bird.icon} {time_str} [{alert.bird.sound}] {alert.bird.name}: {alert.message}"
+                alert_text = f"{alert.bird.icon} {time_str} [{alert.bird.sound}] {alert.bird.bird_name}: {alert.message}"
                 
                 # Color based on bird type
                 if alert.bird in [BirdType.EAGLE, BirdType.FALCON]:

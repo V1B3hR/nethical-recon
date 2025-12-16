@@ -28,10 +28,10 @@ class BirdType(Enum):
     EAGLE = ("🦅", "ROAR!!", "Eagle")
     CROW = ("🐦‍⬛", "CAW!", "Crow")
     
-    def __init__(self, icon: str, sound: str, name: str):
+    def __init__(self, icon: str, sound: str, bird_name: str):
         self.icon = icon
         self.sound = sound
-        self.name = name
+        self.bird_name = bird_name
 
 
 class ThreatType(Enum):
@@ -65,7 +65,7 @@ class Alert:
     
     def __str__(self) -> str:
         time_str = self.timestamp.strftime("%H:%M")
-        return f"{self.bird.icon} {time_str} [{self.bird.sound}] {self.bird.name}: {self.message}"
+        return f"{self.bird.icon} {time_str} [{self.bird.sound}] {self.bird.bird_name}: {self.message}"
 
 
 class SystemStatus:
@@ -95,7 +95,7 @@ class UIColors:
     # Threat levels
     SAFE = "green"
     WARNING = "yellow"
-    ELEVATED = "orange"
+    ELEVATED = "bright_yellow"
     CRITICAL = "red"
     BREACH = "bright_red"
     
