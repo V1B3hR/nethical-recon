@@ -18,141 +18,158 @@ import socket
 class DNSEnumerator(BaseCamera):
     """
     DNS enumeration camera with ghost vision
-    
+
     Configuration:
         wordlist: Path to subdomain wordlist (default: None - uses common list)
         nameservers: List of custom nameservers (default: None - uses system)
         timeout: DNS query timeout in seconds (default: 2)
         check_zone_transfer: Attempt zone transfer (default: True)
     """
-    
+
     def __init__(self, config: Dict[str, Any] = None):
         super().__init__("DNSEnumerator", CameraMode.GHOST, config)
-        self.wordlist = self.config.get('wordlist')
-        self.nameservers = self.config.get('nameservers', [])
-        self.timeout = self.config.get('timeout', 2)
-        self.check_zone_transfer = self.config.get('check_zone_transfer', True)
+        self.wordlist = self.config.get("wordlist")
+        self.nameservers = self.config.get("nameservers", [])
+        self.timeout = self.config.get("timeout", 2)
+        self.check_zone_transfer = self.config.get("check_zone_transfer", True)
         self.common_subdomains = [
-            'www', 'mail', 'ftp', 'webmail', 'smtp', 'pop', 'ns1', 'ns2',
-            'admin', 'api', 'dev', 'staging', 'test', 'demo', 'blog',
-            'shop', 'vpn', 'remote', 'portal', 'dashboard', 'app',
-            'mobile', 'cdn', 'static', 'assets', 'img', 'images'
+            "www",
+            "mail",
+            "ftp",
+            "webmail",
+            "smtp",
+            "pop",
+            "ns1",
+            "ns2",
+            "admin",
+            "api",
+            "dev",
+            "staging",
+            "test",
+            "demo",
+            "blog",
+            "shop",
+            "vpn",
+            "remote",
+            "portal",
+            "dashboard",
+            "app",
+            "mobile",
+            "cdn",
+            "static",
+            "assets",
+            "img",
+            "images",
         ]
-    
+
     def validate_config(self) -> bool:
         """Validate configuration"""
         try:
             import dns.resolver
+
             return True
         except ImportError:
             self.logger.error("dnspython not installed. Install with: pip install dnspython")
             return False
-    
+
     def scan(self, target: str) -> Dict[str, Any]:
         """
         Enumerate DNS records for target domain
-        
+
         Args:
             target: Domain name to scan
-            
+
         Returns:
             Dict with DNS enumeration results
         """
         if not self.validate_config():
-            return {'error': 'dnspython not installed'}
-        
+            return {"error": "dnspython not installed"}
+
         self.logger.info(f"👻 Ghost Vision: Enumerating DNS for {target}...")
-        
+
         results = {
-            'target': target,
-            'subdomains': [],
-            'dns_records': {},
-            'nameservers': [],
-            'zone_transfer': None,
-            'dnssec': False
+            "target": target,
+            "subdomains": [],
+            "dns_records": {},
+            "nameservers": [],
+            "zone_transfer": None,
+            "dnssec": False,
         }
-        
+
         # Get nameservers
-        results['nameservers'] = self._get_nameservers(target)
-        
+        results["nameservers"] = self._get_nameservers(target)
+
         # Get DNS records for main domain
-        results['dns_records'][target] = self._get_dns_records(target)
-        
+        results["dns_records"][target] = self._get_dns_records(target)
+
         # Enumerate subdomains
-        results['subdomains'] = self._enumerate_subdomains(target)
-        
+        results["subdomains"] = self._enumerate_subdomains(target)
+
         # Get DNS records for discovered subdomains
-        for subdomain in results['subdomains']:
-            results['dns_records'][subdomain] = self._get_dns_records(subdomain)
-        
+        for subdomain in results["subdomains"]:
+            results["dns_records"][subdomain] = self._get_dns_records(subdomain)
+
         # Attempt zone transfer
-        if self.check_zone_transfer and results['nameservers']:
-            results['zone_transfer'] = self._attempt_zone_transfer(
-                target, 
-                results['nameservers']
-            )
-        
+        if self.check_zone_transfer and results["nameservers"]:
+            results["zone_transfer"] = self._attempt_zone_transfer(target, results["nameservers"])
+
         # Check DNSSEC
-        results['dnssec'] = self._check_dnssec(target)
-        
+        results["dnssec"] = self._check_dnssec(target)
+
         self.logger.info(f"Found {len(results['subdomains'])} subdomains")
-        
+
         return results
-    
+
     def _get_nameservers(self, domain: str) -> List[str]:
         """Get nameservers for domain"""
         try:
             import dns.resolver
-            
-            answers = dns.resolver.resolve(domain, 'NS', lifetime=self.timeout)
-            nameservers = [str(rdata.target).rstrip('.') for rdata in answers]
-            
+
+            answers = dns.resolver.resolve(domain, "NS", lifetime=self.timeout)
+            nameservers = [str(rdata.target).rstrip(".") for rdata in answers]
+
             self.logger.info(f"Found {len(nameservers)} nameservers for {domain}")
             return nameservers
-        
+
         except Exception as e:
             self.logger.warning(f"Failed to get nameservers: {e}")
             return []
-    
+
     def _get_dns_records(self, domain: str) -> Dict[str, List[str]]:
         """
         Get various DNS records for a domain
-        
+
         Args:
             domain: Domain name
-            
+
         Returns:
             Dict mapping record types to values
         """
         import dns.resolver
-        
+
         records = {}
-        record_types = ['A', 'AAAA', 'MX', 'TXT', 'CNAME', 'NS', 'SOA']
-        
+        record_types = ["A", "AAAA", "MX", "TXT", "CNAME", "NS", "SOA"]
+
         for rtype in record_types:
             try:
                 answers = dns.resolver.resolve(domain, rtype, lifetime=self.timeout)
                 records[rtype] = []
-                
+
                 for rdata in answers:
-                    if rtype == 'MX':
+                    if rtype == "MX":
                         records[rtype].append(f"{rdata.preference} {str(rdata.exchange)}")
-                    elif rtype == 'SOA':
+                    elif rtype == "SOA":
                         records[rtype].append(f"{str(rdata.mname)} {str(rdata.rname)}")
                     else:
                         records[rtype].append(str(rdata))
-                
+
                 # Record discovery for interesting records
-                if rtype in ['A', 'AAAA']:
+                if rtype in ["A", "AAAA"]:
                     for ip in records[rtype]:
                         self.record_discovery(
-                            'dns_record',
-                            domain,
-                            {'type': rtype, 'value': ip},
-                            confidence=1.0,
-                            severity='INFO'
+                            "dns_record", domain, {"type": rtype, "value": ip}, confidence=1.0, severity="INFO"
                         )
-            
+
             except dns.resolver.NoAnswer:
                 continue
             except dns.resolver.NXDOMAIN:
@@ -160,53 +177,47 @@ class DNSEnumerator(BaseCamera):
                 break
             except Exception as e:
                 continue
-        
+
         return records
-    
+
     def _enumerate_subdomains(self, domain: str) -> List[str]:
         """
         Enumerate subdomains
-        
+
         Args:
             domain: Base domain
-            
+
         Returns:
             List of discovered subdomains
         """
         subdomains = []
-        
+
         # Use wordlist if provided
         if self.wordlist:
             try:
-                with open(self.wordlist, 'r') as f:
+                with open(self.wordlist, "r") as f:
                     wordlist = [line.strip() for line in f if line.strip()]
             except Exception as e:
                 self.logger.warning(f"Failed to read wordlist: {e}")
                 wordlist = self.common_subdomains
         else:
             wordlist = self.common_subdomains
-        
+
         # Try each subdomain
         for sub in wordlist:
             subdomain = f"{sub}.{domain}"
-            
+
             try:
                 # Try to resolve
                 socket.setdefaulttimeout(self.timeout)
                 socket.gethostbyname(subdomain)
-                
+
                 subdomains.append(subdomain)
                 self.logger.info(f"Found subdomain: {subdomain}")
-                
+
                 # Record discovery
-                self.record_discovery(
-                    'subdomain',
-                    subdomain,
-                    {'parent': domain},
-                    confidence=1.0,
-                    severity='INFO'
-                )
-            
+                self.record_discovery("subdomain", subdomain, {"parent": domain}, confidence=1.0, severity="INFO")
+
             except socket.gaierror:
                 # Subdomain doesn't exist
                 continue
@@ -214,114 +225,104 @@ class DNSEnumerator(BaseCamera):
                 continue
             except Exception as e:
                 continue
-        
+
         return subdomains
-    
+
     def _attempt_zone_transfer(self, domain: str, nameservers: List[str]) -> Dict[str, Any]:
         """
         Attempt DNS zone transfer (AXFR)
-        
+
         Args:
             domain: Domain name
             nameservers: List of nameservers to try
-            
+
         Returns:
             Dict with zone transfer results
         """
         import dns.zone
         import dns.query
-        
-        result = {
-            'successful': False,
-            'nameserver': None,
-            'records': []
-        }
-        
+
+        result = {"successful": False, "nameserver": None, "records": []}
+
         for ns in nameservers:
             try:
                 # Resolve nameserver to IP
                 ns_ip = socket.gethostbyname(ns)
-                
+
                 # Attempt zone transfer
                 zone = dns.zone.from_xfr(dns.query.xfr(ns_ip, domain, timeout=self.timeout))
-                
+
                 # Zone transfer successful!
-                result['successful'] = True
-                result['nameserver'] = ns
-                
+                result["successful"] = True
+                result["nameserver"] = ns
+
                 # Extract records
                 for name, node in zone.nodes.items():
                     rdatasets = node.rdatasets
                     for rdataset in rdatasets:
                         for rdata in rdataset:
-                            result['records'].append({
-                                'name': str(name),
-                                'type': dns.rdatatype.to_text(rdataset.rdtype),
-                                'value': str(rdata)
-                            })
-                
+                            result["records"].append(
+                                {"name": str(name), "type": dns.rdatatype.to_text(rdataset.rdtype), "value": str(rdata)}
+                            )
+
                 self.logger.warning(f"Zone transfer successful from {ns}! Found {len(result['records'])} records")
-                
+
                 # Record as a critical discovery
                 self.record_discovery(
-                    'vulnerability',
+                    "vulnerability",
                     domain,
-                    {
-                        'type': 'zone_transfer',
-                        'nameserver': ns,
-                        'records_exposed': len(result['records'])
-                    },
+                    {"type": "zone_transfer", "nameserver": ns, "records_exposed": len(result["records"])},
                     confidence=1.0,
-                    severity='CRITICAL'
+                    severity="CRITICAL",
                 )
-                
+
                 break  # Stop after first successful transfer
-            
+
             except Exception as e:
                 continue
-        
-        if not result['successful']:
+
+        if not result["successful"]:
             self.logger.info("Zone transfer not allowed (this is good)")
-        
+
         return result
-    
+
     def _check_dnssec(self, domain: str) -> bool:
         """
         Check if DNSSEC is enabled
-        
+
         Args:
             domain: Domain name
-            
+
         Returns:
             True if DNSSEC is enabled
         """
         try:
             import dns.resolver
-            
+
             # Try to get DNSKEY record
-            answers = dns.resolver.resolve(domain, 'DNSKEY', lifetime=self.timeout)
-            
+            answers = dns.resolver.resolve(domain, "DNSKEY", lifetime=self.timeout)
+
             if answers:
                 self.logger.info(f"DNSSEC is enabled for {domain}")
                 return True
-        
+
         except Exception:
             pass
-        
+
         return False
-    
+
     def quick_scan(self, domain: str) -> Dict[str, Any]:
         """
         Quick DNS scan (basic records only)
-        
+
         Args:
             domain: Domain to scan
-            
+
         Returns:
             Basic DNS records
         """
         return {
-            'domain': domain,
-            'records': self._get_dns_records(domain),
-            'nameservers': self._get_nameservers(domain)
+            "domain": domain,
+            "records": self._get_dns_records(domain),
+            "nameservers": self._get_nameservers(domain),
         }

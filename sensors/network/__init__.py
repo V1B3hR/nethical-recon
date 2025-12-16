@@ -8,9 +8,4 @@ from .anomaly_detector import AnomalyDetector
 from .port_scan_detector import PortScanDetector
 from .protocol_analyzer import ProtocolAnalyzer
 
-__all__ = [
-    'TrafficMonitor',
-    'AnomalyDetector',
-    'PortScanDetector',
-    'ProtocolAnalyzer'
-]
+__all__ = ["TrafficMonitor", "AnomalyDetector", "PortScanDetector", "ProtocolAnalyzer"]

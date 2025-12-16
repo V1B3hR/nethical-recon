@@ -2,7 +2,7 @@
 🎯 Nethical Hunter Command Center UI
 FALA 7: TABLET MYŚLIWEGO - Main Command Dashboard
 
-This module provides the UI components for the hunter's tablet - 
+This module provides the UI components for the hunter's tablet -
 the central command center for all hunting operations.
 """
 

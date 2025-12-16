@@ -8,13 +8,7 @@ This module provides bird-based surveillance and monitoring for the forest infra
 Each bird has unique capabilities for different aspects of threat detection and monitoring.
 """
 
-from .base_bird import (
-    BaseBird,
-    BirdType,
-    FlightMode,
-    AlertLevel,
-    BirdAlert
-)
+from .base_bird import BaseBird, BirdType, FlightMode, AlertLevel, BirdAlert
 
 from .eagle import Eagle
 from .falcon import Falcon
@@ -25,39 +19,37 @@ from .bird_song import BirdSong, format_colored_alert, visualize_sound
 
 __all__ = [
     # Base classes
-    'BaseBird',
-    'BirdType',
-    'FlightMode',
-    'AlertLevel',
-    'BirdAlert',
-    
+    "BaseBird",
+    "BirdType",
+    "FlightMode",
+    "AlertLevel",
+    "BirdAlert",
     # Bird implementations
-    'Eagle',
-    'Falcon',
-    'Owl',
-    'Sparrow',
-    
+    "Eagle",
+    "Falcon",
+    "Owl",
+    "Sparrow",
     # Coordination
-    'FlightController',
-    
+    "FlightController",
     # Alert system
-    'BirdSong',
-    'format_colored_alert',
-    'visualize_sound',
+    "BirdSong",
+    "format_colored_alert",
+    "visualize_sound",
 ]
 
-__version__ = '1.0.0'
-__author__ = 'Nethical Recon Team'
-__description__ = 'Eye in the Sky - Bird-based surveillance system'
+__version__ = "1.0.0"
+__author__ = "Nethical Recon Team"
+__description__ = "Eye in the Sky - Bird-based surveillance system"
+
 
 # Quick start helper
 def create_sky_surveillance():
     """
     Create and deploy standard sky surveillance fleet
-    
+
     Returns:
         FlightController with standard fleet deployed and activated
-    
+
     Example:
         >>> from forest.sky import create_sky_surveillance
         >>> sky = create_sky_surveillance()

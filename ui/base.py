@@ -1,6 +1,7 @@
 """
 Base UI components and utilities for Nethical Hunter Command Center
 """
+
 from typing import Dict, List, Optional, Any
 from datetime import datetime
 from enum import Enum
@@ -8,12 +9,13 @@ from enum import Enum
 
 class ThreatLevel(Enum):
     """Threat level indicators"""
+
     INFO = ("🟢", "INFO", 0)
     WARNING = ("🟡", "WARNING", 1)
     ELEVATED = ("🟠", "ELEVATED", 2)
     CRITICAL = ("🔴", "CRITICAL", 3)
     BREACH = ("⚫", "BREACH", 4)
-    
+
     def __init__(self, icon: str, label: str, severity: int):
         self.icon = icon
         self.label = label
@@ -22,12 +24,13 @@ class ThreatLevel(Enum):
 
 class BirdType(Enum):
     """Bird types for alerts"""
+
     SPARROW = ("🐦", "chirp", "Sparrow")
     OWL = ("🦉", "hoot...", "Owl")
     FALCON = ("🦅", "SCREECH!", "Falcon")
     EAGLE = ("🦅", "ROAR!!", "Eagle")
     CROW = ("🐦‍⬛", "CAW!", "Crow")
-    
+
     def __init__(self, icon: str, sound: str, bird_name: str):
         self.icon = icon
         self.sound = sound
@@ -36,13 +39,14 @@ class BirdType(Enum):
 
 class ThreatType(Enum):
     """Forest threat types"""
+
     CROW = ("🐦‍⬛", "crow", "Malware waiting")
     MAGPIE = ("🐦", "magpie", "Data Stealer")
     SQUIRREL = ("🐿️", "squirrel", "Lateral Movement")
     SNAKE = ("🐍", "snake", "Rootkit")
     PARASITE = ("🐛", "parasite", "Cryptominer")
     BAT = ("🦇", "bat", "Night-time Attack")
-    
+
     def __init__(self, icon: str, code: str, description: str):
         self.icon = icon
         self.code = code
@@ -51,18 +55,15 @@ class ThreatType(Enum):
 
 class Alert:
     """Alert/Bird Song representation"""
+
     def __init__(
-        self,
-        bird: BirdType,
-        message: str,
-        timestamp: Optional[datetime] = None,
-        level: ThreatLevel = ThreatLevel.INFO
+        self, bird: BirdType, message: str, timestamp: Optional[datetime] = None, level: ThreatLevel = ThreatLevel.INFO
     ):
         self.bird = bird
         self.message = message
         self.timestamp = timestamp or datetime.now()
         self.level = level
-    
+
     def __str__(self) -> str:
         time_str = self.timestamp.strftime("%H:%M")
         return f"{self.bird.icon} {time_str} [{self.bird.sound}] {self.bird.bird_name}: {self.message}"
@@ -70,6 +71,7 @@ class Alert:
 
 class SystemStatus:
     """Overall system status for dashboard"""
+
     def __init__(self):
         self.threat_level: ThreatLevel = ThreatLevel.INFO
         self.threat_score: float = 0.0
@@ -92,13 +94,14 @@ class SystemStatus:
 
 class UIColors:
     """Color scheme for the UI"""
+
     # Threat levels
     SAFE = "green"
     WARNING = "yellow"
     ELEVATED = "bright_yellow"
     CRITICAL = "red"
     BREACH = "bright_red"
-    
+
     # Components
     SENSOR = "cyan"
     CAMERA = "red"
@@ -106,7 +109,7 @@ class UIColors:
     WEAPON = "bright_yellow"
     FOREST = "green"
     BIRD = "bright_cyan"
-    
+
     # General
     BORDER = "bright_blue"
     TEXT = "white"
@@ -146,4 +149,4 @@ def truncate_text(text: str, max_length: int) -> str:
     """Truncate text with ellipsis"""
     if len(text) <= max_length:
         return text
-    return text[:max_length - 3] + "..."
+    return text[: max_length - 3] + "..."
