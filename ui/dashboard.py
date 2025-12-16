@@ -2,6 +2,7 @@
 Main Dashboard - TABLET MYŚLIWEGO Command Center
 Central command and control interface for Nethical Hunter
 """
+import time
 from typing import Optional
 from datetime import datetime
 from rich.console import Console
@@ -220,7 +221,6 @@ class Dashboard:
                 while True:
                     live.update(self.render_dashboard())
                     # In a real implementation, this would handle input and updates
-                    import time
                     time.sleep(1 / refresh_rate)
             except KeyboardInterrupt:
                 pass
