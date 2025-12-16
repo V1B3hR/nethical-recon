@@ -2,17 +2,10 @@
 CLI entry point for Nethical Recon
 """
 
-import sys
-from pathlib import Path
 from typing import Optional
 
 import typer
 from rich.console import Console
-
-# Add the project root to the path to allow imports
-project_root = Path(__file__).parent.parent.parent
-if str(project_root) not in sys.path:
-    sys.path.insert(0, str(project_root))
 
 console = Console()
 app = typer.Typer(
@@ -35,7 +28,7 @@ def interactive():
     """Launch interactive mode (original nethical_recon.py interface)"""
     console.print("[bold yellow]Launching interactive mode...[/bold yellow]")
 
-    # Import and run the original nethical_recon.py main function
+    # Import and run the original nethical_recon_legacy.py main function
     try:
         # Import from the root directory
         import nethical_recon as original
@@ -44,9 +37,11 @@ def interactive():
             original.main()
         else:
             console.print("[red]Error: Interactive mode not available yet[/red]")
+            console.print("[yellow]For now, run: python nethical_recon_legacy.py[/yellow]")
             raise typer.Exit(1)
     except ImportError:
         console.print("[red]Error: Could not load interactive mode[/red]")
+        console.print("[yellow]For now, run: python nethical_recon_legacy.py[/yellow]")
         raise typer.Exit(1) from None
 
 
