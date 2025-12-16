@@ -1,6 +1,7 @@
 """
 Panels package for Nethical Hunter Command Center
 """
+
 from .threat_level import ThreatLevelPanel
 from .sensors_status import SensorsStatusPanel
 from .nanobots_status import NanobotsStatusPanel

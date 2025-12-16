@@ -22,15 +22,15 @@ from .dns_enum import DNSEnumerator
 from .waf_detector import WAFDetector
 
 __all__ = [
-    'BaseCamera',
-    'CameraMode',
-    'CameraStatus',
-    'CameraDiscovery',
-    'CameraManager',
-    'ShodanEye',
-    'CensysEye',
-    'HarvesterEye',
-    'SSLScanner',
-    'DNSEnumerator',
-    'WAFDetector',
+    "BaseCamera",
+    "CameraMode",
+    "CameraStatus",
+    "CameraDiscovery",
+    "CameraManager",
+    "ShodanEye",
+    "CensysEye",
+    "HarvesterEye",
+    "SSLScanner",
+    "DNSEnumerator",
+    "WAFDetector",
 ]

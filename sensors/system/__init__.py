@@ -9,10 +9,4 @@ from .file_watcher import FileWatcher
 from .auth_monitor import AuthMonitor
 from .dns_watcher import DNSWatcher
 
-__all__ = [
-    'HeartbeatMonitor',
-    'ResourceMonitor',
-    'FileWatcher',
-    'AuthMonitor',
-    'DNSWatcher'
-]
+__all__ = ["HeartbeatMonitor", "ResourceMonitor", "FileWatcher", "AuthMonitor", "DNSWatcher"]
