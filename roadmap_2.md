@@ -1,4 +1,4 @@
-# 🦾 NETHICAL RECON — ROADMAP 2.0 (PROFESSIONAL-GRADE)
+# 🦾 NETHICAL RECON — ROADMAP 3.0 (PROFESSIONAL-GRADE)
 **Repo:** `V1B3hR/nethical-recon`  
 **Date:** 2025-12-16  
 **Audience:** profesjonalni ethical hackers, red team / purple team, threat hunters, SOC/security engineers  
