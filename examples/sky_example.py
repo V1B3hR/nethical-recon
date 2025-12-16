@@ -241,8 +241,9 @@ def example_4_eagle_executive_report():
     print_header("Example 4: Eagle Executive Report")
     
     # Deploy eagle
+    from forest.sky.base_bird import FlightMode
     eagle = Eagle("Eagle-Command")
-    eagle.take_flight(eagle.flight_mode.__class__.SOARING)
+    eagle.take_flight(FlightMode.SOARING)
     print("✅ Eagle deployed for strategic assessment\n")
     
     # Create data and scan

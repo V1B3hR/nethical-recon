@@ -191,7 +191,14 @@ class Falcon(BaseBird):
             else:
                 return True
             
-            cutoff = datetime.now() - timedelta(minutes=minutes)
+            # Handle timezone-aware and naive datetime comparison
+            cutoff = datetime.now()
+            if event_time.tzinfo is not None:
+                # If event_time is timezone-aware, make cutoff timezone-aware too
+                from datetime import timezone
+                cutoff = datetime.now(timezone.utc)
+            
+            cutoff = cutoff - timedelta(minutes=minutes)
             return event_time > cutoff
         except:
             return True  # On parse error, assume recent

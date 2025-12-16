@@ -302,10 +302,10 @@ class FlightController:
     
     def clear_old_data(self, hours: int = 24):
         """Clear old alerts and data"""
-        cutoff = datetime.now().timestamp() - (hours * 3600)
+        cutoff_timestamp = datetime.now().timestamp() - (hours * 3600)
         self.all_alerts = [
             alert for alert in self.all_alerts
-            if alert.timestamp.timestamp() > cutoff
+            if alert.timestamp.timestamp() > cutoff_timestamp
         ]
         
         # Clear bird-specific old data
