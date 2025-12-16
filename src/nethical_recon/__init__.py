@@ -1,15 +1,10 @@
-"""
-Nethical Recon - Advanced Cybersecurity Reconnaissance & Threat Hunting Platform
+"""Top-level package for nethical_recon.
 
-A comprehensive, AI-powered cybersecurity platform that uses hunting metaphors
-to create an intuitive and powerful security monitoring system.
+This package contains utilities and helpers for the Nethical Recon project.
 """
+
+from __future__ import annotations
+
+__all__ = ["__version__"]
 
 __version__ = "0.1.0"
-__author__ = "V1B3hR"
-
-# Expose main components for easy import
-__all__ = [
-    "__version__",
-    "__author__",
-]
