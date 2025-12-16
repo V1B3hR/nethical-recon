@@ -10,13 +10,4 @@ from .leaf import Leaf, LeafType
 from .crown import Crown
 from .forest_map import ForestMap
 
-__all__ = [
-    'Tree',
-    'Trunk',
-    'Branch',
-    'BranchType',
-    'Leaf',
-    'LeafType',
-    'Crown',
-    'ForestMap'
-]
+__all__ = ["Tree", "Trunk", "Branch", "BranchType", "Leaf", "LeafType", "Crown", "ForestMap"]

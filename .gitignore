@@ -58,3 +58,25 @@ Thumbs.db
 *.db-journal
 *.db-wal
 *.db-shm
+
+# Testing and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# Pre-commit
+.pre-commit-config.yaml.bak
+
+# Ruff cache
+.ruff_cache/
+
+# MyPy cache
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Security scanning reports
+bandit-report.json
+*.sarif

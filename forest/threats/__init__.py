@@ -13,14 +13,14 @@ from .bat import Bat
 from .detector import ThreatDetector
 
 __all__ = [
-    'BaseThreat',
-    'ThreatType',
-    'ThreatSeverity',
-    'Crow',
-    'Magpie',
-    'Squirrel',
-    'Snake',
-    'Parasite',
-    'Bat',
-    'ThreatDetector'
+    "BaseThreat",
+    "ThreatType",
+    "ThreatSeverity",
+    "Crow",
+    "Magpie",
+    "Squirrel",
+    "Snake",
+    "Parasite",
+    "Bat",
+    "ThreatDetector",
 ]

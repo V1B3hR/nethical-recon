@@ -24,16 +24,7 @@ from .manager import ForestManager
 from .health_check import HealthChecker
 
 # Import tree components
-from .trees import (
-    Tree,
-    Trunk,
-    Branch,
-    BranchType,
-    Leaf,
-    LeafType,
-    Crown,
-    ForestMap
-)
+from .trees import Tree, Trunk, Branch, BranchType, Leaf, LeafType, Crown, ForestMap
 
 # Import threat components
 from .threats import (
@@ -46,38 +37,35 @@ from .threats import (
     Snake,
     Parasite,
     Bat,
-    ThreatDetector
+    ThreatDetector,
 )
 
 __all__ = [
     # Base classes
-    'ForestBase',
-    'ForestComponent',
-    'ComponentStatus',
-    
+    "ForestBase",
+    "ForestComponent",
+    "ComponentStatus",
     # Management
-    'ForestManager',
-    'HealthChecker',
-    
+    "ForestManager",
+    "HealthChecker",
     # Tree components
-    'Tree',
-    'Trunk',
-    'Branch',
-    'BranchType',
-    'Leaf',
-    'LeafType',
-    'Crown',
-    'ForestMap',
-    
+    "Tree",
+    "Trunk",
+    "Branch",
+    "BranchType",
+    "Leaf",
+    "LeafType",
+    "Crown",
+    "ForestMap",
     # Threat components
-    'BaseThreat',
-    'ThreatType',
-    'ThreatSeverity',
-    'Crow',
-    'Magpie',
-    'Squirrel',
-    'Snake',
-    'Parasite',
-    'Bat',
-    'ThreatDetector'
+    "BaseThreat",
+    "ThreatType",
+    "ThreatSeverity",
+    "Crow",
+    "Magpie",
+    "Squirrel",
+    "Snake",
+    "Parasite",
+    "Bat",
+    "ThreatDetector",
 ]

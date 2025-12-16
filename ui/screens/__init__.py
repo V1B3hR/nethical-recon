@@ -1,6 +1,7 @@
 """
 Screens package for Nethical Hunter Command Center
 """
+
 from .targeting import TargetingScreen
 from .stain_report import StainReportScreen
 from .forest_view import ForestViewScreen

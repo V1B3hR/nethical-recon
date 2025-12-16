@@ -22,26 +22,24 @@ from .connection_pool import ConnectionPool, PooledStore
 
 __all__ = [
     # Base classes
-    'BaseStore',
-    'StoreBackend',
-    
+    "BaseStore",
+    "StoreBackend",
     # Store implementations
-    'SQLiteStore',
-    'PostgreSQLStore',
-    'MySQLStore',
-    'MSSQLStore',
-    'OracleStore',
-    'Db2Store',
-    'SnowflakeStore',
-    'MongoDBStore',
-    'RedisCache',
-    'ElasticsearchStore',
-    
+    "SQLiteStore",
+    "PostgreSQLStore",
+    "MySQLStore",
+    "MSSQLStore",
+    "OracleStore",
+    "Db2Store",
+    "SnowflakeStore",
+    "MongoDBStore",
+    "RedisCache",
+    "ElasticsearchStore",
     # Factory and utilities
-    'StoreFactory',
-    'create_store',
-    'ConnectionPool',
-    'PooledStore'
+    "StoreFactory",
+    "create_store",
+    "ConnectionPool",
+    "PooledStore",
 ]
 
-__version__ = '1.0.0'
+__version__ = "1.0.0"

@@ -13,12 +13,12 @@ from .tracer_black import BlackTracer
 from .tracer_brown import BrownTracer
 
 __all__ = [
-    'RedTracer',
-    'PurpleTracer',
-    'OrangeTracer',
-    'YellowTracer',
-    'BlueTracer',
-    'WhiteTracer',
-    'BlackTracer',
-    'BrownTracer',
+    "RedTracer",
+    "PurpleTracer",
+    "OrangeTracer",
+    "YellowTracer",
+    "BlueTracer",
+    "WhiteTracer",
+    "BlackTracer",
+    "BrownTracer",
 ]
