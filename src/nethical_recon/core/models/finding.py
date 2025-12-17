@@ -58,14 +58,6 @@ class Finding(BaseModel):
     raw_data: dict = Field(default_factory=dict, description="Raw tool output data")
     discovered_at: datetime = Field(default_factory=datetime.utcnow, description="Discovery timestamp (UTC)")
 
-    @field_validator("port")
-    @classmethod
-    def validate_port(cls, v: Optional[int]) -> Optional[int]:
-        """Validate port number is in valid range."""
-        if v is not None and not (1 <= v <= 65535):
-            raise ValueError(f"Port must be between 1 and 65535, got {v}")
-        return v
-
     class Config:
         """Pydantic configuration."""
 
