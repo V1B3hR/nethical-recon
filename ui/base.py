@@ -57,7 +57,7 @@ class Alert:
     """Alert/Bird Song representation"""
 
     def __init__(
-        self, bird: BirdType, message: str, timestamp: Optional[datetime] = None, level: ThreatLevel = ThreatLevel.INFO
+        self, bird: BirdType, message: str, timestamp: datetime | None = None, level: ThreatLevel = ThreatLevel.INFO
     ):
         self.bird = bird
         self.message = message
@@ -131,14 +131,14 @@ def calculate_threat_level(score: float) -> ThreatLevel:
         return ThreatLevel.BREACH
 
 
-def format_time(dt: Optional[datetime] = None) -> str:
+def format_time(dt: datetime | None = None) -> str:
     """Format datetime for display"""
     if dt is None:
         dt = datetime.now()
     return dt.strftime("%H:%M")
 
 
-def format_date(dt: Optional[datetime] = None) -> str:
+def format_date(dt: datetime | None = None) -> str:
     """Format date for display"""
     if dt is None:
         dt = datetime.now()

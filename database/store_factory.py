@@ -190,7 +190,7 @@ class StoreFactory:
 
 
 # Convenience function for quick store creation
-def create_store(backend: str = "sqlite", config: Optional[Dict[str, Any]] = None) -> BaseStore:
+def create_store(backend: str = "sqlite", config: Dict[str, Any] | None = None) -> BaseStore:
     """
     Convenience function to create a database store
 

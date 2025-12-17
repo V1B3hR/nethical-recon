@@ -161,7 +161,7 @@ class SQLiteStore(BaseStore):
             print(f"Save stain error: {e}")
             return False
 
-    def get_stain(self, tag_id: str) -> Optional[Dict[str, Any]]:
+    def get_stain(self, tag_id: str) -> Dict[str, Any] | None:
         """Retrieve a stain by tag ID"""
         try:
             self.cursor.execute("SELECT * FROM stains WHERE tag_id = ?", (tag_id,))
@@ -173,7 +173,7 @@ class SQLiteStore(BaseStore):
             print(f"Get stain error: {e}")
             return None
 
-    def get_all_stains(self, limit: Optional[int] = None, offset: int = 0) -> List[Dict[str, Any]]:
+    def get_all_stains(self, limit: int | None = None, offset: int = 0) -> List[Dict[str, Any]]:
         """Retrieve all stains with pagination"""
         try:
             query = "SELECT * FROM stains ORDER BY timestamp_first_seen DESC"
@@ -187,7 +187,7 @@ class SQLiteStore(BaseStore):
             print(f"Get all stains error: {e}")
             return []
 
-    def get_stains_by_type(self, marker_type: str, limit: Optional[int] = None) -> List[Dict[str, Any]]:
+    def get_stains_by_type(self, marker_type: str, limit: int | None = None) -> List[Dict[str, Any]]:
         """Retrieve stains filtered by marker type"""
         try:
             query = "SELECT * FROM stains WHERE marker_type = ? ORDER BY timestamp_first_seen DESC"
@@ -201,7 +201,7 @@ class SQLiteStore(BaseStore):
             print(f"Get stains by type error: {e}")
             return []
 
-    def get_stains_by_color(self, color: str, limit: Optional[int] = None) -> List[Dict[str, Any]]:
+    def get_stains_by_color(self, color: str, limit: int | None = None) -> List[Dict[str, Any]]:
         """Retrieve stains filtered by color"""
         try:
             query = "SELECT * FROM stains WHERE color = ? ORDER BY timestamp_first_seen DESC"
@@ -307,7 +307,7 @@ class SQLiteStore(BaseStore):
             print(f"Delete stain error: {e}")
             return False
 
-    def search_stains(self, query: str, fields: Optional[List[str]] = None) -> List[Dict[str, Any]]:
+    def search_stains(self, query: str, fields: List[str] | None = None) -> List[Dict[str, Any]]:
         """Search for stains matching a query"""
         try:
             # Simple full-text search across JSON fields
@@ -331,7 +331,7 @@ class SQLiteStore(BaseStore):
             print(f"Search stains error: {e}")
             return []
 
-    def count_stains(self, filters: Optional[Dict[str, Any]] = None) -> int:
+    def count_stains(self, filters: Dict[str, Any] | None = None) -> int:
         """Count stains with optional filters"""
         try:
             if not filters:

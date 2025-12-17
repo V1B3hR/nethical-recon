@@ -24,7 +24,7 @@ class FireResult:
     mode_used: str
     ammo_used: str
     hit: bool
-    stain_id: Optional[str] = None
+    stain_id: str | None = None
     message: str = ""
     errors: List[str] = None
 
@@ -71,7 +71,7 @@ class FireControlSystem:
         self.engagement_log: List[Dict[str, Any]] = []
 
     def engage_target(
-        self, target: Target, weapon_mode: Optional[str] = None, ammo_color: Optional[str] = None
+        self, target: Target, weapon_mode: str | None = None, ammo_color: str | None = None
     ) -> FireResult:
         """
         Engage a target with the marker gun

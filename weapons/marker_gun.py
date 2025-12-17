@@ -27,10 +27,10 @@ class MarkerGun:
     def __init__(self, name: str = "Silent Marker"):
         self.name = name
         self.serial_number = self._generate_serial()
-        self.current_mode: Optional[BaseWeaponMode] = None
+        self.current_mode: BaseWeaponMode | None = None
         self.available_modes: Dict[WeaponMode, BaseWeaponMode] = {}
         self.ammo_inventory: Dict[str, BaseTracer] = {}
-        self.current_ammo: Optional[BaseTracer] = None
+        self.current_ammo: BaseTracer | None = None
         self.shots_fired = 0
         self.hits_successful = 0
         self.stains_created: List[Stain] = []
@@ -165,7 +165,7 @@ class MarkerGun:
                 "message": "Shot fired but missed target",
             }
 
-    def get_stain(self, tag_id: str) -> Optional[Stain]:
+    def get_stain(self, tag_id: str) -> Stain | None:
         """Retrieve stain by tag ID"""
         for stain in self.stains_created:
             if stain.tag_id == tag_id:

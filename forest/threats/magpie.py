@@ -24,7 +24,7 @@ class Magpie(BaseThreat):
         threat_id: str,
         name: str,
         severity: ThreatSeverity = ThreatSeverity.HIGH,
-        metadata: Optional[Dict[str, Any]] = None,
+        metadata: Dict[str, Any] | None = None,
     ):
         """
         Initialize a Magpie threat.

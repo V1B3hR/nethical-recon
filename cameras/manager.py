@@ -76,7 +76,7 @@ class CameraManager:
         self.logger.info(f"Unregistered camera: {name}")
         return True
 
-    def scan_with_camera(self, name: str, target: str, async_mode: bool = False) -> Optional[Dict[str, Any]]:
+    def scan_with_camera(self, name: str, target: str, async_mode: bool = False) -> Dict[str, Any] | None:
         """
         Perform a scan with a specific camera
 
@@ -201,7 +201,7 @@ class CameraManager:
 
         return success
 
-    def get_camera_status(self, name: str) -> Optional[Dict[str, Any]]:
+    def get_camera_status(self, name: str) -> Dict[str, Any] | None:
         """
         Get status of a specific camera
 
@@ -225,7 +225,7 @@ class CameraManager:
         """
         return {name: camera.get_status() for name, camera in self.cameras.items()}
 
-    def get_all_discoveries(self, severity: Optional[str] = None) -> List[Dict[str, Any]]:
+    def get_all_discoveries(self, severity: str | None = None) -> List[Dict[str, Any]]:
         """
         Get all discoveries from all cameras
 

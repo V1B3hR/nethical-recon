@@ -56,7 +56,7 @@ class ActionResult:
     confidence: float  # 0.0 to 1.0
     timestamp: datetime = field(default_factory=datetime.now)
     details: Dict[str, Any] = field(default_factory=dict)
-    error_message: Optional[str] = None
+    error_message: str | None = None
 
     def is_successful(self) -> bool:
         """Check if action was successful"""
@@ -82,7 +82,7 @@ class BaseNanobot(ABC):
     based on confidence levels and configured rules.
     """
 
-    def __init__(self, nanobot_id: str, mode: NanobotMode, config: Optional[Dict[str, Any]] = None):
+    def __init__(self, nanobot_id: str, mode: NanobotMode, config: Dict[str, Any] | None = None):
         """
         Initialize nanobot.
 
@@ -154,7 +154,7 @@ class BaseNanobot(ABC):
         """Check if confidence is too low for action"""
         return confidence < self.propose_threshold
 
-    def process_event(self, event: Dict[str, Any]) -> Optional[ActionResult]:
+    def process_event(self, event: Dict[str, Any]) -> ActionResult | None:
         """
         Process an event and take appropriate action.
 

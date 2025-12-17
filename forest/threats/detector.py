@@ -41,7 +41,7 @@ class ThreatDetector:
         name: str,
         malware_family: str = "Unknown",
         severity: ThreatSeverity = ThreatSeverity.HIGH,
-        metadata: Optional[Dict[str, Any]] = None,
+        metadata: Dict[str, Any] | None = None,
     ) -> Crow:
         """
         Detect a Crow (malware) threat.
@@ -71,7 +71,7 @@ class ThreatDetector:
         name: str,
         target_data_types: List[str] = None,
         severity: ThreatSeverity = ThreatSeverity.HIGH,
-        metadata: Optional[Dict[str, Any]] = None,
+        metadata: Dict[str, Any] | None = None,
     ) -> Magpie:
         """
         Detect a Magpie (data stealer) threat.
@@ -101,7 +101,7 @@ class ThreatDetector:
         name: str,
         technique: str = "Unknown",
         severity: ThreatSeverity = ThreatSeverity.MEDIUM,
-        metadata: Optional[Dict[str, Any]] = None,
+        metadata: Dict[str, Any] | None = None,
     ) -> Squirrel:
         """
         Detect a Squirrel (lateral movement) threat.
@@ -131,7 +131,7 @@ class ThreatDetector:
         name: str,
         rootkit_type: str = "unknown",
         severity: ThreatSeverity = ThreatSeverity.CRITICAL,
-        metadata: Optional[Dict[str, Any]] = None,
+        metadata: Dict[str, Any] | None = None,
     ) -> Snake:
         """
         Detect a Snake (rootkit) threat.
@@ -161,7 +161,7 @@ class ThreatDetector:
         name: str,
         parasite_type: str = "cryptominer",
         severity: ThreatSeverity = ThreatSeverity.MEDIUM,
-        metadata: Optional[Dict[str, Any]] = None,
+        metadata: Dict[str, Any] | None = None,
     ) -> Parasite:
         """
         Detect a Parasite (cryptominer) threat.
@@ -191,7 +191,7 @@ class ThreatDetector:
         name: str,
         attack_type: str = "unknown",
         severity: ThreatSeverity = ThreatSeverity.MEDIUM,
-        metadata: Optional[Dict[str, Any]] = None,
+        metadata: Dict[str, Any] | None = None,
     ) -> Bat:
         """
         Detect a Bat (night attack) threat.
@@ -215,7 +215,7 @@ class ThreatDetector:
         self._log_detection(bat)
         return bat
 
-    def get_threat(self, threat_id: str) -> Optional[BaseThreat]:
+    def get_threat(self, threat_id: str) -> BaseThreat | None:
         """Get a specific threat by ID"""
         return self.detected_threats.get(threat_id)
 

@@ -53,9 +53,9 @@ class BirdAlert:
         bird_type: BirdType,
         level: AlertLevel,
         message: str,
-        location: Optional[Dict[str, str]] = None,
-        evidence: Optional[List[str]] = None,
-        timestamp: Optional[datetime] = None,
+        location: Dict[str, str] | None = None,
+        evidence: List[str] | None = None,
+        timestamp: datetime | None = None,
     ):
         self.bird_type = bird_type
         self.level = level
@@ -110,8 +110,8 @@ class BaseBird(ABC):
         self.is_active = False
         self.alerts: List[BirdAlert] = []
         self.observations: List[Dict[str, Any]] = []
-        self.patrol_area: Optional[Dict[str, Any]] = None
-        self.last_patrol: Optional[datetime] = None
+        self.patrol_area: Dict[str, Any] | None = None
+        self.last_patrol: datetime | None = None
 
     @abstractmethod
     def scan(self, forest_data: Dict[str, Any]) -> List[BirdAlert]:
@@ -160,8 +160,8 @@ class BaseBird(ABC):
         self,
         level: AlertLevel,
         message: str,
-        location: Optional[Dict[str, str]] = None,
-        evidence: Optional[List[str]] = None,
+        location: Dict[str, str] | None = None,
+        evidence: List[str] | None = None,
     ) -> BirdAlert:
         """
         Create and store an alert

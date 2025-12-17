@@ -17,7 +17,7 @@ class ThreatHunterNanobot(BaseNanobot):
     Proactively searches for malware, data stealers, and other threats.
     """
 
-    def __init__(self, nanobot_id: str = "threat_hunter", config: Optional[Dict[str, Any]] = None):
+    def __init__(self, nanobot_id: str = "threat_hunter", config: Dict[str, Any] | None = None):
         """
         Initialize threat hunter nanobot.
 
@@ -198,7 +198,7 @@ class ThreatHunterNanobot(BaseNanobot):
         """Get all active hunts"""
         return {hunt_id: info for hunt_id, info in self.active_hunts.items() if info["status"] == "hunting"}
 
-    def get_caught_threats(self, threat_type: Optional[str] = None, limit: int = 50) -> List[Dict[str, Any]]:
+    def get_caught_threats(self, threat_type: str | None = None, limit: int = 50) -> List[Dict[str, Any]]:
         """
         Get caught threats.
 

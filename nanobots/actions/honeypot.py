@@ -17,7 +17,7 @@ class HoneypotNanobot(BaseNanobot):
     Deploys decoy services and monitors interactions to gather intelligence.
     """
 
-    def __init__(self, nanobot_id: str = "honeypot_deployer", config: Optional[Dict[str, Any]] = None):
+    def __init__(self, nanobot_id: str = "honeypot_deployer", config: Dict[str, Any] | None = None):
         """
         Initialize honeypot nanobot.
 
@@ -216,7 +216,7 @@ class HoneypotNanobot(BaseNanobot):
         """Get all active honeypots"""
         return self.active_honeypots.copy()
 
-    def get_interactions(self, honeypot_id: Optional[str] = None, limit: int = 50) -> List[Dict[str, Any]]:
+    def get_interactions(self, honeypot_id: str | None = None, limit: int = 50) -> List[Dict[str, Any]]:
         """
         Get honeypot interactions.
 

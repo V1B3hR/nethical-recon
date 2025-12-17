@@ -44,7 +44,7 @@ class ConnectionPool:
             if connection:
                 self._pool.put(connection)
 
-    def _create_connection(self) -> Optional[BaseStore]:
+    def _create_connection(self) -> BaseStore | None:
         """Create a new database connection"""
         try:
             store = StoreFactory.create_store(self.backend, self.config)
@@ -57,7 +57,7 @@ class ConnectionPool:
             print(f"Error creating connection: {e}")
             return None
 
-    def get_connection(self, timeout: float = 5.0) -> Optional[BaseStore]:
+    def get_connection(self, timeout: float = 5.0) -> BaseStore | None:
         """
         Get a connection from the pool
 
@@ -154,7 +154,7 @@ class PooledStore:
             pool: Connection pool to use
         """
         self.pool = pool
-        self._connection: Optional[BaseStore] = None
+        self._connection: BaseStore | None = None
 
     def __enter__(self) -> BaseStore:
         """Get connection from pool"""

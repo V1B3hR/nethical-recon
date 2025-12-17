@@ -24,7 +24,7 @@ class Squirrel(BaseThreat):
         threat_id: str,
         name: str,
         severity: ThreatSeverity = ThreatSeverity.MEDIUM,
-        metadata: Optional[Dict[str, Any]] = None,
+        metadata: Dict[str, Any] | None = None,
     ):
         """
         Initialize a Squirrel threat.

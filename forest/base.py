@@ -18,7 +18,7 @@ from enum import Enum
 class ForestComponent(ABC):
     """Abstract base class for all forest components"""
 
-    def __init__(self, component_id: str, name: str, metadata: Optional[Dict[str, Any]] = None):
+    def __init__(self, component_id: str, name: str, metadata: Dict[str, Any] | None = None):
         """
         Initialize a forest component.
 
@@ -133,7 +133,7 @@ class ForestBase(ABC):
         if component_id in self.components:
             del self.components[component_id]
 
-    def get_component(self, component_id: str) -> Optional[ForestComponent]:
+    def get_component(self, component_id: str) -> ForestComponent | None:
         """Get a component by ID"""
         return self.components.get(component_id)
 

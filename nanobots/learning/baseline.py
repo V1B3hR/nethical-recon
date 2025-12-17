@@ -21,7 +21,7 @@ class BaselineLearner:
     - Time-based behavior
     """
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+    def __init__(self, config: Dict[str, Any] | None = None):
         """
         Initialize baseline learner.
 
@@ -42,7 +42,7 @@ class BaselineLearner:
         self.samples: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
         self.last_update: Dict[str, datetime] = {}
 
-    def record_observation(self, metric_name: str, value: float, context: Optional[Dict[str, Any]] = None):
+    def record_observation(self, metric_name: str, value: float, context: Dict[str, Any] | None = None):
         """
         Record an observation for baseline learning.
 
@@ -115,7 +115,7 @@ class BaselineLearner:
         self.baselines[metric_name] = baseline
         self.last_update[metric_name] = datetime.now()
 
-    def get_baseline(self, metric_name: str) -> Optional[Dict[str, Any]]:
+    def get_baseline(self, metric_name: str) -> Dict[str, Any] | None:
         """
         Get baseline for a metric.
 

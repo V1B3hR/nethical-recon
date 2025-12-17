@@ -24,8 +24,8 @@ class Trunk(ForestComponent):
         trunk_id: str,
         os_name: str,
         os_version: str,
-        kernel_version: Optional[str] = None,
-        metadata: Optional[Dict[str, Any]] = None,
+        kernel_version: str | None = None,
+        metadata: Dict[str, Any] | None = None,
     ):
         """
         Initialize a trunk.

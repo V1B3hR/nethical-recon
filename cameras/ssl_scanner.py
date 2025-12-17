@@ -69,7 +69,7 @@ class SSLScanner(BaseCamera):
 
         return results
 
-    def _analyze_certificate(self, hostname: str, port: int) -> Optional[Dict[str, Any]]:
+    def _analyze_certificate(self, hostname: str, port: int) -> Dict[str, Any] | None:
         """
         Analyze SSL/TLS certificate
 
@@ -284,7 +284,7 @@ class SSLScanner(BaseCamera):
 
         return summary
 
-    def quick_scan(self, hostname: str, port: int = 443) -> Optional[Dict[str, Any]]:
+    def quick_scan(self, hostname: str, port: int = 443) -> Dict[str, Any] | None:
         """
         Quick scan of a single host:port
 

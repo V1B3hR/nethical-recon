@@ -61,15 +61,15 @@ class ForestManager(ForestBase):
             self.forest_map.remove_tree(tree_id)
             self.remove_component(tree_id)
 
-    def get_tree(self, tree_id: str) -> Optional[Tree]:
+    def get_tree(self, tree_id: str) -> Tree | None:
         """Get a tree by ID"""
         return self.trees.get(tree_id)
 
-    def get_tree_by_hostname(self, hostname: str) -> Optional[Tree]:
+    def get_tree_by_hostname(self, hostname: str) -> Tree | None:
         """Get a tree by hostname"""
         return self.forest_map.get_tree_by_hostname(hostname)
 
-    def get_tree_by_ip(self, ip_address: str) -> Optional[Tree]:
+    def get_tree_by_ip(self, ip_address: str) -> Tree | None:
         """Get a tree by IP address"""
         return self.forest_map.get_tree_by_ip(ip_address)
 
@@ -77,9 +77,7 @@ class ForestManager(ForestBase):
         """Get all trees in the forest"""
         return list(self.trees.values())
 
-    def detect_threat(
-        self, threat: BaseThreat, tree_id: str, branch_id: Optional[str] = None, leaf_id: Optional[str] = None
-    ):
+    def detect_threat(self, threat: BaseThreat, tree_id: str, branch_id: str | None = None, leaf_id: str | None = None):
         """
         Detect and register a threat in the forest.
 

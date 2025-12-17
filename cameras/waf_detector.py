@@ -286,7 +286,7 @@ class WAFDetector(BaseCamera):
 
         return detections
 
-    def quick_scan(self, url: str) -> Optional[str]:
+    def quick_scan(self, url: str) -> str | None:
         """
         Quick WAF detection (basic check only)
 

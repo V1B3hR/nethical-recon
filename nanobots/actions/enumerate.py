@@ -17,7 +17,7 @@ class EnumeratorNanobot(BaseNanobot):
     Performs follow-up reconnaissance on anomalies and new discoveries.
     """
 
-    def __init__(self, nanobot_id: str = "auto_enumerator", config: Optional[Dict[str, Any]] = None):
+    def __init__(self, nanobot_id: str = "auto_enumerator", config: Dict[str, Any] | None = None):
         """
         Initialize enumerator nanobot.
 
@@ -201,7 +201,7 @@ class EnumeratorNanobot(BaseNanobot):
         """Get all active enumerations"""
         return self.active_enumerations.copy()
 
-    def get_enumeration_results(self, enum_id: str) -> Optional[Dict[str, Any]]:
+    def get_enumeration_results(self, enum_id: str) -> Dict[str, Any] | None:
         """
         Get results for a specific enumeration.
 

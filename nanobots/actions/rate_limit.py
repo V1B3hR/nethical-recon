@@ -18,7 +18,7 @@ class RateLimiterNanobot(BaseNanobot):
     Tracks request rates and applies throttling when thresholds are exceeded.
     """
 
-    def __init__(self, nanobot_id: str = "rate_limiter", config: Optional[Dict[str, Any]] = None):
+    def __init__(self, nanobot_id: str = "rate_limiter", config: Dict[str, Any] | None = None):
         """
         Initialize rate limiter nanobot.
 
@@ -186,7 +186,7 @@ class RateLimiterNanobot(BaseNanobot):
 
         return True
 
-    def get_rate_limit(self, source: str) -> Optional[Dict[str, Any]]:
+    def get_rate_limit(self, source: str) -> Dict[str, Any] | None:
         """
         Get rate limit details for a source.
 

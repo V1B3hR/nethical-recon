@@ -48,7 +48,7 @@ class BaseThreat(ABC):
         name: str,
         threat_type: ThreatType,
         severity: ThreatSeverity,
-        metadata: Optional[Dict[str, Any]] = None,
+        metadata: Dict[str, Any] | None = None,
     ):
         """
         Initialize a threat.
@@ -95,7 +95,7 @@ class BaseThreat(ABC):
         """Get the characteristic behavior pattern of this threat"""
         pass
 
-    def set_location(self, tree_id: str, branch_id: Optional[str] = None, leaf_id: Optional[str] = None):
+    def set_location(self, tree_id: str, branch_id: str | None = None, leaf_id: str | None = None):
         """
         Set the location of this threat in the forest.
 

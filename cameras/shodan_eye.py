@@ -97,7 +97,7 @@ class ShodanEye(BaseCamera):
         ip_pattern = r"^(\d{1,3}\.){3}\d{1,3}$"
         return bool(re.match(ip_pattern, target))
 
-    def _scan_host(self, ip: str) -> Optional[Dict[str, Any]]:
+    def _scan_host(self, ip: str) -> Dict[str, Any] | None:
         """
         Get detailed information about a specific host
 
