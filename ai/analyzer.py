@@ -93,7 +93,7 @@ class ThreatAnalyzer:
 
         return round(min(10.0, max(0.0, score)), 2)
 
-    def match_pattern(self, threat_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    def match_pattern(self, threat_data: Dict[str, Any]) -> Dict[str, Any] | None:
         """
         Match threat against known patterns
 
@@ -250,7 +250,7 @@ class ThreatAnalyzer:
             "recommendations": self._generate_threat_recommendations(threat_score, pattern_match),
         }
 
-    def _generate_threat_recommendations(self, score: float, pattern: Optional[Dict]) -> List[str]:
+    def _generate_threat_recommendations(self, score: float, pattern: Dict | None) -> List[str]:
         """Generate action recommendations for a threat"""
         recommendations = []
 

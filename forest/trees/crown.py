@@ -20,7 +20,7 @@ class Crown(ForestComponent):
     Analogia: 👑 Korona - The top of the tree, overseeing everything below
     """
 
-    def __init__(self, crown_id: str, tree_hostname: str, metadata: Optional[Dict[str, Any]] = None):
+    def __init__(self, crown_id: str, tree_hostname: str, metadata: Dict[str, Any] | None = None):
         """
         Initialize a crown.
 

@@ -40,7 +40,7 @@ class BaseStore(ABC):
                    (host, port, database, user, password, etc.)
         """
         self.config = config
-        self.backend_type: Optional[StoreBackend] = None
+        self.backend_type: StoreBackend | None = None
         self.connected = False
 
     @abstractmethod
@@ -87,7 +87,7 @@ class BaseStore(ABC):
         pass
 
     @abstractmethod
-    def get_stain(self, tag_id: str) -> Optional[Dict[str, Any]]:
+    def get_stain(self, tag_id: str) -> Dict[str, Any] | None:
         """
         Retrieve a stain by tag ID
 
@@ -100,7 +100,7 @@ class BaseStore(ABC):
         pass
 
     @abstractmethod
-    def get_all_stains(self, limit: Optional[int] = None, offset: int = 0) -> List[Dict[str, Any]]:
+    def get_all_stains(self, limit: int | None = None, offset: int = 0) -> List[Dict[str, Any]]:
         """
         Retrieve all stains with optional pagination
 
@@ -114,7 +114,7 @@ class BaseStore(ABC):
         pass
 
     @abstractmethod
-    def get_stains_by_type(self, marker_type: str, limit: Optional[int] = None) -> List[Dict[str, Any]]:
+    def get_stains_by_type(self, marker_type: str, limit: int | None = None) -> List[Dict[str, Any]]:
         """
         Retrieve stains filtered by marker type
 
@@ -128,7 +128,7 @@ class BaseStore(ABC):
         pass
 
     @abstractmethod
-    def get_stains_by_color(self, color: str, limit: Optional[int] = None) -> List[Dict[str, Any]]:
+    def get_stains_by_color(self, color: str, limit: int | None = None) -> List[Dict[str, Any]]:
         """
         Retrieve stains filtered by color
 
@@ -196,7 +196,7 @@ class BaseStore(ABC):
         pass
 
     @abstractmethod
-    def search_stains(self, query: str, fields: Optional[List[str]] = None) -> List[Dict[str, Any]]:
+    def search_stains(self, query: str, fields: List[str] | None = None) -> List[Dict[str, Any]]:
         """
         Search for stains matching a query
 
@@ -210,7 +210,7 @@ class BaseStore(ABC):
         pass
 
     @abstractmethod
-    def count_stains(self, filters: Optional[Dict[str, Any]] = None) -> int:
+    def count_stains(self, filters: Dict[str, Any] | None = None) -> int:
         """
         Count stains with optional filters
 
@@ -236,7 +236,7 @@ class BaseStore(ABC):
         """Check if database is connected"""
         return self.connected
 
-    def get_backend_type(self) -> Optional[StoreBackend]:
+    def get_backend_type(self) -> StoreBackend | None:
         """Get the backend type"""
         return self.backend_type
 

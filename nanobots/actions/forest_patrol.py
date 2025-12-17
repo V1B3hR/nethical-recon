@@ -17,7 +17,7 @@ class ForestPatrolNanobot(BaseNanobot):
     Monitors tree health, branch activity, and leaf status.
     """
 
-    def __init__(self, nanobot_id: str = "forest_patrol", config: Optional[Dict[str, Any]] = None):
+    def __init__(self, nanobot_id: str = "forest_patrol", config: Dict[str, Any] | None = None):
         """
         Initialize forest patrol nanobot.
 
@@ -35,7 +35,7 @@ class ForestPatrolNanobot(BaseNanobot):
         # Track patrol status
         self.patrolled_trees: Dict[str, Dict[str, Any]] = {}
         self.patrol_findings: List[Dict[str, Any]] = []
-        self.last_patrol: Optional[datetime] = None
+        self.last_patrol: datetime | None = None
 
     def can_handle(self, event: Dict[str, Any]) -> bool:
         """Check if this event is forest-related"""
@@ -175,7 +175,7 @@ class ForestPatrolNanobot(BaseNanobot):
             "active": self.is_active,
         }
 
-    def get_tree_status(self, tree_id: str) -> Optional[Dict[str, Any]]:
+    def get_tree_status(self, tree_id: str) -> Dict[str, Any] | None:
         """
         Get patrol status for a specific tree.
 

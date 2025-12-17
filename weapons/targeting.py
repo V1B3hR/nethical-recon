@@ -68,7 +68,7 @@ class TargetingSystem:
 
     def __init__(self):
         self.active_targets: List[Target] = []
-        self.locked_target: Optional[Target] = None
+        self.locked_target: Target | None = None
         self.target_history: List[Target] = []
         self.validation_rules = {
             "min_threat_score": 3.0,
@@ -156,7 +156,7 @@ class TargetingSystem:
             self.target_history.append(self.locked_target)
         self.locked_target = None
 
-    def get_locked_target(self) -> Optional[Target]:
+    def get_locked_target(self) -> Target | None:
         """Get currently locked target"""
         return self.locked_target
 
@@ -173,7 +173,7 @@ class TargetingSystem:
 
         return sorted(self.active_targets, key=priority_score, reverse=True)
 
-    def get_top_target(self) -> Optional[Target]:
+    def get_top_target(self) -> Target | None:
         """Get highest priority target"""
         prioritized = self.prioritize_targets()
         return prioritized[0] if prioritized else None

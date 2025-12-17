@@ -95,7 +95,7 @@ class Rule:
     conditions: List[RuleCondition]
     logic: str = "AND"  # AND or OR
     priority: int = 0
-    action_type: Optional[str] = None
+    action_type: str | None = None
     confidence_modifier: float = 0.0  # Add/subtract from base confidence
     enabled: bool = True
 
@@ -296,7 +296,7 @@ class RulesEngine:
 
         return matches
 
-    def get_recommended_action(self, event: Dict[str, Any], base_confidence: float) -> Optional[Dict[str, Any]]:
+    def get_recommended_action(self, event: Dict[str, Any], base_confidence: float) -> Dict[str, Any] | None:
         """
         Get recommended action based on rules.
 
@@ -330,7 +330,7 @@ class RulesEngine:
         """Get all rules"""
         return list(self.rules.values())
 
-    def get_rule(self, rule_id: str) -> Optional[Rule]:
+    def get_rule(self, rule_id: str) -> Rule | None:
         """Get a specific rule"""
         return self.rules.get(rule_id)
 

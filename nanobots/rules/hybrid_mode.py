@@ -29,7 +29,7 @@ class HybridDecisionMaker:
     3. Observe and learn when confidence is low (<70%)
     """
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+    def __init__(self, config: Dict[str, Any] | None = None):
         """
         Initialize hybrid decision maker.
 
@@ -48,7 +48,7 @@ class HybridDecisionMaker:
         self.context_weight = self.config.get("context_weight", 0.1)
 
     def make_decision(
-        self, base_confidence: float, event: Dict[str, Any], context: Optional[Dict[str, Any]] = None
+        self, base_confidence: float, event: Dict[str, Any], context: Dict[str, Any] | None = None
     ) -> Dict[str, Any]:
         """
         Make a decision based on confidence, event, and context.
@@ -82,7 +82,7 @@ class HybridDecisionMaker:
         }
 
     def _adjust_confidence(
-        self, base_confidence: float, event: Dict[str, Any], context: Optional[Dict[str, Any]]
+        self, base_confidence: float, event: Dict[str, Any], context: Dict[str, Any] | None
     ) -> float:
         """
         Adjust confidence based on context.
@@ -147,7 +147,7 @@ class HybridDecisionMaker:
         adjusted_confidence: float,
         mode: DecisionMode,
         event: Dict[str, Any],
-        context: Optional[Dict[str, Any]],
+        context: Dict[str, Any] | None,
     ) -> str:
         """Generate human-readable reasoning for the decision"""
         reasons = []
@@ -225,7 +225,7 @@ class HybridDecisionMaker:
         }
 
     def update_thresholds(
-        self, auto_fire: Optional[float] = None, propose: Optional[float] = None, observe: Optional[float] = None
+        self, auto_fire: float | None = None, propose: float | None = None, observe: float | None = None
     ):
         """Update decision thresholds"""
         if auto_fire is not None:

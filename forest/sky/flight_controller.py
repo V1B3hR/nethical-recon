@@ -28,7 +28,7 @@ class FlightController:
     def __init__(self):
         """Initialize flight controller"""
         self.birds: Dict[str, BaseBird] = {}
-        self.eagle: Optional[Eagle] = None
+        self.eagle: Eagle | None = None
         self.falcons: List[Falcon] = []
         self.owls: List[Owl] = []
         self.sparrows: List[Sparrow] = []

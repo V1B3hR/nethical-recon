@@ -28,7 +28,7 @@ class AlertNanobot(BaseNanobot):
     Manages alert levels and notifications based on threat severity.
     """
 
-    def __init__(self, nanobot_id: str = "alert_escalator", config: Optional[Dict[str, Any]] = None):
+    def __init__(self, nanobot_id: str = "alert_escalator", config: Dict[str, Any] | None = None):
         """
         Initialize alert nanobot.
 
@@ -182,7 +182,7 @@ class AlertNanobot(BaseNanobot):
 
         return True
 
-    def get_active_alerts(self, level: Optional[AlertLevel] = None, limit: int = 50) -> List[Dict[str, Any]]:
+    def get_active_alerts(self, level: AlertLevel | None = None, limit: int = 50) -> List[Dict[str, Any]]:
         """
         Get active alerts.
 

@@ -19,7 +19,7 @@ class IPBlockerNanobot(BaseNanobot):
     Uses iptables (Linux) or pf (BSD) to block IPs based on threat assessment.
     """
 
-    def __init__(self, nanobot_id: str = "ip_blocker", config: Optional[Dict[str, Any]] = None):
+    def __init__(self, nanobot_id: str = "ip_blocker", config: Dict[str, Any] | None = None):
         """
         Initialize IP blocker nanobot.
 

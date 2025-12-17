@@ -148,7 +148,7 @@ class SensorManager:
         self.logger.info(f"Stopped {count}/{len(self.sensors)} sensors")
         return count
 
-    def get_sensor(self, name: str) -> Optional[BaseSensor]:
+    def get_sensor(self, name: str) -> BaseSensor | None:
         """
         Get a sensor by name
 
@@ -169,7 +169,7 @@ class SensorManager:
         """
         return list(self.sensors.keys())
 
-    def get_all_alerts(self, severity: Optional[str] = None) -> Dict[str, List]:
+    def get_all_alerts(self, severity: str | None = None) -> Dict[str, List]:
         """
         Get alerts from all sensors
 

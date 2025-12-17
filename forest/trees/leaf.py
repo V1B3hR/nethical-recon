@@ -29,7 +29,7 @@ class Leaf(ForestComponent):
     Analogia: 🍃 Liść - The smallest unit, growing from branches
     """
 
-    def __init__(self, leaf_id: str, name: str, leaf_type: LeafType, metadata: Optional[Dict[str, Any]] = None):
+    def __init__(self, leaf_id: str, name: str, leaf_type: LeafType, metadata: Dict[str, Any] | None = None):
         """
         Initialize a leaf.
 

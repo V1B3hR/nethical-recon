@@ -29,7 +29,7 @@ class Branch(ForestComponent):
     Analogia: 🌿 Gałąź - Processes and services growing from the tree
     """
 
-    def __init__(self, branch_id: str, name: str, branch_type: BranchType, metadata: Optional[Dict[str, Any]] = None):
+    def __init__(self, branch_id: str, name: str, branch_type: BranchType, metadata: Dict[str, Any] | None = None):
         """
         Initialize a branch.
 

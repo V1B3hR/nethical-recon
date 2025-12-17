@@ -24,7 +24,7 @@ class Snake(BaseThreat):
         threat_id: str,
         name: str,
         severity: ThreatSeverity = ThreatSeverity.CRITICAL,
-        metadata: Optional[Dict[str, Any]] = None,
+        metadata: Dict[str, Any] | None = None,
     ):
         """
         Initialize a Snake threat.

@@ -178,7 +178,7 @@ class Falcon(BaseBird):
 
         return alerts
 
-    def _is_recent(self, timestamp: Optional[str], minutes: int = 5) -> bool:
+    def _is_recent(self, timestamp: str | None, minutes: int = 5) -> bool:
         """Check if timestamp is recent (within specified minutes)"""
         if not timestamp:
             return True  # Treat missing timestamp as recent

@@ -48,19 +48,19 @@ class Db2Store(BaseStore):
         """Save a stain to Db2 database"""
         raise NotImplementedError()
 
-    def get_stain(self, tag_id: str) -> Optional[Dict[str, Any]]:
+    def get_stain(self, tag_id: str) -> Dict[str, Any] | None:
         """Retrieve a stain by tag ID"""
         raise NotImplementedError()
 
-    def get_all_stains(self, limit: Optional[int] = None, offset: int = 0) -> List[Dict[str, Any]]:
+    def get_all_stains(self, limit: int | None = None, offset: int = 0) -> List[Dict[str, Any]]:
         """Retrieve all stains with pagination"""
         raise NotImplementedError()
 
-    def get_stains_by_type(self, marker_type: str, limit: Optional[int] = None) -> List[Dict[str, Any]]:
+    def get_stains_by_type(self, marker_type: str, limit: int | None = None) -> List[Dict[str, Any]]:
         """Retrieve stains filtered by marker type"""
         raise NotImplementedError()
 
-    def get_stains_by_color(self, color: str, limit: Optional[int] = None) -> List[Dict[str, Any]]:
+    def get_stains_by_color(self, color: str, limit: int | None = None) -> List[Dict[str, Any]]:
         """Retrieve stains filtered by color"""
         raise NotImplementedError()
 
@@ -80,11 +80,11 @@ class Db2Store(BaseStore):
         """Delete a stain from the database"""
         raise NotImplementedError()
 
-    def search_stains(self, query: str, fields: Optional[List[str]] = None) -> List[Dict[str, Any]]:
+    def search_stains(self, query: str, fields: List[str] | None = None) -> List[Dict[str, Any]]:
         """Search for stains matching a query"""
         raise NotImplementedError()
 
-    def count_stains(self, filters: Optional[Dict[str, Any]] = None) -> int:
+    def count_stains(self, filters: Dict[str, Any] | None = None) -> int:
         """Count stains with optional filters"""
         raise NotImplementedError()
 

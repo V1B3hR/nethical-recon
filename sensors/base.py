@@ -149,7 +149,7 @@ class BaseSensor(ABC):
 
         return alert
 
-    def get_alerts(self, severity: Optional[str] = None) -> List[SensorAlert]:
+    def get_alerts(self, severity: str | None = None) -> List[SensorAlert]:
         """
         Get alerts from this sensor
 

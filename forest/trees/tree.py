@@ -24,8 +24,8 @@ class Tree(ForestComponent):
         tree_id: str,
         hostname: str,
         ip_address: str,
-        os_type: Optional[str] = None,
-        metadata: Optional[Dict[str, Any]] = None,
+        os_type: str | None = None,
+        metadata: Dict[str, Any] | None = None,
     ):
         """
         Initialize a tree (host).

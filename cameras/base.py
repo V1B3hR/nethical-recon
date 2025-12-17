@@ -197,9 +197,7 @@ class BaseCamera(ABC):
 
         return discovery
 
-    def get_discoveries(
-        self, discovery_type: Optional[str] = None, severity: Optional[str] = None
-    ) -> List[CameraDiscovery]:
+    def get_discoveries(self, discovery_type: str | None = None, severity: str | None = None) -> List[CameraDiscovery]:
         """
         Get discoveries from this camera
 

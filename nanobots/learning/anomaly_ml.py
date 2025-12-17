@@ -25,7 +25,7 @@ class SimpleMLAnomalyDetector:
     For production use, integrate proper ML libraries like sklearn.
     """
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+    def __init__(self, config: Dict[str, Any] | None = None):
         """
         Initialize ML anomaly detector.
 

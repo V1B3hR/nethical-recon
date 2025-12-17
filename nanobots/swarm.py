@@ -35,13 +35,13 @@ class NanobotSwarm:
         self.nanobots: Dict[str, BaseNanobot] = {}
         self.event_queue: List[Dict[str, Any]] = []
         self.is_active = False
-        self.processing_thread: Optional[threading.Thread] = None
+        self.processing_thread: threading.Thread | None = None
         self._lock = threading.Lock()
 
         # Statistics
         self.total_events_processed = 0
         self.total_actions_taken = 0
-        self.swarm_start_time: Optional[datetime] = None
+        self.swarm_start_time: datetime | None = None
 
     def register_nanobot(self, nanobot: BaseNanobot) -> bool:
         """
@@ -79,7 +79,7 @@ class NanobotSwarm:
             del self.nanobots[nanobot_id]
             return True
 
-    def get_nanobot(self, nanobot_id: str) -> Optional[BaseNanobot]:
+    def get_nanobot(self, nanobot_id: str) -> BaseNanobot | None:
         """Get nanobot by ID"""
         return self.nanobots.get(nanobot_id)
 

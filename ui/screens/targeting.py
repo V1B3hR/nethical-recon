@@ -22,7 +22,7 @@ class Target:
         port: int = 0,
         target_type: str = "UNKNOWN",
         forest_location: Dict[str, str] = None,
-        threat: Optional[ThreatType] = None,
+        threat: ThreatType | None = None,
         confidence: float = 0.0,
         previous_stains: int = 0,
         detected_by: str = "Unknown",
@@ -41,7 +41,7 @@ class TargetingScreen:
     """Screen for targeting and weapon control"""
 
     def __init__(self):
-        self.current_target: Optional[Target] = None
+        self.current_target: Target | None = None
         self.selected_weapon = "CO2 Silent"
         self.selected_ammo = "BLACK"  # Crow marker
 
