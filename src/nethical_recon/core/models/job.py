@@ -34,22 +34,22 @@ class ScanJob(BaseModel):
     status: JobStatus = Field(default=JobStatus.PENDING, description="Current job status")
     tools: list[str] = Field(default_factory=list, description="List of tools to run in this job")
     config: dict = Field(default_factory=dict, description="Job-specific configuration")
-    
+
     # Timestamps
     created_at: datetime = Field(default_factory=datetime.utcnow, description="Job creation time (UTC)")
     started_at: Optional[datetime] = Field(None, description="Job start time (UTC)")
     completed_at: Optional[datetime] = Field(None, description="Job completion time (UTC)")
     updated_at: datetime = Field(default_factory=datetime.utcnow, description="Last update time (UTC)")
-    
+
     # Results metadata
     total_runs: int = Field(default=0, description="Total number of tool runs")
     successful_runs: int = Field(default=0, description="Number of successful tool runs")
     failed_runs: int = Field(default=0, description="Number of failed tool runs")
     findings_count: int = Field(default=0, description="Total findings discovered")
-    
+
     # Operator info
     operator: Optional[str] = Field(None, description="User or system that initiated the job")
-    
+
     class Config:
         """Pydantic config."""
 
