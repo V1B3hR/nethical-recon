@@ -80,3 +80,7 @@ dmypy.json
 # Security scanning reports
 bandit-report.json
 *.sarif
+# Database files
+*.db
+*.db-shm
+*.db-wal

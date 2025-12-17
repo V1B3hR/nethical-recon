@@ -8,7 +8,7 @@
 ## 📊 Implementation Status
 
 - ✅ **PHASE A** — Foundation & Repo Professionalization (Completed: 2025-12-16)
-- ⏳ **PHASE B** — Unified Data Model + Normalization (Not Started)
+- ✅ **PHASE B** — Unified Data Model + Normalization (Completed: 2025-12-17)
 - ⏳ **PHASE C** — Worker Queue + Scheduler + Concurrency Policy (Not Started)
 - ⏳ **PHASE D** — API (REST) + OpenAPI + Auth (Not Started)
 - ⏳ **PHASE E** — Observability: Logging + Metrics + Tracing (Not Started)
@@ -113,6 +113,16 @@ Poniżej etapy są ułożone tak, by **szybko uzyskać profesjonalny “core”*
 ---
 
 ### PHASE B — Unified Data Model + Normalization (3–6 tyg.)
+**Status:** ✅ COMPLETE (Implemented 2025-12-17)
+
+All objectives achieved:
+- ✅ Pydantic v2 domain models (Target, ScanJob, ToolRun, Evidence, Finding, Asset, IOC)
+- ✅ SQLAlchemy + Alembic migrations
+- ✅ Repository pattern for data access
+- ✅ Nmap XML parser with Finding normalization
+- ✅ Full evidence provenance tracking
+- ✅ 32 tests passing (25 model tests + 7 parser tests)
+
 **Cel:** wspólny model danych dla wszystkich modułów i narzędzi.
 
 **B.1 Domain model**
