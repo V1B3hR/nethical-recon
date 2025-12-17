@@ -7,7 +7,7 @@ from enum import Enum
 from typing import Optional
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, model_validator
 import ipaddress
 
 
@@ -44,29 +44,26 @@ class Target(BaseModel):
     created_at: datetime = Field(default_factory=datetime.utcnow, description="Creation timestamp (UTC)")
     updated_at: datetime = Field(default_factory=datetime.utcnow, description="Last update timestamp (UTC)")
 
-    @field_validator("value")
-    @classmethod
-    def validate_target_value(cls, v: str, info) -> str:
+    @model_validator(mode='after')
+    def validate_target_value(self) -> 'Target':
         """Validate target value based on type."""
-        target_type = info.data.get("type")
-
-        if target_type == TargetType.IP:
+        if self.type == TargetType.IP:
             try:
-                ipaddress.ip_address(v)
+                ipaddress.ip_address(self.value)
             except ValueError as e:
-                raise ValueError(f"Invalid IP address: {v}") from e
+                raise ValueError(f"Invalid IP address: {self.value}") from e
 
-        elif target_type == TargetType.CIDR:
+        elif self.type == TargetType.CIDR:
             try:
-                ipaddress.ip_network(v, strict=False)
+                ipaddress.ip_network(self.value, strict=False)
             except ValueError as e:
-                raise ValueError(f"Invalid CIDR notation: {v}") from e
+                raise ValueError(f"Invalid CIDR notation: {self.value}") from e
 
-        elif target_type == TargetType.URL:
-            if not v.startswith(("http://", "https://")):
-                raise ValueError(f"URL must start with http:// or https://: {v}")
+        elif self.type == TargetType.URL:
+            if not self.value.startswith(("http://", "https://")):
+                raise ValueError(f"URL must start with http:// or https://: {self.value}")
 
-        return v
+        return self
 
     class Config:
         """Pydantic configuration."""
