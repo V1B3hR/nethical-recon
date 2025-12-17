@@ -2,13 +2,12 @@
 
 from __future__ import annotations
 
+import ipaddress
 from datetime import datetime
 from enum import Enum
-from typing import Optional
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field, model_validator
-import ipaddress
 
 
 class TargetType(str, Enum):
@@ -39,13 +38,13 @@ class Target(BaseModel):
     value: str = Field(..., description="Target value (domain, IP, CIDR, or URL)")
     type: TargetType = Field(..., description="Type of target")
     scope: TargetScope = Field(default=TargetScope.UNKNOWN, description="Engagement scope")
-    description: Optional[str] = Field(None, description="Target description")
+    description: str | None = Field(None, description="Target description")
     tags: list[str] = Field(default_factory=list, description="Tags for categorization")
     created_at: datetime = Field(default_factory=datetime.utcnow, description="Creation timestamp (UTC)")
     updated_at: datetime = Field(default_factory=datetime.utcnow, description="Last update timestamp (UTC)")
 
-    @model_validator(mode='after')
-    def validate_target_value(self) -> 'Target':
+    @model_validator(mode="after")
+    def validate_target_value(self) -> Target:
         """Validate target value based on type."""
         if self.type == TargetType.IP:
             try:

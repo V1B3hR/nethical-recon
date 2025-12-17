@@ -4,10 +4,9 @@ from __future__ import annotations
 
 from datetime import datetime
 from enum import Enum
-from typing import Optional
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field
 
 
 class Severity(str, Enum):
@@ -45,11 +44,11 @@ class Finding(BaseModel):
     severity: Severity = Field(..., description="Severity level")
     confidence: Confidence = Field(..., description="Confidence in the finding")
     category: str = Field(..., description="Finding category (e.g., 'open_port', 'vulnerability')")
-    affected_asset: Optional[str] = Field(None, description="Affected host, service, or URL")
-    port: Optional[int] = Field(None, ge=1, le=65535, description="Port number if applicable")
-    protocol: Optional[str] = Field(None, description="Protocol (tcp, udp, http, etc.)")
-    service: Optional[str] = Field(None, description="Service name")
-    service_version: Optional[str] = Field(None, description="Service version")
+    affected_asset: str | None = Field(None, description="Affected host, service, or URL")
+    port: int | None = Field(None, ge=1, le=65535, description="Port number if applicable")
+    protocol: str | None = Field(None, description="Protocol (tcp, udp, http, etc.)")
+    service: str | None = Field(None, description="Service name")
+    service_version: str | None = Field(None, description="Service version")
     cve_ids: list[str] = Field(default_factory=list, description="CVE identifiers")
     cwe_ids: list[str] = Field(default_factory=list, description="CWE identifiers")
     references: list[str] = Field(default_factory=list, description="External references")

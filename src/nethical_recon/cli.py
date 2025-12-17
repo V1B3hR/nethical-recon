@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import typer
-from typing import Optional
 
 app = typer.Typer(
     name="nethical",
@@ -15,7 +14,7 @@ app = typer.Typer(
 @app.command()
 def version():
     """Show version information."""
-    from . import __version__, __author__
+    from . import __author__, __version__
 
     typer.echo(f"Nethical Recon v{__version__}")
     typer.echo(f"Author: {__author__}")
@@ -30,7 +29,7 @@ def interactive():
 @app.command()
 def scan(
     target: str = typer.Argument(..., help="Target to scan (domain, IP, or CIDR)"),
-    output: Optional[str] = typer.Option(None, "--output", "-o", help="Output directory"),
+    output: str | None = typer.Option(None, "--output", "-o", help="Output directory"),
 ):
     """Scan a target."""
     typer.echo(f"Scan command - Target: {target}, Output: {output}")
@@ -44,7 +43,7 @@ def job():
 
 
 @app.command()
-def report(job_id: Optional[str] = typer.Argument(None, help="Job ID to generate report for")):
+def report(job_id: str | None = typer.Argument(None, help="Job ID to generate report for")):
     """Generate reports."""
     typer.echo(f"Report generation - Job ID: {job_id}")
     typer.echo("Full implementation coming in Phase B")

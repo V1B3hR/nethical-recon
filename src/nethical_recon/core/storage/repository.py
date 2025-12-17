@@ -7,15 +7,15 @@ from uuid import UUID
 
 from sqlalchemy.orm import Session
 
-from ..models import Target, ScanJob, ToolRun, Evidence, Finding, Asset, IOC
+from ..models import IOC, Asset, Evidence, Finding, ScanJob, Target, ToolRun
 from .models import (
-    TargetModel,
-    ScanJobModel,
-    ToolRunModel,
+    AssetModel,
     EvidenceModel,
     FindingModel,
-    AssetModel,
     IOCModel,
+    ScanJobModel,
+    TargetModel,
+    ToolRunModel,
 )
 
 DomainModel = TypeVar("DomainModel")

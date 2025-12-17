@@ -12,13 +12,13 @@ This module contains Pydantic v2 models representing the core domain:
 
 from __future__ import annotations
 
-from .target import Target, TargetType, TargetScope
-from .scan_job import ScanJob, JobStatus
-from .tool_run import ToolRun, ToolStatus
-from .evidence import Evidence, EvidenceType
-from .finding import Finding, Severity, Confidence
 from .asset import Asset, AssetType
+from .evidence import Evidence, EvidenceType
+from .finding import Confidence, Finding, Severity
 from .ioc import IOC, IOCType
+from .scan_job import JobStatus, ScanJob
+from .target import Target, TargetScope, TargetType
+from .tool_run import ToolRun, ToolStatus
 
 __all__ = [
     # Target

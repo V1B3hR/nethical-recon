@@ -5,7 +5,7 @@ from __future__ import annotations
 import xml.etree.ElementTree as ET
 from uuid import UUID
 
-from ..models import Finding, Severity, Confidence
+from ..models import Confidence, Finding, Severity
 from . import BaseParser
 
 
@@ -35,7 +35,7 @@ class NmapParser(BaseParser):
 
         try:
             root = ET.fromstring(output)
-        except ET.ParseError as e:
+        except ET.ParseError:
             # If XML parsing fails, return empty list
             return findings
 

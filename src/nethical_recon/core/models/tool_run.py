@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from datetime import datetime
 from enum import Enum
-from typing import Optional
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
@@ -33,12 +32,12 @@ class ToolRun(BaseModel):
     tool_version: str = Field(..., description="Version of the tool")
     command: str = Field(..., description="Full command line executed")
     status: ToolStatus = Field(default=ToolStatus.PENDING, description="Current run status")
-    exit_code: Optional[int] = Field(None, description="Exit code of the tool")
-    stdout: Optional[str] = Field(None, description="Standard output")
-    stderr: Optional[str] = Field(None, description="Standard error output")
-    started_at: Optional[datetime] = Field(None, description="Run start timestamp (UTC)")
-    completed_at: Optional[datetime] = Field(None, description="Run completion timestamp (UTC)")
-    duration_seconds: Optional[float] = Field(None, description="Execution duration in seconds")
+    exit_code: int | None = Field(None, description="Exit code of the tool")
+    stdout: str | None = Field(None, description="Standard output")
+    stderr: str | None = Field(None, description="Standard error output")
+    started_at: datetime | None = Field(None, description="Run start timestamp (UTC)")
+    completed_at: datetime | None = Field(None, description="Run completion timestamp (UTC)")
+    duration_seconds: float | None = Field(None, description="Execution duration in seconds")
     created_at: datetime = Field(default_factory=datetime.utcnow, description="Record creation timestamp (UTC)")
 
     class Config:
