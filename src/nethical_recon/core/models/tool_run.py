@@ -37,7 +37,7 @@ class ToolRun(BaseModel):
     command_line: str = Field(..., description="Exact command line executed")
     status: ToolStatus = Field(default=ToolStatus.PENDING, description="Current status")
     exit_code: Optional[int] = Field(None, description="Process exit code")
-    
+
     # Output and evidence
     stdout_path: Optional[str] = Field(None, description="Path to stdout output file")
     stderr_path: Optional[str] = Field(None, description="Path to stderr output file")
@@ -53,7 +53,7 @@ class ToolRun(BaseModel):
     # Results
     findings_count: int = Field(default=0, description="Number of findings from this run")
     error_message: Optional[str] = Field(None, description="Error message if failed")
-    
+
     # Metadata
     environment: dict = Field(default_factory=dict, description="Environment variables and context")
     
