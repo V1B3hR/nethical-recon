@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from datetime import datetime
 from enum import Enum
-from typing import Optional
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
@@ -32,13 +31,13 @@ class Evidence(BaseModel):
     id: UUID = Field(default_factory=uuid4, description="Unique evidence identifier")
     run_id: UUID = Field(..., description="Tool run that generated this evidence")
     type: EvidenceType = Field(..., description="Type of evidence")
-    file_path: Optional[str] = Field(None, description="Path to evidence file")
-    content: Optional[str] = Field(None, description="Evidence content (for small artifacts)")
-    size_bytes: Optional[int] = Field(None, description="File size in bytes")
-    checksum_sha256: Optional[str] = Field(None, description="SHA-256 hash of the content")
-    checksum_md5: Optional[str] = Field(None, description="MD5 hash of the content (legacy)")
-    mime_type: Optional[str] = Field(None, description="MIME type of the evidence")
-    description: Optional[str] = Field(None, description="Human-readable description")
+    file_path: str | None = Field(None, description="Path to evidence file")
+    content: str | None = Field(None, description="Evidence content (for small artifacts)")
+    size_bytes: int | None = Field(None, description="File size in bytes")
+    checksum_sha256: str | None = Field(None, description="SHA-256 hash of the content")
+    checksum_md5: str | None = Field(None, description="MD5 hash of the content (legacy)")
+    mime_type: str | None = Field(None, description="MIME type of the evidence")
+    description: str | None = Field(None, description="Human-readable description")
     metadata: dict = Field(default_factory=dict, description="Additional metadata")
     timestamp: datetime = Field(default_factory=datetime.utcnow, description="Evidence collection timestamp (UTC)")
 

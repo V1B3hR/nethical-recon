@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from datetime import datetime
 from enum import Enum
-from typing import Optional
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
@@ -34,13 +33,13 @@ class IOC(BaseModel):
     """
 
     id: UUID = Field(default_factory=uuid4, description="Unique IOC identifier")
-    finding_id: Optional[UUID] = Field(None, description="Related finding ID")
+    finding_id: UUID | None = Field(None, description="Related finding ID")
     type: IOCType = Field(..., description="Type of IOC")
     value: str = Field(..., description="IOC value")
-    description: Optional[str] = Field(None, description="IOC description")
-    threat_level: Optional[str] = Field(None, description="Threat level (low, medium, high, critical)")
-    confidence: Optional[str] = Field(None, description="Confidence in the IOC")
-    source: Optional[str] = Field(None, description="Source of the IOC (tool name, feed, etc.)")
+    description: str | None = Field(None, description="IOC description")
+    threat_level: str | None = Field(None, description="Threat level (low, medium, high, critical)")
+    confidence: str | None = Field(None, description="Confidence in the IOC")
+    source: str | None = Field(None, description="Source of the IOC (tool name, feed, etc.)")
     tags: list[str] = Field(default_factory=list, description="Tags for categorization")
     metadata: dict = Field(default_factory=dict, description="Additional metadata")
     first_seen: datetime = Field(default_factory=datetime.utcnow, description="First seen timestamp (UTC)")

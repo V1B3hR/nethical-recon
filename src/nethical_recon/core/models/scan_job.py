@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from datetime import datetime
 from enum import Enum
-from typing import Optional
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
@@ -30,14 +29,14 @@ class ScanJob(BaseModel):
     id: UUID = Field(default_factory=uuid4, description="Unique job identifier")
     target_id: UUID = Field(..., description="Target being scanned")
     name: str = Field(..., description="Job name")
-    description: Optional[str] = Field(None, description="Job description")
+    description: str | None = Field(None, description="Job description")
     status: JobStatus = Field(default=JobStatus.PENDING, description="Current job status")
     tools: list[str] = Field(default_factory=list, description="Tools to run in this job")
     config: dict = Field(default_factory=dict, description="Job configuration")
     created_at: datetime = Field(default_factory=datetime.utcnow, description="Job creation timestamp (UTC)")
-    started_at: Optional[datetime] = Field(None, description="Job start timestamp (UTC)")
-    completed_at: Optional[datetime] = Field(None, description="Job completion timestamp (UTC)")
-    error_message: Optional[str] = Field(None, description="Error message if job failed")
+    started_at: datetime | None = Field(None, description="Job start timestamp (UTC)")
+    completed_at: datetime | None = Field(None, description="Job completion timestamp (UTC)")
+    error_message: str | None = Field(None, description="Error message if job failed")
     created_by: str = Field(default="system", description="User who created the job")
 
     class Config:

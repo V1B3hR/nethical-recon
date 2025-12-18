@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import os
+from collections.abc import Generator
 from contextlib import contextmanager
-from typing import Generator
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
@@ -21,9 +21,7 @@ class DatabaseConfig:
         Args:
             database_url: Database URL. Defaults to SQLite in current directory.
         """
-        self.database_url = database_url or os.getenv(
-            "NETHICAL_DATABASE_URL", "sqlite:///./nethical_recon.db"
-        )
+        self.database_url = database_url or os.getenv("NETHICAL_DATABASE_URL", "sqlite:///./nethical_recon.db")
 
 
 class Database:

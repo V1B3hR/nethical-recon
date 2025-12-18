@@ -98,6 +98,7 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"]
+"src/nethical_recon/core/storage/models.py" = ["UP037"]  # Keep quotes for SQLAlchemy forward references
 
 [tool.black]
 line-length = 120
