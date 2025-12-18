@@ -18,7 +18,7 @@ app.add_typer(job_app, name="job")
 @app.command()
 def version():
     """Show version information."""
-    from .  import __author__, __version__
+    from . import __author__, __version__
 
     typer.echo(f"Nethical Recon v{__version__}")
     typer.echo(f"Author: {__author__}")
@@ -50,14 +50,13 @@ def job_submit(
 ):
     """Submit a new scan job to the worker queue."""
     import ipaddress
-    from uuid import uuid4
 
     from nethical_recon.core.models import ScanJob, Target, TargetScope, TargetType
     from nethical_recon.core.storage import init_database
     from nethical_recon.core.storage.repository import ScanJobRepository, TargetRepository
-    from nethical_recon. worker.tasks import run_scan_job
+    from nethical_recon.worker.tasks import run_scan_job
 
-    try: 
+    try:
         # Initialize database
         db = init_database()
 
@@ -108,7 +107,7 @@ def job_submit(
 
             # Submit to worker queue
             task = run_scan_job.delay(str(job.id))
-            typer.echo(f"✓ Submitted to worker queue")
+            typer.echo("✓ Submitted to worker queue")
             typer.echo(f"  Task ID: {task.id}")
             typer.echo(f"\nUse 'nethical job status {job.id}' to check progress")
 
@@ -125,7 +124,7 @@ def job_status(
     from uuid import UUID
 
     from nethical_recon.core.storage import init_database
-    from nethical_recon.core.storage. repository import FindingRepository, ScanJobRepository, ToolRunRepository
+    from nethical_recon.core.storage.repository import FindingRepository, ScanJobRepository, ToolRunRepository
 
     try:
         db = init_database()
@@ -153,7 +152,7 @@ def job_status(
 
             # Get tool runs
             tool_runs = tool_repo.get_by_job(UUID(job_id))
-            if tool_runs: 
+            if tool_runs:
                 typer.echo(f"\n=== Tool Runs ({len(tool_runs)}) ===")
                 for run in tool_runs:
                     typer.echo(f"\n  {run.tool_name} ({run.tool_version})")
@@ -164,7 +163,7 @@ def job_status(
 
                     # Get findings for this run
                     findings = finding_repo.get_by_run(run. id)
-                    if findings: 
+                    if findings:
                         typer.echo(f"    Findings: {len(findings)}")
                         severity_counts = {}
                         for finding in findings:
@@ -186,8 +185,8 @@ def job_list(
     """List recent scan jobs."""
     from sqlalchemy import select
 
-    from nethical_recon. core.storage import init_database
-    from nethical_recon. core.storage.models import ScanJobModel
+    from nethical_recon.core.storage import init_database
+    from nethical_recon.core.storage.models import ScanJobModel
 
     try:
         db = init_database()
@@ -220,7 +219,7 @@ def job_list(
                 typer.echo(f"  Tools: {', '.join(job. tools)}")
                 typer. echo()
 
-    except Exception as e: 
+    except Exception as e:
         typer.echo(f"Error: {e}", err=True)
         raise typer.Exit(1) from e
 
@@ -235,7 +234,7 @@ def job_logs(
     from nethical_recon.core.storage import init_database
     from nethical_recon.core.storage.repository import ToolRunRepository
 
-    try: 
+    try:
         db = init_database()
 
         with db.session() as session:
