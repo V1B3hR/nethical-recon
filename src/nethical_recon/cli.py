@@ -191,7 +191,6 @@ def job_list(
         db = init_database()
 
         with db.session() as session:
-            job_repo = ScanJobRepository(session)
 
             # Get all jobs (in production, add pagination)
             from sqlalchemy import select
