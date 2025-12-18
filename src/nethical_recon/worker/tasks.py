@@ -111,7 +111,7 @@ def run_scan_job(self, job_id: str) -> dict:
             session.commit()
             self.policy_engine.release_scan_slot(job_id)
             # Retry on failure
-            raise self.retry(exc=e, countdown=60)
+            raise self.retry(exc=e, countdown=60) from
 
 
 @app.task(base=DatabaseTask, bind=True, max_retries=3)
@@ -211,7 +211,7 @@ def run_tool(self, tool_name: str, job_id: str, target_id: str) -> dict:
         except Exception as e:
             self.policy_engine.release_tool_slot(job_id)
             # Retry on failure
-            raise self.retry(exc=e, countdown=30)
+            raise self.retry(exc=e, countdown=30) from
 
 
 @app.task(base=DatabaseTask, bind=True, max_retries=3)
@@ -265,7 +265,7 @@ def normalize_results(self, run_id: str) -> dict:
 
         except Exception as e:
             # Retry on failure
-            raise self.retry(exc=e, countdown=10)
+            raise self.retry(exc=e, countdown=10) from
 
 
 @app.task(base=DatabaseTask, bind=True)
