@@ -193,7 +193,6 @@ def job_list(
 
             # Get all jobs (in production, add pagination)
             from sqlalchemy import select
-
             from nethical_recon.core.storage.models import ScanJobModel
 
             stmt = select(ScanJobModel).order_by(ScanJobModel.created_at.desc()).limit(limit)
