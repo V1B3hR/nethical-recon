@@ -62,7 +62,6 @@ def job_submit(
 
         with db.session() as session:
             target_repo = TargetRepository(session)
-            job_repo = ScanJobRepository(session)
 
             # Create or find target
             existing_target = target_repo.get_by_value(target)
