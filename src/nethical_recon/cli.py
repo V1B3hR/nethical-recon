@@ -49,7 +49,6 @@ def job_submit(
     description: str | None = typer.Option(None, "--description", "-d", help="Job description"),
 ):
     """Submit a new scan job to the worker queue."""
-    from uuid import uuid4
 
     from nethical_recon.core.models import ScanJob, Target, TargetScope, TargetType
     from nethical_recon.core.storage import init_database
@@ -61,15 +60,15 @@ def job_submit(
         db = init_database()
 
         with db.session() as session:
-    target_repo = TargetRepository(session)
-    job_repo = ScanJobRepository(session)  # Initialize job_repo
-    
-    # Create or find target
-    existing_target = target_repo.get_by_value(target)
-    if existing_target:
-        target_obj = existing_target
-        typer.echo(f"Using existing target: {target_obj.id}")
-    else:
+            target_repo = TargetRepository(session)
+            job_repo = ScanJobRepository(session)  # Initialize job_repo
+
+            # Create or find target
+            existing_target = target_repo.get_by_value(target)
+            if existing_target:
+                target_obj = existing_target
+                typer.echo(f"Using existing target: {target_obj.id}")
+            else:
                 # Determine target type using proper IP validation
                 target_type = TargetType.DOMAIN  # Default to domain
                 try:
@@ -108,7 +107,7 @@ def job_submit(
 
             # Submit to worker queue
             task = run_scan_job.delay(str(job.id))
-            typer.echo(f"✓ Submitted to worker queue")
+            typer.echo("✓ Submitted to worker queue")
             typer.echo(f"  Task ID: {task.id}")
             typer.echo(f"\nUse 'nethical job status {job.id}' to check progress")
 
@@ -194,7 +193,6 @@ def job_list(
 
             # Get all jobs (in production, add pagination)
             from sqlalchemy import select
-
             from nethical_recon.core.storage.models import ScanJobModel
 
             stmt = select(ScanJobModel).order_by(ScanJobModel.created_at.desc()).limit(limit)
@@ -271,6 +269,7 @@ def job_logs(
     except Exception as e:
         typer.echo(f"Error: {e}", err=True)
         raise typer.Exit(1) from e
+
 
 @app.command()
 def report(job_id: str | None = typer.Argument(None, help="Job ID to generate report for")):
