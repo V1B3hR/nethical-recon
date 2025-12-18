@@ -16,9 +16,6 @@ from nethical_recon.core.storage import DatabaseConfig, init_database
 
 from .celery_app import app
 
-# Initialize database and policy engine (will be recreated per worker)
-db = init_database(DatabaseConfig(os.getenv("NETHICAL_DATABASE_URL", "sqlite:///nethical_recon.db")))
-
 
 class DatabaseTask(Task):
     """Base task with database session management."""
@@ -76,13 +73,13 @@ def run_scan_job(self, job_id: str) -> dict:
             # Validate target with policy
             self.policy_engine.validate_target(target.value)
 
-            # Acquire scan slot
-            self.policy_engine.acquire_scan_slot(job_id)
-
             # Update job status
             job.status = JobStatus.RUNNING
             job.started_at = datetime.utcnow()
             session.commit()
+
+            # Acquire scan slot after validation
+            self.policy_engine.acquire_scan_slot(job_id)
 
             # Schedule tool runs
             tool_tasks = []

@@ -72,10 +72,18 @@ def job_submit(
                 target_obj = existing_target
                 typer.echo(f"Using existing target: {target_obj.id}")
             else:
-                # Determine target type
-                target_type = TargetType.DOMAIN  # Simple heuristic
-                if target.replace(".", "").replace(":", "").isdigit():
-                    target_type = TargetType.IPV4
+                # Determine target type using proper IP validation
+                target_type = TargetType.DOMAIN  # Default to domain
+                try:
+                    import ipaddress
+                    ip = ipaddress.ip_address(target)
+                    if isinstance(ip, ipaddress.IPv4Address):
+                        target_type = TargetType.IPV4
+                    elif isinstance(ip, ipaddress.IPv6Address):
+                        target_type = TargetType.IPV6
+                except ValueError:
+                    # Not a valid IP, treat as domain/hostname
+                    target_type = TargetType.DOMAIN
 
                 target_obj = Target(
                     value=target,

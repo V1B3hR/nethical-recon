@@ -85,6 +85,11 @@ class PolicyEngine:
         self._active_scans: set[str] = set()
         self._active_tools: dict[str, int] = defaultdict(int)
         self._lock = Lock()
+        
+        # Pre-compute lowercase high-risk tools set for efficient lookup
+        self._high_risk_tools_lower = frozenset(
+            tool.lower() for tool in self.policy.tool.high_risk_tools
+        )
 
     def validate_target(self, target: str) -> bool:
         """Validate if target is allowed by network policy.
@@ -149,7 +154,7 @@ class PolicyEngine:
         # Check if tool is high-risk and requires approval
         if (
             self.policy.tool.require_approval_for_high_risk
-            and tool_name.lower() in [t.lower() for t in self.policy.tool.high_risk_tools]
+            and tool_name.lower() in self._high_risk_tools_lower
         ):
             raise PolicyViolationError(f"High-risk tool {tool_name} requires explicit approval")
 
