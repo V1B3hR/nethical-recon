@@ -6,10 +6,11 @@ Silent Marker System for tagging threats
 "Cichy, z tłumikiem, naboje tracer - raz trafiony, zawsze widoczny"
 """
 
-from typing import Dict, Any, List, Optional
-from .base import BaseWeaponMode, BaseTracer, WeaponMode, Stain
 import datetime
 import hashlib
+from typing import Any
+
+from .base import BaseTracer, BaseWeaponMode, Stain, WeaponMode
 
 
 class MarkerGun:
@@ -28,12 +29,12 @@ class MarkerGun:
         self.name = name
         self.serial_number = self._generate_serial()
         self.current_mode: BaseWeaponMode | None = None
-        self.available_modes: Dict[WeaponMode, BaseWeaponMode] = {}
-        self.ammo_inventory: Dict[str, BaseTracer] = {}
+        self.available_modes: dict[WeaponMode, BaseWeaponMode] = {}
+        self.ammo_inventory: dict[str, BaseTracer] = {}
         self.current_ammo: BaseTracer | None = None
         self.shots_fired = 0
         self.hits_successful = 0
-        self.stains_created: List[Stain] = []
+        self.stains_created: list[Stain] = []
         self.armed = False
         self.safety = True
         self.created_at = datetime.datetime.now()
@@ -91,7 +92,7 @@ class MarkerGun:
         """Turn safety on"""
         self.safety = True
 
-    def fire(self, target: Dict[str, Any]) -> Dict[str, Any]:
+    def fire(self, target: dict[str, Any]) -> dict[str, Any]:
         """
         Fire weapon at target
 
@@ -172,15 +173,15 @@ class MarkerGun:
                 return stain
         return None
 
-    def get_all_stains(self) -> List[Dict[str, Any]]:
+    def get_all_stains(self) -> list[dict[str, Any]]:
         """Get all created stains"""
         return [stain.to_dict() for stain in self.stains_created]
 
-    def get_stains_by_type(self, marker_type: str) -> List[Dict[str, Any]]:
+    def get_stains_by_type(self, marker_type: str) -> list[dict[str, Any]]:
         """Get stains filtered by marker type"""
         return [stain.to_dict() for stain in self.stains_created if stain.marker_type == marker_type]
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get weapon usage statistics"""
         accuracy = (self.hits_successful / self.shots_fired * 100) if self.shots_fired > 0 else 0
 
@@ -217,12 +218,12 @@ class MarkerGun:
         if self.current_mode:
             status_parts.append(f"   Mode: {self.current_mode.mode_name} ({self.current_mode.noise_level} dB)")
         else:
-            status_parts.append(f"   Mode: None")
+            status_parts.append("   Mode: None")
 
         if self.current_ammo:
             status_parts.append(f"   Ammo: {self.current_ammo.color} ({self.current_ammo.tracer_type.value})")
         else:
-            status_parts.append(f"   Ammo: None")
+            status_parts.append("   Ammo: None")
 
         status_parts.append(
             f"   Shots: {self.shots_fired} | Hits: {self.hits_successful} | Stains: {len(self.stains_created)}"

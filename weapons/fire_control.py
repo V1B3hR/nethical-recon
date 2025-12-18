@@ -6,12 +6,13 @@ Provides automated and manual fire control for the marker gun,
 including safety checks and engagement protocols.
 """
 
-from typing import Dict, Any, Optional, List
-from dataclasses import dataclass
 import datetime
-from .marker_gun import MarkerGun
-from .targeting import TargetingSystem, Target
+from dataclasses import dataclass
+from typing import Any
+
 from .base import WeaponMode
+from .marker_gun import MarkerGun
+from .targeting import Target, TargetingSystem
 
 
 @dataclass
@@ -26,13 +27,13 @@ class FireResult:
     hit: bool
     stain_id: str | None = None
     message: str = ""
-    errors: List[str] = None
+    errors: list[str] = None
 
     def __post_init__(self):
         if self.errors is None:
             self.errors = []
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary"""
         return {
             "success": self.success,
@@ -65,10 +66,10 @@ class FireControlSystem:
         """
         self.marker_gun = marker_gun
         self.targeting_system = targeting_system
-        self.fire_history: List[FireResult] = []
+        self.fire_history: list[FireResult] = []
         self.auto_fire_enabled = False
         self.auto_fire_threshold = 0.90  # 90% confidence for auto-fire
-        self.engagement_log: List[Dict[str, Any]] = []
+        self.engagement_log: list[dict[str, Any]] = []
 
     def engage_target(
         self, target: Target, weapon_mode: str | None = None, ammo_color: str | None = None
@@ -171,7 +172,7 @@ class FireControlSystem:
 
         return result
 
-    def auto_engage(self) -> List[FireResult]:
+    def auto_engage(self) -> list[FireResult]:
         """
         Automatically engage high-confidence targets
 
@@ -242,7 +243,7 @@ class FireControlSystem:
         self.marker_gun.safety_on()
         self.marker_gun.disarm()
 
-    def get_engagement_statistics(self) -> Dict[str, Any]:
+    def get_engagement_statistics(self) -> dict[str, Any]:
         """Get engagement statistics"""
         total_engagements = len(self.fire_history)
         successful_hits = sum(1 for r in self.fire_history if r.hit)
@@ -272,7 +273,7 @@ class FireControlSystem:
             "weapon_status": self.marker_gun.get_statistics(),
         }
 
-    def get_recent_engagements(self, count: int = 10) -> List[Dict[str, Any]]:
+    def get_recent_engagements(self, count: int = 10) -> list[dict[str, Any]]:
         """Get recent engagement logs"""
         return self.engagement_log[-count:] if self.engagement_log else []
 

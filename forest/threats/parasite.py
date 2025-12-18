@@ -8,8 +8,9 @@ The parasite:
 - Difficult to detect without resource monitoring
 """
 
-from typing import Dict, Optional, Any
-from .base import BaseThreat, ThreatType, ThreatSeverity
+from typing import Any
+
+from .base import BaseThreat, ThreatSeverity, ThreatType
 
 
 class Parasite(BaseThreat):
@@ -24,7 +25,7 @@ class Parasite(BaseThreat):
         threat_id: str,
         name: str,
         severity: ThreatSeverity = ThreatSeverity.MEDIUM,
-        metadata: Dict[str, Any] | None = None,
+        metadata: dict[str, Any] | None = None,
     ):
         """
         Initialize a Parasite threat.
@@ -56,10 +57,10 @@ class Parasite(BaseThreat):
         desc = f"Resource abuse detected: {self.name} ({self.parasite_type}). "
 
         if self.parasite_type == "cryptominer":
-            desc += f"This parasite is mining "
+            desc += "This parasite is mining "
             if self.cryptocurrency:
                 desc += f"{self.cryptocurrency} "
-            desc += f"and draining system resources. "
+            desc += "and draining system resources. "
             if self.mining_pool:
                 desc += f"Mining pool: {self.mining_pool}."
         else:

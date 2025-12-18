@@ -6,9 +6,10 @@ Tag Format: HID-[SERVICE]-[RISK]-[DATE]
 Use Case: Hidden services, shadow IT, undocumented endpoints
 """
 
-from typing import Dict, Any
-from ..base import BaseTracer, TracerType
 import hashlib
+from typing import Any
+
+from ..base import BaseTracer, TracerType
 
 
 class BlueTracer(BaseTracer):
@@ -26,7 +27,7 @@ class BlueTracer(BaseTracer):
         self.marker_prefix = "HID"
         self.description = "Hidden service marker - for undocumented endpoints"
 
-    def create_tag(self, target: Dict[str, Any]) -> Dict[str, Any]:
+    def create_tag(self, target: dict[str, Any]) -> dict[str, Any]:
         """
         Create hidden service tag for target
 
@@ -83,19 +84,19 @@ class BlueTracer(BaseTracer):
         """Get usage guidelines for this tracer"""
         return """
         BLUE TRACER USAGE GUIDELINES:
-        
+
         When to use:
         - Undocumented services discovered
         - Shadow IT infrastructure
         - Hidden API endpoints
         - Unauthorized web services
         - Rogue devices on network
-        
+
         Required target fields:
         - service OR hostname OR port (at least one)
         - risk_score (recommended)
         - Optional: discovery_method, documented
-        
+
         Severity: VARIABLE (based on risk_score)
         Action: Document and assess security posture
         """

@@ -19,26 +19,26 @@ Threats in the canopy:
 - Bats: Night attacks
 """
 
-from .base import ForestBase, ForestComponent, ComponentStatus
-from .manager import ForestManager
+from .base import ComponentStatus, ForestBase, ForestComponent
 from .health_check import HealthChecker
-
-# Import tree components
-from .trees import Tree, Trunk, Branch, BranchType, Leaf, LeafType, Crown, ForestMap
+from .manager import ForestManager
 
 # Import threat components
 from .threats import (
     BaseThreat,
-    ThreatType,
-    ThreatSeverity,
+    Bat,
     Crow,
     Magpie,
-    Squirrel,
-    Snake,
     Parasite,
-    Bat,
+    Snake,
+    Squirrel,
     ThreatDetector,
+    ThreatSeverity,
+    ThreatType,
 )
+
+# Import tree components
+from .trees import Branch, BranchType, Crown, ForestMap, Leaf, LeafType, Tree, Trunk
 
 __all__ = [
     # Base classes

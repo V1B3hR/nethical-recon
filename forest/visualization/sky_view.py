@@ -4,10 +4,10 @@
 Visual representation of the forest from above
 """
 
-from typing import Dict, List, Any
+from typing import Any
 
 
-def render_sky_view(forest_data: Dict[str, Any], bird_status: Dict[str, Any]) -> str:
+def render_sky_view(forest_data: dict[str, Any], bird_status: dict[str, Any]) -> str:
     """
     Render ASCII art sky view of the forest
 

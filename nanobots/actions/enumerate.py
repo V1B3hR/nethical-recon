@@ -4,10 +4,10 @@ Auto-Enumeration - Scout nanobot that automatically enumerates targets.
 Part of the scout mode (🔍 reconnaissance behavior).
 """
 
-from typing import Dict, Any, Optional, List
 from datetime import datetime
+from typing import Any
 
-from ..base import BaseNanobot, ActionResult, NanobotMode, ActionType, ActionStatus
+from ..base import ActionResult, ActionStatus, ActionType, BaseNanobot, NanobotMode
 
 
 class EnumeratorNanobot(BaseNanobot):
@@ -17,7 +17,7 @@ class EnumeratorNanobot(BaseNanobot):
     Performs follow-up reconnaissance on anomalies and new discoveries.
     """
 
-    def __init__(self, nanobot_id: str = "auto_enumerator", config: Dict[str, Any] | None = None):
+    def __init__(self, nanobot_id: str = "auto_enumerator", config: dict[str, Any] | None = None):
         """
         Initialize enumerator nanobot.
 
@@ -35,10 +35,10 @@ class EnumeratorNanobot(BaseNanobot):
         )
 
         # Track enumeration tasks
-        self.active_enumerations: Dict[str, Dict[str, Any]] = {}
-        self.completed_enumerations: List[Dict[str, Any]] = []
+        self.active_enumerations: dict[str, dict[str, Any]] = {}
+        self.completed_enumerations: list[dict[str, Any]] = []
 
-    def can_handle(self, event: Dict[str, Any]) -> bool:
+    def can_handle(self, event: dict[str, Any]) -> bool:
         """Check if this event warrants enumeration"""
         return (
             "new_host_discovered" in event
@@ -47,7 +47,7 @@ class EnumeratorNanobot(BaseNanobot):
             or "enumerate_target" in event
         )
 
-    def assess_threat(self, event: Dict[str, Any]) -> float:
+    def assess_threat(self, event: dict[str, Any]) -> float:
         """
         Assess if enumeration is warranted.
 
@@ -80,7 +80,7 @@ class EnumeratorNanobot(BaseNanobot):
 
         return min(confidence, 1.0)
 
-    def execute_action(self, event: Dict[str, Any], confidence: float) -> ActionResult:
+    def execute_action(self, event: dict[str, Any], confidence: float) -> ActionResult:
         """
         Execute enumeration on target.
 
@@ -146,7 +146,7 @@ class EnumeratorNanobot(BaseNanobot):
                 error_message=f"Failed to start enumeration: {target}",
             )
 
-    def _select_enum_type(self, event: Dict[str, Any]) -> str:
+    def _select_enum_type(self, event: dict[str, Any]) -> str:
         """Select enumeration type based on event"""
         # Check what kind of discovery this is
         if event.get("new_host_discovered", False):
@@ -158,7 +158,7 @@ class EnumeratorNanobot(BaseNanobot):
         else:
             return "port_scan"  # Default
 
-    def _start_enumeration(self, enum_id: str, target: str, enum_type: str, event: Dict[str, Any]) -> bool:
+    def _start_enumeration(self, enum_id: str, target: str, enum_type: str, event: dict[str, Any]) -> bool:
         """
         Start enumeration (simulation).
 
@@ -172,7 +172,7 @@ class EnumeratorNanobot(BaseNanobot):
         # Simulation - always succeeds
         return True
 
-    def complete_enumeration(self, enum_id: str, results: Dict[str, Any]) -> bool:
+    def complete_enumeration(self, enum_id: str, results: dict[str, Any]) -> bool:
         """
         Mark enumeration as complete.
 
@@ -197,11 +197,11 @@ class EnumeratorNanobot(BaseNanobot):
 
         return True
 
-    def get_active_enumerations(self) -> Dict[str, Dict[str, Any]]:
+    def get_active_enumerations(self) -> dict[str, dict[str, Any]]:
         """Get all active enumerations"""
         return self.active_enumerations.copy()
 
-    def get_enumeration_results(self, enum_id: str) -> Dict[str, Any] | None:
+    def get_enumeration_results(self, enum_id: str) -> dict[str, Any] | None:
         """
         Get results for a specific enumeration.
 
@@ -216,7 +216,7 @@ class EnumeratorNanobot(BaseNanobot):
                 return enum_info.get("results")
         return None
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get enumeration statistics"""
         stats = super().get_statistics()
         stats["active_enumerations"] = len(self.active_enumerations)

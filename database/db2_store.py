@@ -3,7 +3,8 @@ IBM Db2 Store Implementation
 Mainframe integration and legacy enterprise systems
 """
 
-from typing import Dict, Any, List, Optional
+from typing import Any
+
 from .base_store import BaseStore, StoreBackend
 
 
@@ -22,7 +23,7 @@ class Db2Store(BaseStore):
           pip install ibm_db
     """
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         """Initialize Db2 store"""
         super().__init__(config)
         self.backend_type = StoreBackend.DB2
@@ -44,35 +45,35 @@ class Db2Store(BaseStore):
         """Initialize Db2 schema"""
         raise NotImplementedError()
 
-    def save_stain(self, stain: Dict[str, Any]) -> bool:
+    def save_stain(self, stain: dict[str, Any]) -> bool:
         """Save a stain to Db2 database"""
         raise NotImplementedError()
 
-    def get_stain(self, tag_id: str) -> Dict[str, Any] | None:
+    def get_stain(self, tag_id: str) -> dict[str, Any] | None:
         """Retrieve a stain by tag ID"""
         raise NotImplementedError()
 
-    def get_all_stains(self, limit: int | None = None, offset: int = 0) -> List[Dict[str, Any]]:
+    def get_all_stains(self, limit: int | None = None, offset: int = 0) -> list[dict[str, Any]]:
         """Retrieve all stains with pagination"""
         raise NotImplementedError()
 
-    def get_stains_by_type(self, marker_type: str, limit: int | None = None) -> List[Dict[str, Any]]:
+    def get_stains_by_type(self, marker_type: str, limit: int | None = None) -> list[dict[str, Any]]:
         """Retrieve stains filtered by marker type"""
         raise NotImplementedError()
 
-    def get_stains_by_color(self, color: str, limit: int | None = None) -> List[Dict[str, Any]]:
+    def get_stains_by_color(self, color: str, limit: int | None = None) -> list[dict[str, Any]]:
         """Retrieve stains filtered by color"""
         raise NotImplementedError()
 
-    def get_stains_by_ip(self, ip: str) -> List[Dict[str, Any]]:
+    def get_stains_by_ip(self, ip: str) -> list[dict[str, Any]]:
         """Retrieve stains associated with an IP address"""
         raise NotImplementedError()
 
-    def get_stains_by_threat_score(self, min_score: float, max_score: float = 10.0) -> List[Dict[str, Any]]:
+    def get_stains_by_threat_score(self, min_score: float, max_score: float = 10.0) -> list[dict[str, Any]]:
         """Retrieve stains within a threat score range"""
         raise NotImplementedError()
 
-    def update_stain(self, tag_id: str, updates: Dict[str, Any]) -> bool:
+    def update_stain(self, tag_id: str, updates: dict[str, Any]) -> bool:
         """Update an existing stain"""
         raise NotImplementedError()
 
@@ -80,14 +81,14 @@ class Db2Store(BaseStore):
         """Delete a stain from the database"""
         raise NotImplementedError()
 
-    def search_stains(self, query: str, fields: List[str] | None = None) -> List[Dict[str, Any]]:
+    def search_stains(self, query: str, fields: list[str] | None = None) -> list[dict[str, Any]]:
         """Search for stains matching a query"""
         raise NotImplementedError()
 
-    def count_stains(self, filters: Dict[str, Any] | None = None) -> int:
+    def count_stains(self, filters: dict[str, Any] | None = None) -> int:
         """Count stains with optional filters"""
         raise NotImplementedError()
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get database statistics"""
         raise NotImplementedError()

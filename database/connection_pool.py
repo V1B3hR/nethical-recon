@@ -3,9 +3,10 @@ Connection Pool Manager
 Manages database connection pooling for improved performance
 """
 
-from typing import Dict, Any, Optional
-from queue import Queue, Empty
 import threading
+from queue import Empty, Queue
+from typing import Any
+
 from .base_store import BaseStore
 from .store_factory import StoreFactory
 
@@ -18,7 +19,7 @@ class ConnectionPool:
     and resource utilization in multi-threaded environments.
     """
 
-    def __init__(self, backend: str, config: Dict[str, Any], pool_size: int = 5, max_overflow: int = 10):
+    def __init__(self, backend: str, config: dict[str, Any], pool_size: int = 5, max_overflow: int = 10):
         """
         Initialize connection pool
 
@@ -119,7 +120,7 @@ class ConnectionPool:
         with self._lock:
             self._current_size = 0
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """Get connection pool statistics"""
         return {
             "backend": self.backend,

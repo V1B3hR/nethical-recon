@@ -5,8 +5,9 @@
 > "King of the skies, master of strategic decision-making"
 """
 
-from typing import Dict, List, Any
-from .base_bird import BaseBird, BirdType, FlightMode, AlertLevel, BirdAlert
+from typing import Any
+
+from .base_bird import AlertLevel, BaseBird, BirdAlert, BirdType, FlightMode
 
 
 class Eagle(BaseBird):
@@ -31,7 +32,7 @@ class Eagle(BaseBird):
         self.vision_range = "entire_forest"
         self.leadership_role = "command_and_control"
 
-    def get_capabilities(self) -> Dict[str, str]:
+    def get_capabilities(self) -> dict[str, str]:
         """Get Eagle's unique capabilities"""
         return {
             "altitude": "Highest pułap - sees entire infrastructure",
@@ -42,7 +43,7 @@ class Eagle(BaseBird):
             "authority": "Highest decision authority",
         }
 
-    def scan(self, forest_data: Dict[str, Any]) -> List[BirdAlert]:
+    def scan(self, forest_data: dict[str, Any]) -> list[BirdAlert]:
         """
         Strategic scan of entire forest
 
@@ -109,7 +110,7 @@ class Eagle(BaseBird):
                 AlertLevel.ELEVATED,
                 f"Elevated threat level: {total_threats} active threats in forest",
                 location={"scope": "entire_forest"},
-                evidence=[f"Requires strategic response planning"],
+                evidence=["Requires strategic response planning"],
             )
             alerts.append(alert)
 
@@ -119,7 +120,7 @@ class Eagle(BaseBird):
                 AlertLevel.CRITICAL,
                 f"ROAR!! Coordinated malware attack: {crow_count} crows across multiple trees",
                 location={"scope": "cross_tree_pattern"},
-                evidence=[f"Pattern: Distributed malware campaign", f"Recommendation: Full forest lockdown"],
+                evidence=["Pattern: Distributed malware campaign", "Recommendation: Full forest lockdown"],
             )
             alerts.append(alert)
 
@@ -128,7 +129,7 @@ class Eagle(BaseBird):
                 AlertLevel.ELEVATED,
                 f"Lateral movement detected: {squirrel_count} squirrels jumping between trees",
                 location={"scope": "cross_tree_pattern"},
-                evidence=[f"Pattern: Attacker moving laterally", f"Recommendation: Isolate affected trees"],
+                evidence=["Pattern: Attacker moving laterally", "Recommendation: Isolate affected trees"],
             )
             alerts.append(alert)
 
@@ -144,13 +145,13 @@ class Eagle(BaseBird):
                 AlertLevel.CRITICAL,
                 f"Multiple trees compromised: {', '.join(unhealthy_trees[:3])}",
                 location={"scope": "multiple_trees", "trees": unhealthy_trees},
-                evidence=[f"Compromised trees: {len(unhealthy_trees)}", f"Strategic action required"],
+                evidence=[f"Compromised trees: {len(unhealthy_trees)}", "Strategic action required"],
             )
             alerts.append(alert)
 
         return alerts
 
-    def generate_executive_report(self, forest_data: Dict[str, Any]) -> Dict[str, Any]:
+    def generate_executive_report(self, forest_data: dict[str, Any]) -> dict[str, Any]:
         """
         Generate executive-level strategic report
 
@@ -212,7 +213,7 @@ class Eagle(BaseBird):
             ),
         }
 
-    def _get_strategic_recommendations(self, health: float, threats: int, compromised: int) -> List[str]:
+    def _get_strategic_recommendations(self, health: float, threats: int, compromised: int) -> list[str]:
         """Generate strategic recommendations based on current state"""
         recommendations = []
 
@@ -238,7 +239,7 @@ class Eagle(BaseBird):
 
         return recommendations
 
-    def command_decision(self, situation: str) -> Dict[str, Any]:
+    def command_decision(self, situation: str) -> dict[str, Any]:
         """
         Make strategic command decision
 

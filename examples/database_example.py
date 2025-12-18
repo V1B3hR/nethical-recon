@@ -6,17 +6,17 @@ Demonstrates stain database storage across different backends
 🗂️ FALA 6: STAIN DATABASE
 """
 
-import sys
 import os
+import sys
 
 # Add parent directory to path to import modules
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from database import create_store, StoreFactory, ConnectionPool, PooledStore
+from database import ConnectionPool, PooledStore, StoreFactory, create_store
 
 # Try to import weapons module, but make it optional
 try:
-    from weapons import MarkerGun, WeaponMode, CO2SilentMode, RedTracer, OrangeTracer
+    from weapons import CO2SilentMode, MarkerGun, OrangeTracer, RedTracer, WeaponMode
 
     WEAPONS_AVAILABLE = True
 except ImportError:
@@ -91,7 +91,7 @@ def example_1_basic_sqlite():
 
     # Get statistics
     stats = store.get_statistics()
-    print(f"\n📊 Database Statistics:")
+    print("\n📊 Database Statistics:")
     print(f"   Total stains: {stats.get('total_stains', 0)}")
 
     store.disconnect()
@@ -179,7 +179,7 @@ def example_2_weapon_integration():
 
     # Get statistics
     stats = store.get_statistics()
-    print(f"\n📊 Database Statistics:")
+    print("\n📊 Database Statistics:")
     print(f"   Total stains: {stats.get('total_stains', 0)}")
     print(f"   By type: {stats.get('stains_by_type', {})}")
     print(f"   By color: {stats.get('stains_by_color', {})}")
@@ -279,7 +279,7 @@ def example_4_connection_pooling():
     # Create connection pool
     pool = ConnectionPool(backend="sqlite", config={"database": "pooled_stains.db"}, pool_size=3, max_overflow=2)
 
-    print(f"✅ Created connection pool")
+    print("✅ Created connection pool")
     print(f"   Pool size: {pool.pool_size}")
     print(f"   Max overflow: {pool.max_overflow}")
 
@@ -310,7 +310,7 @@ def example_4_connection_pooling():
 
     # Check pool statistics
     stats = pool.get_stats()
-    print(f"\n📊 Pool Statistics:")
+    print("\n📊 Pool Statistics:")
     print(f"   Backend: {stats['backend']}")
     print(f"   Current size: {stats['current_size']}")
     print(f"   Available: {stats['available']}")
@@ -361,7 +361,7 @@ def example_5_store_factory():
     }
 
     store.save_stain(stain)
-    print(f"✅ Saved test stain")
+    print("✅ Saved test stain")
 
     # Verify
     retrieved = store.get_stain("FACTORY-test-2025-12-15")

@@ -4,12 +4,11 @@ IP Blocking Action - Defensive nanobot that blocks suspicious IPs.
 Part of the defensive mode (🛡️ antibody behavior).
 """
 
-from typing import Dict, Any, Optional, List
-import subprocess
-import re
 import ipaddress
+import subprocess
+from typing import Any
 
-from ..base import BaseNanobot, ActionResult, NanobotMode, ActionType, ActionStatus
+from ..base import ActionResult, ActionStatus, ActionType, BaseNanobot, NanobotMode
 
 
 class IPBlockerNanobot(BaseNanobot):
@@ -19,7 +18,7 @@ class IPBlockerNanobot(BaseNanobot):
     Uses iptables (Linux) or pf (BSD) to block IPs based on threat assessment.
     """
 
-    def __init__(self, nanobot_id: str = "ip_blocker", config: Dict[str, Any] | None = None):
+    def __init__(self, nanobot_id: str = "ip_blocker", config: dict[str, Any] | None = None):
         """
         Initialize IP blocker nanobot.
 
@@ -35,14 +34,14 @@ class IPBlockerNanobot(BaseNanobot):
         self.method = self.config.get("method", "simulation")  # simulation, iptables, pf
         self.whitelist = self.config.get("whitelist", [])
         self.max_blocks = self.config.get("max_blocks", 1000)
-        self.blocked_ips: List[str] = []
+        self.blocked_ips: list[str] = []
 
-    def can_handle(self, event: Dict[str, Any]) -> bool:
+    def can_handle(self, event: dict[str, Any]) -> bool:
         """Check if this event contains an IP to potentially block"""
         # Event must have 'source_ip' or 'ip' field
         return "source_ip" in event or "ip" in event
 
-    def assess_threat(self, event: Dict[str, Any]) -> float:
+    def assess_threat(self, event: dict[str, Any]) -> float:
         """
         Assess threat level based on event data.
 
@@ -86,7 +85,7 @@ class IPBlockerNanobot(BaseNanobot):
         # Cap at 1.0
         return min(confidence, 1.0)
 
-    def execute_action(self, event: Dict[str, Any], confidence: float) -> ActionResult:
+    def execute_action(self, event: dict[str, Any], confidence: float) -> ActionResult:
         """
         Block the IP address.
 
@@ -262,7 +261,7 @@ class IPBlockerNanobot(BaseNanobot):
         except (subprocess.CalledProcessError, subprocess.TimeoutExpired, FileNotFoundError):
             return False
 
-    def get_blocked_ips(self) -> List[str]:
+    def get_blocked_ips(self) -> list[str]:
         """Get list of currently blocked IPs"""
         return self.blocked_ips.copy()
 

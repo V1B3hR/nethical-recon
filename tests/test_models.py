@@ -2,26 +2,27 @@
 
 from __future__ import annotations
 
-import pytest
 from uuid import uuid4
 
+import pytest
+
 from nethical_recon.core.models import (
-    Target,
-    TargetType,
-    TargetScope,
-    ScanJob,
-    JobStatus,
-    ToolRun,
-    ToolStatus,
+    IOC,
+    Asset,
+    AssetType,
+    Confidence,
     Evidence,
     EvidenceType,
     Finding,
-    Severity,
-    Confidence,
-    Asset,
-    AssetType,
-    IOC,
     IOCType,
+    JobStatus,
+    ScanJob,
+    Severity,
+    Target,
+    TargetScope,
+    TargetType,
+    ToolRun,
+    ToolStatus,
 )
 
 
@@ -104,9 +105,7 @@ class TestToolRun:
     def test_create_tool_run(self):
         """Test creating a tool run."""
         job_id = uuid4()
-        run = ToolRun(
-            job_id=job_id, tool_name="nmap", tool_version="7.94", command="nmap -sV example.com"
-        )
+        run = ToolRun(job_id=job_id, tool_name="nmap", tool_version="7.94", command="nmap -sV example.com")
         assert run.job_id == job_id
         assert run.tool_name == "nmap"
         assert run.tool_version == "7.94"
@@ -225,9 +224,7 @@ class TestIOC:
 
     def test_create_ioc(self):
         """Test creating an IOC."""
-        ioc = IOC(
-            type=IOCType.IP, value="192.0.2.100", threat_level="high", confidence="high", source="threat_feed"
-        )
+        ioc = IOC(type=IOCType.IP, value="192.0.2.100", threat_level="high", confidence="high", source="threat_feed")
         assert ioc.type == IOCType.IP
         assert ioc.value == "192.0.2.100"
         assert ioc.threat_level == "high"

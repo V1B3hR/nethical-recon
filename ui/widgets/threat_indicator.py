@@ -2,12 +2,10 @@
 Threat indicator widget for displaying threat levels
 """
 
-from typing import Optional
-from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
 
-from ..base import ThreatLevel, calculate_threat_level, UIColors
+from ..base import ThreatLevel, UIColors, calculate_threat_level
 
 
 class ThreatIndicator:

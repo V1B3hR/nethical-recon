@@ -6,9 +6,10 @@ Tag Format: EAI-[PATTERN]-[DATE]
 Use Case: Evil AI, malicious bots, automated attacks
 """
 
-from typing import Dict, Any
-from ..base import BaseTracer, TracerType
 import hashlib
+from typing import Any
+
+from ..base import BaseTracer, TracerType
 
 
 class PurpleTracer(BaseTracer):
@@ -26,7 +27,7 @@ class PurpleTracer(BaseTracer):
         self.marker_prefix = "EAI"
         self.description = "Evil AI marker - for malicious bots and AI agents"
 
-    def create_tag(self, target: Dict[str, Any]) -> Dict[str, Any]:
+    def create_tag(self, target: dict[str, Any]) -> dict[str, Any]:
         """
         Create evil AI tag for target
 
@@ -76,18 +77,18 @@ class PurpleTracer(BaseTracer):
         """Get usage guidelines for this tracer"""
         return """
         PURPLE TRACER USAGE GUIDELINES:
-        
+
         When to use:
         - Malicious bot traffic detected
         - Automated scraping/crawling attacks
         - AI-powered credential stuffing
         - DDoS bots and bot networks
         - Automated vulnerability scanners
-        
+
         Required target fields:
         - user_agent OR bot_signature OR ip
         - Optional: behavior_pattern, request_rate, bot_type
-        
+
         Severity: HIGH
         Action: Block and monitor for bot network patterns
         """

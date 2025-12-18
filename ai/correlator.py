@@ -5,9 +5,9 @@ Links stains together, identifies attack chains, builds threat graphs,
 and maps forest connections.
 """
 
-from typing import Dict, Any, List, Set, Tuple
-from datetime import datetime, timedelta
 import logging
+from datetime import datetime
+from typing import Any
 
 
 class StainCorrelator:
@@ -24,7 +24,7 @@ class StainCorrelator:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
 
-    def link_stains(self, stains: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def link_stains(self, stains: list[dict[str, Any]]) -> list[dict[str, Any]]:
         """
         Link related stains together
 
@@ -76,7 +76,7 @@ class StainCorrelator:
 
         return groups
 
-    def _calculate_correlation(self, stain1: Dict, stain2: Dict) -> Dict[str, Any]:
+    def _calculate_correlation(self, stain1: dict, stain2: dict) -> dict[str, Any]:
         """Calculate correlation between two stains"""
         indicators = []
         strength = 0.0
@@ -95,7 +95,7 @@ class StainCorrelator:
             if abs((time2 - time1).total_seconds()) < 3600:
                 indicators.append("time_proximity")
                 strength += 0.3
-        except:
+        except Exception:
             pass
 
         # Check threat type similarity
@@ -114,7 +114,7 @@ class StainCorrelator:
 
         return {"strength": min(strength, 1.0), "indicators": indicators}
 
-    def identify_attack_chain(self, stains: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def identify_attack_chain(self, stains: list[dict[str, Any]]) -> list[dict[str, Any]]:
         """
         Identify attack chains from stains
 
@@ -143,7 +143,7 @@ class StainCorrelator:
 
                 current_chain.append(stain)
                 last_time = stain_time
-            except:
+            except Exception:
                 continue
 
         # Add final chain
@@ -152,7 +152,7 @@ class StainCorrelator:
 
         return chains
 
-    def _analyze_chain(self, chain: List[Dict]) -> Dict[str, Any]:
+    def _analyze_chain(self, chain: list[dict]) -> dict[str, Any]:
         """Analyze an attack chain"""
         return {
             "chain_id": f"chain_{datetime.now().timestamp()}",
@@ -165,7 +165,7 @@ class StainCorrelator:
             "recommendations": self._chain_recommendations(chain),
         }
 
-    def _identify_pattern(self, chain: List[Dict]) -> str:
+    def _identify_pattern(self, chain: list[dict]) -> str:
         """Identify attack pattern from chain"""
         types = [s.get("marker_type", "").lower() for s in chain]
 
@@ -178,7 +178,7 @@ class StainCorrelator:
         else:
             return "MULTI_STAGE_ATTACK"
 
-    def _assess_chain_severity(self, chain: List[Dict]) -> str:
+    def _assess_chain_severity(self, chain: list[dict]) -> str:
         """Assess overall chain severity"""
         max_score = max((s.get("stain", {}).get("threat_score", 0) for s in chain), default=0)
 
@@ -189,7 +189,7 @@ class StainCorrelator:
         else:
             return "MEDIUM"
 
-    def _chain_recommendations(self, chain: List[Dict]) -> List[str]:
+    def _chain_recommendations(self, chain: list[dict]) -> list[str]:
         """Generate recommendations for chain"""
         recommendations = [
             f"Attack chain detected with {len(chain)} stages",
@@ -205,7 +205,7 @@ class StainCorrelator:
 
         return recommendations
 
-    def build_threat_graph(self, stains: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def build_threat_graph(self, stains: list[dict[str, Any]]) -> dict[str, Any]:
         """
         Build threat relationship graph
 
@@ -253,14 +253,14 @@ class StainCorrelator:
             "clusters": self._identify_clusters(nodes, edges),
         }
 
-    def _identify_clusters(self, nodes: List[Dict], edges: List[Dict]) -> List[Dict[str, Any]]:
+    def _identify_clusters(self, nodes: list[dict], edges: list[dict]) -> list[dict[str, Any]]:
         """Identify threat clusters in graph"""
         # Simple clustering based on connected components
         node_ids = {n["id"] for n in nodes}
         visited = set()
         clusters = []
 
-        def dfs(node_id: str, cluster: Set[str]):
+        def dfs(node_id: str, cluster: set[str]):
             if node_id in visited:
                 return
             visited.add(node_id)
@@ -282,7 +282,7 @@ class StainCorrelator:
 
         return clusters
 
-    def map_forest_threats(self, forest_data: Dict[str, Any], stains: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def map_forest_threats(self, forest_data: dict[str, Any], stains: list[dict[str, Any]]) -> dict[str, Any]:
         """
         Map threats to forest structure
 
@@ -332,7 +332,7 @@ class StainCorrelator:
             "forest_summary": self._summarize_forest_threats(threat_map, forest_data),
         }
 
-    def _tree_recommendations(self, tree_data: Dict) -> List[str]:
+    def _tree_recommendations(self, tree_data: dict) -> list[str]:
         """Generate recommendations for a tree"""
         recommendations = []
 
@@ -348,7 +348,7 @@ class StainCorrelator:
 
         return recommendations
 
-    def _summarize_forest_threats(self, threat_map: Dict, forest_data: Dict) -> str:
+    def _summarize_forest_threats(self, threat_map: dict, forest_data: dict) -> str:
         """Summarize forest-wide threat situation"""
         total_trees = forest_data.get("total_trees", 0)
         affected_trees = len(threat_map)

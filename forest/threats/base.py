@@ -12,9 +12,9 @@ Threats represent various types of security risks detected in the forest:
 """
 
 from abc import ABC, abstractmethod
-from typing import Dict, List, Optional, Any
 from datetime import datetime
 from enum import Enum
+from typing import Any
 
 
 class ThreatType(Enum):
@@ -48,7 +48,7 @@ class BaseThreat(ABC):
         name: str,
         threat_type: ThreatType,
         severity: ThreatSeverity,
-        metadata: Dict[str, Any] | None = None,
+        metadata: dict[str, Any] | None = None,
     ):
         """
         Initialize a threat.
@@ -171,7 +171,7 @@ class BaseThreat(ABC):
         }
         return colors.get(self.severity, "⚪")
 
-    def get_info(self) -> Dict[str, Any]:
+    def get_info(self) -> dict[str, Any]:
         """Get threat information as dictionary"""
         return {
             "threat_id": self.threat_id,

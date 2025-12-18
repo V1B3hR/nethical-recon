@@ -4,10 +4,10 @@
 Shows threat locations and types across the forest
 """
 
-from typing import Dict, List, Any
+from typing import Any
 
 
-def render_threat_map(forest_data: Dict[str, Any]) -> str:
+def render_threat_map(forest_data: dict[str, Any]) -> str:
     """
     Render threat distribution map
 
@@ -101,7 +101,7 @@ def render_threat_map(forest_data: Dict[str, Any]) -> str:
     return "\n".join(map_view)
 
 
-def render_simple_threat_map(threats: Dict[str, int]) -> str:
+def render_simple_threat_map(threats: dict[str, int]) -> str:
     """
     Render simple threat count visualization
 

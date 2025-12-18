@@ -7,18 +7,18 @@ Multi-backend database support for stain storage
 """
 
 from .base_store import BaseStore, StoreBackend
-from .sqlite_store import SQLiteStore
-from .postgres_store import PostgreSQLStore
-from .mysql_store import MySQLStore
-from .mssql_store import MSSQLStore
-from .oracle_store import OracleStore
-from .db2_store import Db2Store
-from .snowflake_store import SnowflakeStore
-from .mongodb_store import MongoDBStore
-from .redis_cache import RedisCache
-from .elasticsearch_store import ElasticsearchStore
-from .store_factory import StoreFactory, create_store
 from .connection_pool import ConnectionPool, PooledStore
+from .db2_store import Db2Store
+from .elasticsearch_store import ElasticsearchStore
+from .mongodb_store import MongoDBStore
+from .mssql_store import MSSQLStore
+from .mysql_store import MySQLStore
+from .oracle_store import OracleStore
+from .postgres_store import PostgreSQLStore
+from .redis_cache import RedisCache
+from .snowflake_store import SnowflakeStore
+from .sqlite_store import SQLiteStore
+from .store_factory import StoreFactory, create_store
 
 __all__ = [
     # Base classes

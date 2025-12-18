@@ -8,9 +8,10 @@ The bat:
 - Uses echolocation (reconnaissance in darkness)
 """
 
-from typing import Dict, Optional, Any
-from datetime import datetime, time
-from .base import BaseThreat, ThreatType, ThreatSeverity
+from datetime import datetime
+from typing import Any
+
+from .base import BaseThreat, ThreatSeverity, ThreatType
 
 
 class Bat(BaseThreat):
@@ -25,7 +26,7 @@ class Bat(BaseThreat):
         threat_id: str,
         name: str,
         severity: ThreatSeverity = ThreatSeverity.MEDIUM,
-        metadata: Dict[str, Any] | None = None,
+        metadata: dict[str, Any] | None = None,
     ):
         """
         Initialize a Bat threat.
@@ -128,7 +129,7 @@ class Bat(BaseThreat):
         # Night: 22:00 - 06:00 or weekends
         return hour >= 22 or hour < 6 or now.weekday() >= 5
 
-    def get_activity_pattern(self) -> Dict[int, int]:
+    def get_activity_pattern(self) -> dict[int, int]:
         """Get activity pattern by hour"""
         pattern = {hour: 0 for hour in range(24)}
         for hour in self.active_hours:

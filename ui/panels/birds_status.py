@@ -2,10 +2,9 @@
 Birds Status Panel - Shows bird patrol status
 """
 
-from typing import Dict
+from rich.align import Align
 from rich.panel import Panel
 from rich.text import Text
-from rich.align import Align
 
 from ..base import UIColors
 
@@ -13,7 +12,7 @@ from ..base import UIColors
 class BirdsStatusPanel:
     """Panel showing bird patrol status"""
 
-    def __init__(self, birds: Dict[str, str] = None):
+    def __init__(self, birds: dict[str, str] = None):
         # Default birds and their status
         self.birds = birds or {"EAGLE": "PATROL", "FALCON": "HUNT", "OWL": "WATCH"}
 

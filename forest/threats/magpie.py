@@ -8,8 +8,9 @@ The magpie is:
 - Hoards treasures (data collection)
 """
 
-from typing import Dict, List, Optional, Any
-from .base import BaseThreat, ThreatType, ThreatSeverity
+from typing import Any
+
+from .base import BaseThreat, ThreatSeverity, ThreatType
 
 
 class Magpie(BaseThreat):
@@ -24,7 +25,7 @@ class Magpie(BaseThreat):
         threat_id: str,
         name: str,
         severity: ThreatSeverity = ThreatSeverity.HIGH,
-        metadata: Dict[str, Any] | None = None,
+        metadata: dict[str, Any] | None = None,
     ):
         """
         Initialize a Magpie threat.

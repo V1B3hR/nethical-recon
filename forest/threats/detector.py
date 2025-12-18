@@ -11,15 +11,16 @@ Detects various threats in the forest canopy:
 - Bats (night attacks)
 """
 
-from typing import Dict, List, Optional, Any
 from datetime import datetime
-from .base import BaseThreat, ThreatType, ThreatSeverity
+from typing import Any
+
+from .base import BaseThreat, ThreatSeverity, ThreatType
+from .bat import Bat
 from .crow import Crow
 from .magpie import Magpie
-from .squirrel import Squirrel
-from .snake import Snake
 from .parasite import Parasite
-from .bat import Bat
+from .snake import Snake
+from .squirrel import Squirrel
 
 
 class ThreatDetector:
@@ -41,7 +42,7 @@ class ThreatDetector:
         name: str,
         malware_family: str = "Unknown",
         severity: ThreatSeverity = ThreatSeverity.HIGH,
-        metadata: Dict[str, Any] | None = None,
+        metadata: dict[str, Any] | None = None,
     ) -> Crow:
         """
         Detect a Crow (malware) threat.
@@ -69,9 +70,9 @@ class ThreatDetector:
         self,
         threat_id: str,
         name: str,
-        target_data_types: List[str] = None,
+        target_data_types: list[str] = None,
         severity: ThreatSeverity = ThreatSeverity.HIGH,
-        metadata: Dict[str, Any] | None = None,
+        metadata: dict[str, Any] | None = None,
     ) -> Magpie:
         """
         Detect a Magpie (data stealer) threat.
@@ -101,7 +102,7 @@ class ThreatDetector:
         name: str,
         technique: str = "Unknown",
         severity: ThreatSeverity = ThreatSeverity.MEDIUM,
-        metadata: Dict[str, Any] | None = None,
+        metadata: dict[str, Any] | None = None,
     ) -> Squirrel:
         """
         Detect a Squirrel (lateral movement) threat.
@@ -131,7 +132,7 @@ class ThreatDetector:
         name: str,
         rootkit_type: str = "unknown",
         severity: ThreatSeverity = ThreatSeverity.CRITICAL,
-        metadata: Dict[str, Any] | None = None,
+        metadata: dict[str, Any] | None = None,
     ) -> Snake:
         """
         Detect a Snake (rootkit) threat.
@@ -161,7 +162,7 @@ class ThreatDetector:
         name: str,
         parasite_type: str = "cryptominer",
         severity: ThreatSeverity = ThreatSeverity.MEDIUM,
-        metadata: Dict[str, Any] | None = None,
+        metadata: dict[str, Any] | None = None,
     ) -> Parasite:
         """
         Detect a Parasite (cryptominer) threat.
@@ -191,7 +192,7 @@ class ThreatDetector:
         name: str,
         attack_type: str = "unknown",
         severity: ThreatSeverity = ThreatSeverity.MEDIUM,
-        metadata: Dict[str, Any] | None = None,
+        metadata: dict[str, Any] | None = None,
     ) -> Bat:
         """
         Detect a Bat (night attack) threat.
@@ -219,23 +220,23 @@ class ThreatDetector:
         """Get a specific threat by ID"""
         return self.detected_threats.get(threat_id)
 
-    def get_all_threats(self) -> List[BaseThreat]:
+    def get_all_threats(self) -> list[BaseThreat]:
         """Get all detected threats"""
         return list(self.detected_threats.values())
 
-    def get_active_threats(self) -> List[BaseThreat]:
+    def get_active_threats(self) -> list[BaseThreat]:
         """Get all active threats"""
         return [t for t in self.detected_threats.values() if t.is_active]
 
-    def get_threats_by_type(self, threat_type: ThreatType) -> List[BaseThreat]:
+    def get_threats_by_type(self, threat_type: ThreatType) -> list[BaseThreat]:
         """Get all threats of a specific type"""
         return [t for t in self.detected_threats.values() if t.threat_type == threat_type]
 
-    def get_threats_by_severity(self, severity: ThreatSeverity) -> List[BaseThreat]:
+    def get_threats_by_severity(self, severity: ThreatSeverity) -> list[BaseThreat]:
         """Get all threats of a specific severity"""
         return [t for t in self.detected_threats.values() if t.severity == severity]
 
-    def get_critical_threats(self) -> List[BaseThreat]:
+    def get_critical_threats(self) -> list[BaseThreat]:
         """Get all critical threats"""
         return self.get_threats_by_severity(ThreatSeverity.CRITICAL)
 
@@ -244,7 +245,7 @@ class ThreatDetector:
         if threat_id in self.detected_threats:
             del self.detected_threats[threat_id]
 
-    def get_threat_summary(self) -> Dict[str, Any]:
+    def get_threat_summary(self) -> dict[str, Any]:
         """Get summary of all detected threats"""
         by_type = {}
         by_severity = {}
@@ -277,7 +278,7 @@ class ThreatDetector:
         }
         self.detection_history.append(log_entry)
 
-    def get_detection_history(self, limit: int = 50) -> List[Dict[str, Any]]:
+    def get_detection_history(self, limit: int = 50) -> list[dict[str, Any]]:
         """Get recent detection history"""
         return self.detection_history[-limit:]
 

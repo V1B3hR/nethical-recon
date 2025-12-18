@@ -4,10 +4,10 @@ Baseline Learning - Adaptive nanobot that learns normal patterns.
 Part of the adaptive mode (🧬 learning behavior).
 """
 
-from typing import Dict, Any, Optional, List
-from datetime import datetime, timedelta
-from collections import defaultdict
 import statistics
+from collections import defaultdict
+from datetime import datetime, timedelta
+from typing import Any
 
 
 class BaselineLearner:
@@ -21,7 +21,7 @@ class BaselineLearner:
     - Time-based behavior
     """
 
-    def __init__(self, config: Dict[str, Any] | None = None):
+    def __init__(self, config: dict[str, Any] | None = None):
         """
         Initialize baseline learner.
 
@@ -38,11 +38,11 @@ class BaselineLearner:
         self.update_interval_hours = self.config.get("update_interval_hours", 24)
 
         # Baseline data
-        self.baselines: Dict[str, Dict[str, Any]] = {}
-        self.samples: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
-        self.last_update: Dict[str, datetime] = {}
+        self.baselines: dict[str, dict[str, Any]] = {}
+        self.samples: dict[str, list[dict[str, Any]]] = defaultdict(list)
+        self.last_update: dict[str, datetime] = {}
 
-    def record_observation(self, metric_name: str, value: float, context: Dict[str, Any] | None = None):
+    def record_observation(self, metric_name: str, value: float, context: dict[str, Any] | None = None):
         """
         Record an observation for baseline learning.
 
@@ -115,7 +115,7 @@ class BaselineLearner:
         self.baselines[metric_name] = baseline
         self.last_update[metric_name] = datetime.now()
 
-    def get_baseline(self, metric_name: str) -> Dict[str, Any] | None:
+    def get_baseline(self, metric_name: str) -> dict[str, Any] | None:
         """
         Get baseline for a metric.
 
@@ -127,7 +127,7 @@ class BaselineLearner:
         """
         return self.baselines.get(metric_name)
 
-    def is_anomalous(self, metric_name: str, value: float, sensitivity: float = 2.0) -> Dict[str, Any]:
+    def is_anomalous(self, metric_name: str, value: float, sensitivity: float = 2.0) -> dict[str, Any]:
         """
         Check if a value is anomalous compared to baseline.
 
@@ -182,7 +182,7 @@ class BaselineLearner:
             "deviation_percent": ((value - mean) / mean * 100) if mean > 0 else 0,
         }
 
-    def get_all_baselines(self) -> Dict[str, Dict[str, Any]]:
+    def get_all_baselines(self) -> dict[str, dict[str, Any]]:
         """Get all baselines"""
         return self.baselines.copy()
 
@@ -210,7 +210,7 @@ class BaselineLearner:
         self.samples.clear()
         self.last_update.clear()
 
-    def export_baselines(self) -> Dict[str, Any]:
+    def export_baselines(self) -> dict[str, Any]:
         """
         Export baselines for persistence.
 
@@ -229,7 +229,7 @@ class BaselineLearner:
             },
         }
 
-    def import_baselines(self, data: Dict[str, Any]) -> bool:
+    def import_baselines(self, data: dict[str, Any]) -> bool:
         """
         Import baselines from exported data.
 

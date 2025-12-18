@@ -3,18 +3,19 @@ Store Factory
 Factory pattern for unified database access across all backends
 """
 
-from typing import Dict, Any, Optional
+from typing import Any
+
 from .base_store import BaseStore, StoreBackend
-from .sqlite_store import SQLiteStore
-from .postgres_store import PostgreSQLStore
-from .mysql_store import MySQLStore
-from .mssql_store import MSSQLStore
-from .oracle_store import OracleStore
 from .db2_store import Db2Store
-from .snowflake_store import SnowflakeStore
-from .mongodb_store import MongoDBStore
-from .redis_cache import RedisCache
 from .elasticsearch_store import ElasticsearchStore
+from .mongodb_store import MongoDBStore
+from .mssql_store import MSSQLStore
+from .mysql_store import MySQLStore
+from .oracle_store import OracleStore
+from .postgres_store import PostgreSQLStore
+from .redis_cache import RedisCache
+from .snowflake_store import SnowflakeStore
+from .sqlite_store import SQLiteStore
 
 
 class StoreFactory:
@@ -40,7 +41,7 @@ class StoreFactory:
     }
 
     @classmethod
-    def create_store(cls, backend: str, config: Dict[str, Any]) -> BaseStore:
+    def create_store(cls, backend: str, config: dict[str, Any]) -> BaseStore:
         """
         Create a database store instance
 
@@ -94,7 +95,7 @@ class StoreFactory:
         return [backend.value for backend in StoreBackend]
 
     @classmethod
-    def get_backend_info(cls, backend: str) -> Dict[str, str]:
+    def get_backend_info(cls, backend: str) -> dict[str, str]:
         """
         Get information about a specific backend
 
@@ -190,7 +191,7 @@ class StoreFactory:
 
 
 # Convenience function for quick store creation
-def create_store(backend: str = "sqlite", config: Dict[str, Any] | None = None) -> BaseStore:
+def create_store(backend: str = "sqlite", config: dict[str, Any] | None = None) -> BaseStore:
     """
     Convenience function to create a database store
 

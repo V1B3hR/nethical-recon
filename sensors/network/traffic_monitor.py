@@ -4,12 +4,13 @@ Traffic Monitor Sensor
 Analogia: "Kamera przy bramie" (Camera at the gate)
 """
 
+import re
 import subprocess
 import threading
 import time
-from typing import Dict, Any, Optional
+from typing import Any
+
 from ..base import BaseSensor, SensorStatus
-import re
 
 
 class TrafficMonitor(BaseSensor):
@@ -18,7 +19,7 @@ class TrafficMonitor(BaseSensor):
     Uses tcpdump or tshark as backend
     """
 
-    def __init__(self, name: str = "traffic_monitor", config: Dict[str, Any] = None):
+    def __init__(self, name: str = "traffic_monitor", config: dict[str, Any] = None):
         """
         Initialize Traffic Monitor
 
@@ -107,7 +108,7 @@ class TrafficMonitor(BaseSensor):
             self.logger.error(f"Error stopping traffic monitor: {e}")
             return False
 
-    def check(self) -> Dict[str, Any]:
+    def check(self) -> dict[str, Any]:
         """Perform a single traffic check"""
         try:
             # Run tcpdump for a short duration to capture sample
@@ -197,7 +198,7 @@ class TrafficMonitor(BaseSensor):
         # This could be enhanced to track patterns over time
         pass
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get traffic statistics"""
         return {
             "status": self.status.value,

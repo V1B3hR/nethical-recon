@@ -4,11 +4,11 @@ Alert Escalation - Defensive nanobot that escalates alerts.
 Part of the defensive mode (🛡️ antibody behavior).
 """
 
-from typing import Dict, Any, Optional, List
 from datetime import datetime
 from enum import Enum
+from typing import Any
 
-from ..base import BaseNanobot, ActionResult, NanobotMode, ActionType, ActionStatus
+from ..base import ActionResult, ActionStatus, ActionType, BaseNanobot, NanobotMode
 
 
 class AlertLevel(Enum):
@@ -28,7 +28,7 @@ class AlertNanobot(BaseNanobot):
     Manages alert levels and notifications based on threat severity.
     """
 
-    def __init__(self, nanobot_id: str = "alert_escalator", config: Dict[str, Any] | None = None):
+    def __init__(self, nanobot_id: str = "alert_escalator", config: dict[str, Any] | None = None):
         """
         Initialize alert nanobot.
 
@@ -44,14 +44,14 @@ class AlertNanobot(BaseNanobot):
         self.min_level = AlertLevel[self.config.get("min_level", "WARNING").upper()]
 
         # Track alerts
-        self.active_alerts: List[Dict[str, Any]] = []
-        self.alert_count_by_level: Dict[str, int] = {level.value: 0 for level in AlertLevel}
+        self.active_alerts: list[dict[str, Any]] = []
+        self.alert_count_by_level: dict[str, int] = {level.value: 0 for level in AlertLevel}
 
-    def can_handle(self, event: Dict[str, Any]) -> bool:
+    def can_handle(self, event: dict[str, Any]) -> bool:
         """All events can be alerted on"""
         return True
 
-    def assess_threat(self, event: Dict[str, Any]) -> float:
+    def assess_threat(self, event: dict[str, Any]) -> float:
         """
         Assess threat level for alerting.
 
@@ -74,7 +74,7 @@ class AlertNanobot(BaseNanobot):
 
         return confidence
 
-    def execute_action(self, event: Dict[str, Any], confidence: float) -> ActionResult:
+    def execute_action(self, event: dict[str, Any], confidence: float) -> ActionResult:
         """
         Escalate alert.
 
@@ -135,7 +135,7 @@ class AlertNanobot(BaseNanobot):
                 error_message="Failed to send alert",
             )
 
-    def _determine_alert_level(self, event: Dict[str, Any], confidence: float) -> AlertLevel:
+    def _determine_alert_level(self, event: dict[str, Any], confidence: float) -> AlertLevel:
         """Determine appropriate alert level"""
         threat_score = event.get("threat_score", 0)
 
@@ -163,7 +163,7 @@ class AlertNanobot(BaseNanobot):
         level_order = [AlertLevel.INFO, AlertLevel.WARNING, AlertLevel.ELEVATED, AlertLevel.CRITICAL, AlertLevel.BREACH]
         return level_order.index(alert_level) >= level_order.index(self.min_level)
 
-    def _send_alert(self, alert: Dict[str, Any]) -> bool:
+    def _send_alert(self, alert: dict[str, Any]) -> bool:
         """
         Send alert through configured channels.
 
@@ -182,7 +182,7 @@ class AlertNanobot(BaseNanobot):
 
         return True
 
-    def get_active_alerts(self, level: AlertLevel | None = None, limit: int = 50) -> List[Dict[str, Any]]:
+    def get_active_alerts(self, level: AlertLevel | None = None, limit: int = 50) -> list[dict[str, Any]]:
         """
         Get active alerts.
 
@@ -200,7 +200,7 @@ class AlertNanobot(BaseNanobot):
 
         return alerts[-limit:]
 
-    def get_alert_statistics(self) -> Dict[str, Any]:
+    def get_alert_statistics(self) -> dict[str, Any]:
         """Get alert statistics"""
         return {
             "total_alerts": len(self.active_alerts),

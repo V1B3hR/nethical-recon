@@ -5,9 +5,9 @@
 """
 
 from abc import ABC, abstractmethod
-from enum import Enum
-from typing import Dict, List, Optional, Any
 from datetime import datetime
+from enum import Enum
+from typing import Any
 
 
 class BirdType(Enum):
@@ -53,8 +53,8 @@ class BirdAlert:
         bird_type: BirdType,
         level: AlertLevel,
         message: str,
-        location: Dict[str, str] | None = None,
-        evidence: List[str] | None = None,
+        location: dict[str, str] | None = None,
+        evidence: list[str] | None = None,
         timestamp: datetime | None = None,
     ):
         self.bird_type = bird_type
@@ -64,7 +64,7 @@ class BirdAlert:
         self.evidence = evidence or []
         self.timestamp = timestamp or datetime.now()
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert alert to dictionary"""
         return {
             "bird_type": self.bird_type.value,
@@ -108,13 +108,13 @@ class BaseBird(ABC):
         self.bird_type = bird_type
         self.flight_mode = FlightMode.RESTING
         self.is_active = False
-        self.alerts: List[BirdAlert] = []
-        self.observations: List[Dict[str, Any]] = []
-        self.patrol_area: Dict[str, Any] | None = None
+        self.alerts: list[BirdAlert] = []
+        self.observations: list[dict[str, Any]] = []
+        self.patrol_area: dict[str, Any] | None = None
         self.last_patrol: datetime | None = None
 
     @abstractmethod
-    def scan(self, forest_data: Dict[str, Any]) -> List[BirdAlert]:
+    def scan(self, forest_data: dict[str, Any]) -> list[BirdAlert]:
         """
         Scan the forest for threats and anomalies
 
@@ -127,7 +127,7 @@ class BaseBird(ABC):
         pass
 
     @abstractmethod
-    def get_capabilities(self) -> Dict[str, str]:
+    def get_capabilities(self) -> dict[str, str]:
         """
         Get bird's unique capabilities
 
@@ -147,7 +147,7 @@ class BaseBird(ABC):
         self.is_active = False
         self.flight_mode = FlightMode.RESTING
 
-    def set_patrol_area(self, area: Dict[str, Any]):
+    def set_patrol_area(self, area: dict[str, Any]):
         """
         Set the area this bird should patrol
 
@@ -160,8 +160,8 @@ class BaseBird(ABC):
         self,
         level: AlertLevel,
         message: str,
-        location: Dict[str, str] | None = None,
-        evidence: List[str] | None = None,
+        location: dict[str, str] | None = None,
+        evidence: list[str] | None = None,
     ) -> BirdAlert:
         """
         Create and store an alert
@@ -179,7 +179,7 @@ class BaseBird(ABC):
         self.alerts.append(alert)
         return alert
 
-    def get_recent_alerts(self, count: int = 10) -> List[BirdAlert]:
+    def get_recent_alerts(self, count: int = 10) -> list[BirdAlert]:
         """Get most recent alerts"""
         return self.alerts[-count:] if self.alerts else []
 
@@ -188,7 +188,7 @@ class BaseBird(ABC):
         cutoff = datetime.now().timestamp() - (max_age_hours * 3600)
         self.alerts = [alert for alert in self.alerts if alert.timestamp.timestamp() > cutoff]
 
-    def get_status(self) -> Dict[str, Any]:
+    def get_status(self) -> dict[str, Any]:
         """Get current bird status"""
         return {
             "name": self.name,

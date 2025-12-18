@@ -8,10 +8,10 @@ This module provides the foundation for the nanobot system:
 """
 
 from abc import ABC, abstractmethod
-from typing import Dict, Any, Optional, List
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
+from typing import Any
 
 
 class NanobotMode(Enum):
@@ -55,14 +55,14 @@ class ActionResult:
     status: ActionStatus
     confidence: float  # 0.0 to 1.0
     timestamp: datetime = field(default_factory=datetime.now)
-    details: Dict[str, Any] = field(default_factory=dict)
+    details: dict[str, Any] = field(default_factory=dict)
     error_message: str | None = None
 
     def is_successful(self) -> bool:
         """Check if action was successful"""
         return self.status == ActionStatus.SUCCESS
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary"""
         return {
             "action_type": self.action_type.value,
@@ -82,7 +82,7 @@ class BaseNanobot(ABC):
     based on confidence levels and configured rules.
     """
 
-    def __init__(self, nanobot_id: str, mode: NanobotMode, config: Dict[str, Any] | None = None):
+    def __init__(self, nanobot_id: str, mode: NanobotMode, config: dict[str, Any] | None = None):
         """
         Initialize nanobot.
 
@@ -95,7 +95,7 @@ class BaseNanobot(ABC):
         self.mode = mode
         self.config = config or {}
         self.is_active = False
-        self.action_history: List[ActionResult] = []
+        self.action_history: list[ActionResult] = []
 
         # Confidence thresholds for action
         self.auto_fire_threshold = self.config.get("auto_fire_threshold", 0.90)  # ≥90% - auto action
@@ -103,7 +103,7 @@ class BaseNanobot(ABC):
         self.observe_threshold = self.config.get("observe_threshold", 0.0)  # <70% - observe
 
     @abstractmethod
-    def can_handle(self, event: Dict[str, Any]) -> bool:
+    def can_handle(self, event: dict[str, Any]) -> bool:
         """
         Check if this nanobot can handle the given event.
 
@@ -116,7 +116,7 @@ class BaseNanobot(ABC):
         pass
 
     @abstractmethod
-    def assess_threat(self, event: Dict[str, Any]) -> float:
+    def assess_threat(self, event: dict[str, Any]) -> float:
         """
         Assess threat level and return confidence score.
 
@@ -129,7 +129,7 @@ class BaseNanobot(ABC):
         pass
 
     @abstractmethod
-    def execute_action(self, event: Dict[str, Any], confidence: float) -> ActionResult:
+    def execute_action(self, event: dict[str, Any], confidence: float) -> ActionResult:
         """
         Execute the nanobot action.
 
@@ -154,7 +154,7 @@ class BaseNanobot(ABC):
         """Check if confidence is too low for action"""
         return confidence < self.propose_threshold
 
-    def process_event(self, event: Dict[str, Any]) -> ActionResult | None:
+    def process_event(self, event: dict[str, Any]) -> ActionResult | None:
         """
         Process an event and take appropriate action.
 
@@ -207,7 +207,7 @@ class BaseNanobot(ABC):
         """Deactivate this nanobot"""
         self.is_active = False
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get statistics about this nanobot's actions"""
         total = len(self.action_history)
         if total == 0:
@@ -227,7 +227,7 @@ class BaseNanobot(ABC):
             "is_active": self.is_active,
         }
 
-    def get_recent_actions(self, limit: int = 10) -> List[ActionResult]:
+    def get_recent_actions(self, limit: int = 10) -> list[ActionResult]:
         """Get recent actions"""
         return self.action_history[-limit:]
 

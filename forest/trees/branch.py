@@ -8,8 +8,9 @@ A branch can represent:
 - A network connection
 """
 
-from typing import Dict, List, Optional, Any
 from enum import Enum
+from typing import Any
+
 from ..base import ForestComponent
 
 
@@ -29,7 +30,7 @@ class Branch(ForestComponent):
     Analogia: 🌿 Gałąź - Processes and services growing from the tree
     """
 
-    def __init__(self, branch_id: str, name: str, branch_type: BranchType, metadata: Dict[str, Any] | None = None):
+    def __init__(self, branch_id: str, name: str, branch_type: BranchType, metadata: dict[str, Any] | None = None):
         """
         Initialize a branch.
 
@@ -78,7 +79,7 @@ class Branch(ForestComponent):
         """Get a specific leaf by ID"""
         return self.leaves.get(leaf_id)
 
-    def get_all_leaves(self) -> List:
+    def get_all_leaves(self) -> list:
         """Get all leaves on this branch"""
         return list(self.leaves.values())
 
@@ -89,7 +90,7 @@ class Branch(ForestComponent):
         if memory_mb is not None:
             self.memory_mb = memory_mb
 
-    def get_info(self) -> Dict[str, Any]:
+    def get_info(self) -> dict[str, Any]:
         """Get branch information as dictionary"""
         info = super().get_info()
         info.update(

@@ -7,8 +7,8 @@ Implements the hybrid decision system:
 - <70% confidence: Observe (monitor only)
 """
 
-from typing import Dict, Any, Optional
 from enum import Enum
+from typing import Any
 
 
 class DecisionMode(Enum):
@@ -29,7 +29,7 @@ class HybridDecisionMaker:
     3. Observe and learn when confidence is low (<70%)
     """
 
-    def __init__(self, config: Dict[str, Any] | None = None):
+    def __init__(self, config: dict[str, Any] | None = None):
         """
         Initialize hybrid decision maker.
 
@@ -48,8 +48,8 @@ class HybridDecisionMaker:
         self.context_weight = self.config.get("context_weight", 0.1)
 
     def make_decision(
-        self, base_confidence: float, event: Dict[str, Any], context: Dict[str, Any] | None = None
-    ) -> Dict[str, Any]:
+        self, base_confidence: float, event: dict[str, Any], context: dict[str, Any] | None = None
+    ) -> dict[str, Any]:
         """
         Make a decision based on confidence, event, and context.
 
@@ -82,7 +82,7 @@ class HybridDecisionMaker:
         }
 
     def _adjust_confidence(
-        self, base_confidence: float, event: Dict[str, Any], context: Dict[str, Any] | None
+        self, base_confidence: float, event: dict[str, Any], context: dict[str, Any] | None
     ) -> float:
         """
         Adjust confidence based on context.
@@ -146,8 +146,8 @@ class HybridDecisionMaker:
         base_confidence: float,
         adjusted_confidence: float,
         mode: DecisionMode,
-        event: Dict[str, Any],
-        context: Dict[str, Any] | None,
+        event: dict[str, Any],
+        context: dict[str, Any] | None,
     ) -> str:
         """Generate human-readable reasoning for the decision"""
         reasons = []
@@ -196,7 +196,7 @@ class HybridDecisionMaker:
 
         return reasoning
 
-    def should_escalate(self, decision: Dict[str, Any]) -> bool:
+    def should_escalate(self, decision: dict[str, Any]) -> bool:
         """
         Determine if decision should be escalated to hunter.
 
@@ -216,7 +216,7 @@ class HybridDecisionMaker:
 
         return False
 
-    def get_thresholds(self) -> Dict[str, float]:
+    def get_thresholds(self) -> dict[str, float]:
         """Get current decision thresholds"""
         return {
             "auto_fire": self.auto_fire_threshold,

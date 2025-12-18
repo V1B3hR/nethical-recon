@@ -7,10 +7,10 @@ Note: This is a lightweight implementation that doesn't require heavy ML librari
 For production, consider integrating sklearn, tensorflow, or other ML frameworks.
 """
 
-from typing import Dict, Any, Optional, List
-from datetime import datetime
-from collections import deque
 import math
+from collections import deque
+from datetime import datetime
+from typing import Any
 
 
 class SimpleMLAnomalyDetector:
@@ -25,7 +25,7 @@ class SimpleMLAnomalyDetector:
     For production use, integrate proper ML libraries like sklearn.
     """
 
-    def __init__(self, config: Dict[str, Any] | None = None):
+    def __init__(self, config: dict[str, Any] | None = None):
         """
         Initialize ML anomaly detector.
 
@@ -42,16 +42,16 @@ class SimpleMLAnomalyDetector:
         self.features = self.config.get("features", ["request_rate", "error_rate", "response_time", "bandwidth"])
 
         # Data windows for each feature
-        self.feature_windows: Dict[str, deque] = {feature: deque(maxlen=self.window_size) for feature in self.features}
+        self.feature_windows: dict[str, deque] = {feature: deque(maxlen=self.window_size) for feature in self.features}
 
         # Anomaly history
-        self.anomaly_history: List[Dict[str, Any]] = []
+        self.anomaly_history: list[dict[str, Any]] = []
 
         # Model state
         self.is_trained = False
         self.training_samples = 0
 
-    def train(self, samples: List[Dict[str, Any]]):
+    def train(self, samples: list[dict[str, Any]]):
         """
         Train the detector on normal samples.
 
@@ -66,7 +66,7 @@ class SimpleMLAnomalyDetector:
         self.training_samples = len(samples)
         self.is_trained = True
 
-    def predict(self, sample: Dict[str, Any]) -> Dict[str, Any]:
+    def predict(self, sample: dict[str, Any]) -> dict[str, Any]:
         """
         Predict if sample is anomalous.
 
@@ -173,7 +173,7 @@ class SimpleMLAnomalyDetector:
 
         return min(score, 1.0)
 
-    def learn_from_feedback(self, sample: Dict[str, Any], is_anomalous: bool):
+    def learn_from_feedback(self, sample: dict[str, Any], is_anomalous: bool):
         """
         Learn from feedback (supervised learning).
 
@@ -195,7 +195,7 @@ class SimpleMLAnomalyDetector:
             # False negative - decrease sensitivity threshold
             self.sensitivity = max(self.sensitivity - 0.01, 0.5)
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get detector statistics"""
         return {
             "is_trained": self.is_trained,
@@ -209,7 +209,7 @@ class SimpleMLAnomalyDetector:
             },
         }
 
-    def get_anomaly_history(self, limit: int = 50) -> List[Dict[str, Any]]:
+    def get_anomaly_history(self, limit: int = 50) -> list[dict[str, Any]]:
         """
         Get recent anomaly history.
 

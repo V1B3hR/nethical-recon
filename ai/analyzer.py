@@ -5,9 +5,9 @@ Provides threat scoring, pattern matching, correlation analysis,
 and forest health monitoring capabilities.
 """
 
-from typing import Dict, Any, List, Optional
-from datetime import datetime
 import logging
+from datetime import datetime
+from typing import Any
 
 
 class ThreatAnalyzer:
@@ -26,7 +26,7 @@ class ThreatAnalyzer:
         self.threat_patterns = self._load_threat_patterns()
         self.scoring_weights = {"severity": 0.3, "confidence": 0.25, "impact": 0.25, "prevalence": 0.2}
 
-    def _load_threat_patterns(self) -> Dict[str, Any]:
+    def _load_threat_patterns(self) -> dict[str, Any]:
         """Load known threat patterns"""
         return {
             "crow": {
@@ -61,7 +61,7 @@ class ThreatAnalyzer:
             },
         }
 
-    def calculate_threat_score(self, threat_data: Dict[str, Any]) -> float:
+    def calculate_threat_score(self, threat_data: dict[str, Any]) -> float:
         """
         Calculate comprehensive threat score (0.0-10.0)
 
@@ -93,7 +93,7 @@ class ThreatAnalyzer:
 
         return round(min(10.0, max(0.0, score)), 2)
 
-    def match_pattern(self, threat_data: Dict[str, Any]) -> Dict[str, Any] | None:
+    def match_pattern(self, threat_data: dict[str, Any]) -> dict[str, Any] | None:
         """
         Match threat against known patterns
 
@@ -129,7 +129,7 @@ class ThreatAnalyzer:
 
         return best_match
 
-    def correlate_threats(self, threats: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def correlate_threats(self, threats: list[dict[str, Any]]) -> list[dict[str, Any]]:
         """
         Correlate multiple threats to find relationships
 
@@ -159,7 +159,7 @@ class ThreatAnalyzer:
 
         return correlations
 
-    def assess_forest_health(self, forest_data: Dict[str, Any]) -> Dict[str, Any]:
+    def assess_forest_health(self, forest_data: dict[str, Any]) -> dict[str, Any]:
         """
         Assess overall health of the forest (infrastructure)
 
@@ -204,7 +204,7 @@ class ThreatAnalyzer:
             "recommendations": self._generate_health_recommendations(health_score, critical_threats),
         }
 
-    def _generate_health_recommendations(self, health_score: float, critical_threats: int) -> List[str]:
+    def _generate_health_recommendations(self, health_score: float, critical_threats: int) -> list[str]:
         """Generate recommendations based on health assessment"""
         recommendations = []
 
@@ -227,7 +227,7 @@ class ThreatAnalyzer:
 
         return recommendations
 
-    def analyze_threat(self, threat_data: Dict[str, Any]) -> Dict[str, Any]:
+    def analyze_threat(self, threat_data: dict[str, Any]) -> dict[str, Any]:
         """
         Comprehensive threat analysis
 
@@ -250,7 +250,7 @@ class ThreatAnalyzer:
             "recommendations": self._generate_threat_recommendations(threat_score, pattern_match),
         }
 
-    def _generate_threat_recommendations(self, score: float, pattern: Dict | None) -> List[str]:
+    def _generate_threat_recommendations(self, score: float, pattern: dict | None) -> list[str]:
         """Generate action recommendations for a threat"""
         recommendations = []
 

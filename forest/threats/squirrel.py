@@ -8,8 +8,9 @@ The squirrel:
 - Leaves supplies (persistence mechanisms)
 """
 
-from typing import Dict, List, Optional, Any
-from .base import BaseThreat, ThreatType, ThreatSeverity
+from typing import Any
+
+from .base import BaseThreat, ThreatSeverity, ThreatType
 
 
 class Squirrel(BaseThreat):
@@ -24,7 +25,7 @@ class Squirrel(BaseThreat):
         threat_id: str,
         name: str,
         severity: ThreatSeverity = ThreatSeverity.MEDIUM,
-        metadata: Dict[str, Any] | None = None,
+        metadata: dict[str, Any] | None = None,
     ):
         """
         Initialize a Squirrel threat.
@@ -105,7 +106,7 @@ class Squirrel(BaseThreat):
         self.hiding_spots.append(spot)
         self.add_indicator(f"{tree_id}:{location}", "persistence")
 
-    def get_movement_path(self) -> List[Dict[str, Any]]:
+    def get_movement_path(self) -> list[dict[str, Any]]:
         """Get the complete movement path"""
         return self.movement_path
 

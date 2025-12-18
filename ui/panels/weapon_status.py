@@ -2,7 +2,6 @@
 Weapon Status Panel - Shows weapon and ammo status
 """
 
-from typing import Dict
 from rich.panel import Panel
 from rich.text import Text
 
@@ -13,13 +12,13 @@ from ..widgets.progress_bars import create_stealth_bar
 class WeaponStatusPanel:
     """Panel showing weapon status"""
 
-    def __init__(self, mode: str = "CO2 Silent", status: str = "ARMED", stealth: int = 50, ammo: Dict[str, int] = None):
+    def __init__(self, mode: str = "CO2 Silent", status: str = "ARMED", stealth: int = 50, ammo: dict[str, int] = None):
         self.mode = mode
         self.status = status
         self.stealth = stealth
         self.ammo = ammo or {}
 
-    def update(self, mode: str = None, status: str = None, stealth: int = None, ammo: Dict[str, int] = None):
+    def update(self, mode: str = None, status: str = None, stealth: int = None, ammo: dict[str, int] = None):
         """Update weapon status"""
         if mode is not None:
             self.mode = mode

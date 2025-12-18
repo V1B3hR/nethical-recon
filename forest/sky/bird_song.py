@@ -5,7 +5,8 @@
 """
 
 from enum import Enum
-from typing import Dict, Any, Optional
+from typing import Any
+
 from .base_bird import AlertLevel, BirdType
 
 
@@ -78,7 +79,7 @@ class BirdSong:
         return f"{emoji} [{sound}!] {pattern}"
 
     @classmethod
-    def get_sound_info(cls, level: AlertLevel) -> Dict[str, Any]:
+    def get_sound_info(cls, level: AlertLevel) -> dict[str, Any]:
         """Get detailed sound information for an alert level"""
         return cls.SOUNDS.get(level, cls.SOUNDS[AlertLevel.INFO]).copy()
 

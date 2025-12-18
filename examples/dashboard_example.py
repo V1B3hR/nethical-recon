@@ -9,15 +9,12 @@ Usage:
 """
 
 import sys
-import time
-from datetime import datetime
 from pathlib import Path
 
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from ui.dashboard import Dashboard, create_demo_status, create_demo_alerts
-from ui.base import Alert, BirdType, ThreatLevel, SystemStatus
+from ui.dashboard import Dashboard, create_demo_alerts, create_demo_status
 from ui.screens.targeting import Target, TargetingScreen
 from ui.widgets.tree_widget import TreeWidget
 
@@ -86,8 +83,8 @@ def demo_forest_view():
     print("🌳 FOREST VIEW - Infrastructure Map")
     print("=" * 80 + "\n")
 
-    from ui.screens.forest_view import ForestViewScreen
     from ui.base import ThreatType
+    from ui.screens.forest_view import ForestViewScreen
 
     # Create forest view
     forest_view = ForestViewScreen()

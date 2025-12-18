@@ -2,10 +2,10 @@
 Base classes for weapon system components
 """
 
-from abc import ABC, abstractmethod
-from typing import Dict, Any, Optional
-from enum import Enum
 import datetime
+from abc import ABC, abstractmethod
+from enum import Enum
+from typing import Any
 
 
 class TracerType(Enum):
@@ -40,11 +40,11 @@ class BaseWeaponMode(ABC):
         self.description: str = ""
 
     @abstractmethod
-    def fire(self, target: Dict[str, Any], ammo: "BaseTracer") -> Dict[str, Any]:
+    def fire(self, target: dict[str, Any], ammo: "BaseTracer") -> dict[str, Any]:
         """Fire weapon at target with specified ammo"""
         pass
 
-    def get_info(self) -> Dict[str, Any]:
+    def get_info(self) -> dict[str, Any]:
         """Get weapon mode information"""
         return {
             "mode": self.mode_name,
@@ -66,11 +66,11 @@ class BaseTracer(ABC):
         self.use_count: int = 0
 
     @abstractmethod
-    def create_tag(self, target: Dict[str, Any]) -> Dict[str, Any]:
+    def create_tag(self, target: dict[str, Any]) -> dict[str, Any]:
         """Create a tag/stain for the target"""
         pass
 
-    def get_info(self) -> Dict[str, Any]:
+    def get_info(self) -> dict[str, Any]:
         """Get tracer information"""
         return {
             "type": self.tracer_type.value if self.tracer_type else "UNKNOWN",
@@ -103,7 +103,7 @@ class Stain:
         tag_id: str,
         marker_type: str,
         color: str,
-        target: Dict[str, Any],
+        target: dict[str, Any],
         weapon_mode: str,
         threat_score: float,
         confidence: float,
@@ -125,7 +125,7 @@ class Stain:
         self.detected_by = ""
         self.forest_location = {}
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert stain to dictionary"""
         return {
             "tag_id": self.tag_id,

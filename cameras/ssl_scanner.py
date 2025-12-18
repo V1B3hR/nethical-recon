@@ -9,11 +9,12 @@ Analyzes SSL/TLS certificates and configurations:
 - Vulnerabilities (weak ciphers, expired certs, etc.)
 """
 
-from typing import Dict, Any, List, Optional
-from .base import BaseCamera, CameraMode
 import socket
 import ssl
 from datetime import datetime
+from typing import Any
+
+from .base import BaseCamera, CameraMode
 
 
 class SSLScanner(BaseCamera):
@@ -26,13 +27,13 @@ class SSLScanner(BaseCamera):
         check_vulnerabilities: Check for known SSL/TLS vulnerabilities (default: True)
     """
 
-    def __init__(self, config: Dict[str, Any] = None):
+    def __init__(self, config: dict[str, Any] = None):
         super().__init__("SSLScanner", CameraMode.XRAY, config)
         self.ports = self.config.get("ports", [443, 8443])
         self.timeout = self.config.get("timeout", 5)
         self.check_vulns = self.config.get("check_vulnerabilities", True)
 
-    def scan(self, target: str) -> Dict[str, Any]:
+    def scan(self, target: str) -> dict[str, Any]:
         """
         Scan target for SSL/TLS information
 
@@ -69,7 +70,7 @@ class SSLScanner(BaseCamera):
 
         return results
 
-    def _analyze_certificate(self, hostname: str, port: int) -> Dict[str, Any] | None:
+    def _analyze_certificate(self, hostname: str, port: int) -> dict[str, Any] | None:
         """
         Analyze SSL/TLS certificate
 
@@ -134,7 +135,7 @@ class SSLScanner(BaseCamera):
             self.logger.error(f"SSL error on {hostname}:{port}: {e}")
             return None
 
-        except socket.timeout:
+        except TimeoutError:
             self.logger.error(f"Connection timeout on {hostname}:{port}")
             return None
 
@@ -150,11 +151,11 @@ class SSLScanner(BaseCamera):
                 parts.append(f"{name}={value}")
         return ", ".join(parts)
 
-    def _parse_san(self, san_tuple: tuple) -> List[str]:
+    def _parse_san(self, san_tuple: tuple) -> list[str]:
         """Parse Subject Alternative Names"""
         return [value for name, value in san_tuple if name == "DNS"]
 
-    def _check_vulnerabilities(self, cert_info: Dict[str, Any], hostname: str, port: int) -> List[Dict[str, Any]]:
+    def _check_vulnerabilities(self, cert_info: dict[str, Any], hostname: str, port: int) -> list[dict[str, Any]]:
         """
         Check for SSL/TLS vulnerabilities
 
@@ -272,7 +273,7 @@ class SSLScanner(BaseCamera):
 
         return vulns
 
-    def _generate_summary(self, results: Dict[str, Any]) -> Dict[str, Any]:
+    def _generate_summary(self, results: dict[str, Any]) -> dict[str, Any]:
         """Generate summary of findings"""
         summary = {
             "total_ports_scanned": len(self.ports),
@@ -284,7 +285,7 @@ class SSLScanner(BaseCamera):
 
         return summary
 
-    def quick_scan(self, hostname: str, port: int = 443) -> Dict[str, Any] | None:
+    def quick_scan(self, hostname: str, port: int = 443) -> dict[str, Any] | None:
         """
         Quick scan of a single host:port
 

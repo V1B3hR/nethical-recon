@@ -4,26 +4,25 @@ Central command and control interface for Nethical Hunter
 """
 
 import time
-from typing import Optional
-from datetime import datetime
+
+from rich.align import Align
 from rich.console import Console
 from rich.layout import Layout
+from rich.live import Live
 from rich.panel import Panel
 from rich.text import Text
-from rich.live import Live
-from rich.align import Align
 
-from .base import SystemStatus, Alert, BirdType, ThreatLevel, UIColors
+from .base import Alert, BirdType, SystemStatus, ThreatLevel, UIColors
 from .panels import (
-    ThreatLevelPanel,
-    SensorsStatusPanel,
-    NanobotsStatusPanel,
     AlertsFeedPanel,
-    WeaponStatusPanel,
-    ForestStatusPanel,
     BirdsStatusPanel,
+    ForestStatusPanel,
+    NanobotsStatusPanel,
+    SensorsStatusPanel,
+    ThreatLevelPanel,
+    WeaponStatusPanel,
 )
-from .screens import TargetingScreen, StainReportScreen, ForestViewScreen, SettingsScreen
+from .screens import ForestViewScreen, SettingsScreen, StainReportScreen, TargetingScreen
 
 
 class Dashboard:

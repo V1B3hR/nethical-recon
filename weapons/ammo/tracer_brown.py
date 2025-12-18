@@ -6,9 +6,10 @@ Tag Format: SQR-[PATH]-[DATE]
 Use Case: Lateral movement, host hopping, privilege escalation paths
 """
 
-from typing import Dict, Any
-from ..base import BaseTracer, TracerType
 import hashlib
+from typing import Any
+
+from ..base import BaseTracer, TracerType
 
 
 class BrownTracer(BaseTracer):
@@ -26,7 +27,7 @@ class BrownTracer(BaseTracer):
         self.marker_prefix = "SQR"
         self.description = "Squirrel marker - for lateral movement tracking"
 
-    def create_tag(self, target: Dict[str, Any]) -> Dict[str, Any]:
+    def create_tag(self, target: dict[str, Any]) -> dict[str, Any]:
         """
         Create squirrel tag for target
 
@@ -94,7 +95,7 @@ class BrownTracer(BaseTracer):
         """Get usage guidelines for this tracer"""
         return """
         BROWN TRACER USAGE GUIDELINES:
-        
+
         When to use:
         - Lateral movement detected between hosts
         - Privilege escalation attempts
@@ -102,14 +103,14 @@ class BrownTracer(BaseTracer):
         - Remote execution (PSExec, WMI, etc.)
         - Network traversal patterns
         - "Squirrel jumping" between forest trees
-        
+
         Required target fields:
         - movement_path OR (source_host AND dest_host)
         - Optional: method, protocol, credentials_used
         - Forest: source_tree, dest_tree in forest_location
-        
+
         Severity: HIGH
         Action: Isolate affected hosts and contain the spread
-        
+
         Note: Track the squirrel's path to identify attack progression
         """

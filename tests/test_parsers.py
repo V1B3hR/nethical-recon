@@ -2,11 +2,10 @@
 
 from __future__ import annotations
 
-import pytest
 from uuid import uuid4
 
+from nethical_recon.core.models import Confidence, Severity
 from nethical_recon.core.parsers.nmap_parser import NmapParser
-from nethical_recon.core.models import Severity, Confidence
 
 
 class TestNmapParser:
@@ -45,7 +44,7 @@ class TestNmapParser:
 
         assert len(findings) == 2
         assert all(f.run_id == run_id for f in findings)
-        
+
         # Check SSH finding
         ssh_finding = next(f for f in findings if f.port == 22)
         assert ssh_finding.title == "Open Port: 22/tcp"

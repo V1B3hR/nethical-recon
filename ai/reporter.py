@@ -5,9 +5,9 @@ Generates comprehensive reports including CVSS scores, executive summaries,
 remediation recommendations, and bird activity reports.
 """
 
-from typing import Dict, Any, List, Optional
-from datetime import datetime
 import logging
+from datetime import datetime
+from typing import Any
 
 
 class AIReporter:
@@ -24,7 +24,7 @@ class AIReporter:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
 
-    def generate_cvss_report(self, threat_data: Dict[str, Any]) -> Dict[str, Any]:
+    def generate_cvss_report(self, threat_data: dict[str, Any]) -> dict[str, Any]:
         """
         Generate CVSS-style vulnerability report
 
@@ -64,12 +64,12 @@ class AIReporter:
             "timestamp": datetime.now().isoformat(),
         }
 
-    def _generate_vector_string(self, threat_data: Dict[str, Any]) -> str:
+    def _generate_vector_string(self, threat_data: dict[str, Any]) -> str:
         """Generate CVSS vector string"""
         # Simplified vector - in production, this would be more detailed
         return f"NETHICAL:1.0/S:{threat_data.get('severity', 'M')[0]}/C:{threat_data.get('confidence', 0.5):.1f}"
 
-    def _assess_impact(self, threat_data: Dict[str, Any]) -> Dict[str, str]:
+    def _assess_impact(self, threat_data: dict[str, Any]) -> dict[str, str]:
         """Assess CIA (Confidentiality, Integrity, Availability) impact"""
         impact_level = threat_data.get("impact", "MEDIUM")
 
@@ -85,7 +85,7 @@ class AIReporter:
         else:
             return {"confidentiality": "MEDIUM", "integrity": "MEDIUM", "availability": "MEDIUM"}
 
-    def _assess_exploitability(self, threat_data: Dict[str, Any]) -> Dict[str, str]:
+    def _assess_exploitability(self, threat_data: dict[str, Any]) -> dict[str, str]:
         """Assess exploitability metrics"""
         confidence = threat_data.get("confidence", 0.5)
 
@@ -98,7 +98,7 @@ class AIReporter:
 
         return {"attack_complexity": complexity, "privileges_required": "LOW", "user_interaction": "NONE"}
 
-    def generate_executive_summary(self, session_data: Dict[str, Any]) -> str:
+    def generate_executive_summary(self, session_data: dict[str, Any]) -> str:
         """
         Generate executive summary for hunting session
 
@@ -166,7 +166,7 @@ Report Generated: {datetime.now().isoformat()}
 """
         return summary.strip()
 
-    def _format_key_findings(self, threats: List[Dict], stains: List[Dict]) -> str:
+    def _format_key_findings(self, threats: list[dict], stains: list[dict]) -> str:
         """Format key findings section"""
         findings = []
 
@@ -182,7 +182,7 @@ Report Generated: {datetime.now().isoformat()}
 
         return "\n".join(findings)
 
-    def _format_recommendations(self, session_data: Dict[str, Any]) -> str:
+    def _format_recommendations(self, session_data: dict[str, Any]) -> str:
         """Format recommendations section"""
         recommendations = []
 
@@ -208,7 +208,7 @@ Report Generated: {datetime.now().isoformat()}
 
         return "\n".join(recommendations)
 
-    def generate_remediation_plan(self, threat_data: Dict[str, Any]) -> Dict[str, Any]:
+    def generate_remediation_plan(self, threat_data: dict[str, Any]) -> dict[str, Any]:
         """
         Generate step-by-step remediation plan
 
@@ -344,7 +344,7 @@ Report Generated: {datetime.now().isoformat()}
             "success_criteria": self._generate_success_criteria(threat_type),
         }
 
-    def _generate_success_criteria(self, threat_type: str) -> List[str]:
+    def _generate_success_criteria(self, threat_type: str) -> list[str]:
         """Generate success criteria for remediation"""
         criteria = [
             "No malicious activity detected for 72 hours",
@@ -362,7 +362,7 @@ Report Generated: {datetime.now().isoformat()}
 
         return criteria
 
-    def generate_bird_report(self, bird_data: Dict[str, Any]) -> Dict[str, Any]:
+    def generate_bird_report(self, bird_data: dict[str, Any]) -> dict[str, Any]:
         """
         Generate bird activity report
 
@@ -382,7 +382,7 @@ Report Generated: {datetime.now().isoformat()}
             "summary": self._generate_bird_summary(bird_data),
         }
 
-    def _format_eagle_report(self, eagle_data: Dict) -> Dict[str, Any]:
+    def _format_eagle_report(self, eagle_data: dict) -> dict[str, Any]:
         """Format Eagle (strategic) report"""
         return {
             "mode": "STRATEGIC_COMMAND",
@@ -392,7 +392,7 @@ Report Generated: {datetime.now().isoformat()}
             "recommendations": eagle_data.get("recommendations", []),
         }
 
-    def _format_falcon_report(self, falcon_data: Dict) -> Dict[str, Any]:
+    def _format_falcon_report(self, falcon_data: dict) -> dict[str, Any]:
         """Format Falcon (rapid response) report"""
         return {
             "mode": "RAPID_RESPONSE",
@@ -402,7 +402,7 @@ Report Generated: {datetime.now().isoformat()}
             "average_response_time": falcon_data.get("avg_response_time", "N/A"),
         }
 
-    def _format_owl_report(self, owl_data: Dict) -> Dict[str, Any]:
+    def _format_owl_report(self, owl_data: dict) -> dict[str, Any]:
         """Format Owl (night watch) report"""
         return {
             "mode": "NIGHT_WATCH",
@@ -412,7 +412,7 @@ Report Generated: {datetime.now().isoformat()}
             "stealth_operations": owl_data.get("stealth_ops", 0),
         }
 
-    def _format_sparrow_report(self, sparrow_data: Dict) -> Dict[str, Any]:
+    def _format_sparrow_report(self, sparrow_data: dict) -> dict[str, Any]:
         """Format Sparrow (routine check) report"""
         return {
             "mode": "ROUTINE_CHECK",
@@ -422,7 +422,7 @@ Report Generated: {datetime.now().isoformat()}
             "baseline_status": sparrow_data.get("baseline_status", "NORMAL"),
         }
 
-    def _generate_bird_summary(self, bird_data: Dict) -> str:
+    def _generate_bird_summary(self, bird_data: dict) -> str:
         """Generate summary of bird activities"""
         total_alerts = sum(
             [

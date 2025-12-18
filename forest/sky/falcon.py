@@ -5,9 +5,10 @@
 > "Sharp vision, lightning speed, piercing cry"
 """
 
-from typing import Dict, List, Any, Optional
-from datetime import datetime, timedelta
-from .base_bird import BaseBird, BirdType, FlightMode, AlertLevel, BirdAlert
+from datetime import UTC, datetime, timedelta
+from typing import Any
+
+from .base_bird import AlertLevel, BaseBird, BirdAlert, BirdType, FlightMode
 
 
 class Falcon(BaseBird):
@@ -32,9 +33,9 @@ class Falcon(BaseBird):
         self.vision_sharpness = "maximum"
         self.alert_priority = "immediate"
         self.hunting_mode = True
-        self.targets: List[Dict[str, Any]] = []
+        self.targets: list[dict[str, Any]] = []
 
-    def get_capabilities(self) -> Dict[str, str]:
+    def get_capabilities(self) -> dict[str, str]:
         """Get Falcon's unique capabilities"""
         return {
             "speed": "Fastest bird - instant response",
@@ -45,7 +46,7 @@ class Falcon(BaseBird):
             "specialization": "Threat detection and rapid response",
         }
 
-    def scan(self, forest_data: Dict[str, Any]) -> List[BirdAlert]:
+    def scan(self, forest_data: dict[str, Any]) -> list[BirdAlert]:
         """
         Fast real-time scan for immediate threats
 
@@ -81,7 +82,7 @@ class Falcon(BaseBird):
                 location=threat.get("location_detail", {}),
                 evidence=[
                     f"Threat type: {threat.get('type')}",
-                    f"First seen: just now",
+                    "First seen: just now",
                     f"Confidence: {threat.get('confidence', 0)*100:.0f}%",
                 ],
             )
@@ -195,16 +196,15 @@ class Falcon(BaseBird):
             cutoff = datetime.now()
             if event_time.tzinfo is not None:
                 # If event_time is timezone-aware, make cutoff timezone-aware too
-                from datetime import timezone
 
-                cutoff = datetime.now(timezone.utc)
+                cutoff = datetime.now(UTC)
 
             cutoff = cutoff - timedelta(minutes=minutes)
             return event_time > cutoff
-        except:
+        except Exception:
             return True  # On parse error, assume recent
 
-    def hunt_target(self, target: Dict[str, Any]) -> Dict[str, Any]:
+    def hunt_target(self, target: dict[str, Any]) -> dict[str, Any]:
         """
         Actively hunt a specific target
 
@@ -259,7 +259,7 @@ class Falcon(BaseBird):
         }
         return weapon_map.get(threat_type.lower(), "ORANGE_TRACER")
 
-    def quick_response(self, alert_data: Dict[str, Any]) -> List[str]:
+    def quick_response(self, alert_data: dict[str, Any]) -> list[str]:
         """
         Generate quick response actions for an alert
 
@@ -299,7 +299,7 @@ class Falcon(BaseBird):
 
         return actions
 
-    def get_active_hunts(self) -> List[Dict[str, Any]]:
+    def get_active_hunts(self) -> list[dict[str, Any]]:
         """Get list of active hunting targets"""
         return [
             {

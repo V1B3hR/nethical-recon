@@ -2,13 +2,13 @@
 Panels package for Nethical Hunter Command Center
 """
 
-from .threat_level import ThreatLevelPanel
-from .sensors_status import SensorsStatusPanel
-from .nanobots_status import NanobotsStatusPanel
 from .alerts_feed import AlertsFeedPanel
-from .weapon_status import WeaponStatusPanel
-from .forest_status import ForestStatusPanel
 from .birds_status import BirdsStatusPanel
+from .forest_status import ForestStatusPanel
+from .nanobots_status import NanobotsStatusPanel
+from .sensors_status import SensorsStatusPanel
+from .threat_level import ThreatLevelPanel
+from .weapon_status import WeaponStatusPanel
 
 __all__ = [
     "ThreatLevelPanel",

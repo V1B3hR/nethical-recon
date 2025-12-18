@@ -12,13 +12,13 @@ This example shows:
 5. Forest mapping and visualization
 """
 
-import sys
 import os
+import sys
 
 # Add parent directory to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from forest import ForestManager, Tree, Trunk, Branch, BranchType, Leaf, LeafType, Crown, ThreatSeverity, HealthChecker
+from forest import Branch, BranchType, Crown, ForestManager, HealthChecker, ThreatSeverity, Tree, Trunk
 
 
 def print_section(title):

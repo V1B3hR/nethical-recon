@@ -4,8 +4,8 @@ Abstract base class defining the interface for all database backends
 """
 
 from abc import ABC, abstractmethod
-from typing import Dict, Any, List, Optional
 from enum import Enum
+from typing import Any
 
 
 class StoreBackend(Enum):
@@ -31,7 +31,7 @@ class BaseStore(ABC):
     to provide consistent storage and retrieval of stain data.
     """
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         """
         Initialize the store with configuration
 
@@ -74,7 +74,7 @@ class BaseStore(ABC):
         pass
 
     @abstractmethod
-    def save_stain(self, stain: Dict[str, Any]) -> bool:
+    def save_stain(self, stain: dict[str, Any]) -> bool:
         """
         Save a stain to the database
 
@@ -87,7 +87,7 @@ class BaseStore(ABC):
         pass
 
     @abstractmethod
-    def get_stain(self, tag_id: str) -> Dict[str, Any] | None:
+    def get_stain(self, tag_id: str) -> dict[str, Any] | None:
         """
         Retrieve a stain by tag ID
 
@@ -100,7 +100,7 @@ class BaseStore(ABC):
         pass
 
     @abstractmethod
-    def get_all_stains(self, limit: int | None = None, offset: int = 0) -> List[Dict[str, Any]]:
+    def get_all_stains(self, limit: int | None = None, offset: int = 0) -> list[dict[str, Any]]:
         """
         Retrieve all stains with optional pagination
 
@@ -114,7 +114,7 @@ class BaseStore(ABC):
         pass
 
     @abstractmethod
-    def get_stains_by_type(self, marker_type: str, limit: int | None = None) -> List[Dict[str, Any]]:
+    def get_stains_by_type(self, marker_type: str, limit: int | None = None) -> list[dict[str, Any]]:
         """
         Retrieve stains filtered by marker type
 
@@ -128,7 +128,7 @@ class BaseStore(ABC):
         pass
 
     @abstractmethod
-    def get_stains_by_color(self, color: str, limit: int | None = None) -> List[Dict[str, Any]]:
+    def get_stains_by_color(self, color: str, limit: int | None = None) -> list[dict[str, Any]]:
         """
         Retrieve stains filtered by color
 
@@ -142,7 +142,7 @@ class BaseStore(ABC):
         pass
 
     @abstractmethod
-    def get_stains_by_ip(self, ip: str) -> List[Dict[str, Any]]:
+    def get_stains_by_ip(self, ip: str) -> list[dict[str, Any]]:
         """
         Retrieve stains associated with an IP address
 
@@ -155,7 +155,7 @@ class BaseStore(ABC):
         pass
 
     @abstractmethod
-    def get_stains_by_threat_score(self, min_score: float, max_score: float = 10.0) -> List[Dict[str, Any]]:
+    def get_stains_by_threat_score(self, min_score: float, max_score: float = 10.0) -> list[dict[str, Any]]:
         """
         Retrieve stains within a threat score range
 
@@ -169,7 +169,7 @@ class BaseStore(ABC):
         pass
 
     @abstractmethod
-    def update_stain(self, tag_id: str, updates: Dict[str, Any]) -> bool:
+    def update_stain(self, tag_id: str, updates: dict[str, Any]) -> bool:
         """
         Update an existing stain
 
@@ -196,7 +196,7 @@ class BaseStore(ABC):
         pass
 
     @abstractmethod
-    def search_stains(self, query: str, fields: List[str] | None = None) -> List[Dict[str, Any]]:
+    def search_stains(self, query: str, fields: list[str] | None = None) -> list[dict[str, Any]]:
         """
         Search for stains matching a query
 
@@ -210,7 +210,7 @@ class BaseStore(ABC):
         pass
 
     @abstractmethod
-    def count_stains(self, filters: Dict[str, Any] | None = None) -> int:
+    def count_stains(self, filters: dict[str, Any] | None = None) -> int:
         """
         Count stains with optional filters
 
@@ -223,7 +223,7 @@ class BaseStore(ABC):
         pass
 
     @abstractmethod
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """
         Get database statistics
 

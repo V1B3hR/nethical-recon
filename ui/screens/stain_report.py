@@ -2,12 +2,12 @@
 Stain Report Screen - Shows hunting session statistics
 """
 
-from typing import Dict, List
 from datetime import datetime
+
 from rich.console import Console
 from rich.panel import Panel
-from rich.text import Text
 from rich.table import Table
+from rich.text import Text
 
 from ..base import UIColors
 
@@ -17,19 +17,19 @@ class StainReportScreen:
 
     def __init__(self, session_date: str = None):
         self.session_date = session_date or datetime.now().strftime("%Y-%m-%d")
-        self.statistics: Dict[str, int] = {}
-        self.forest_map: Dict[str, tuple] = {}  # tree_name: (status, threats)
-        self.top_threats: List[Dict] = []
+        self.statistics: dict[str, int] = {}
+        self.forest_map: dict[str, tuple] = {}  # tree_name: (status, threats)
+        self.top_threats: list[dict] = []
 
-    def set_statistics(self, stats: Dict[str, int]):
+    def set_statistics(self, stats: dict[str, int]):
         """Set stain statistics"""
         self.statistics = stats
 
-    def set_forest_map(self, forest_map: Dict[str, tuple]):
+    def set_forest_map(self, forest_map: dict[str, tuple]):
         """Set forest threat map"""
         self.forest_map = forest_map
 
-    def set_top_threats(self, threats: List[Dict]):
+    def set_top_threats(self, threats: list[dict]):
         """Set top threats list"""
         self.top_threats = threats
 

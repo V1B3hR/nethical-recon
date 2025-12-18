@@ -12,36 +12,27 @@ This example shows:
 """
 
 import sys
-import time
-from datetime import datetime
 
 # Add parent directory to path
 sys.path.insert(0, "..")
 
 from nanobots import (
-    # Core
-    NanobotSwarm,
-    NanobotMode,
-    # Actions - Defensive
-    IPBlockerNanobot,
-    RateLimiterNanobot,
-    HoneypotNanobot,
     AlertNanobot,
-    AlertLevel,
-    # Actions - Scout
+    BaselineLearner,
     EnumeratorNanobot,
     ForestPatrolNanobot,
-    ThreatHunterNanobot,
-    # Rules
-    RulesEngine,
+    HybridDecisionMaker,
+    IPBlockerNanobot,
+    # Core
+    NanobotSwarm,
+    RateLimiterNanobot,
     Rule,
     RuleCondition,
     RuleOperator,
-    HybridDecisionMaker,
-    DecisionMode,
-    # Learning
-    BaselineLearner,
+    # Rules
+    RulesEngine,
     SimpleMLAnomalyDetector,
+    ThreatHunterNanobot,
 )
 
 
@@ -100,7 +91,7 @@ def example_1_basic_defensive():
 
     # Get swarm status
     status = swarm.get_swarm_status()
-    print(f"\n📊 Swarm Status:")
+    print("\n📊 Swarm Status:")
     print(f"  Active nanobots: {status['active_nanobots']}/{status['total_nanobots']}")
     print(f"  Events processed: {status['events_processed']}")
     print(f"  Actions taken: {status['actions_taken']}")
@@ -295,7 +286,7 @@ def example_5_adaptive_learning():
 
     baseline = learner.get_baseline("request_rate")
     if baseline:
-        print(f"✅ Baseline established:")
+        print("✅ Baseline established:")
         print(f"  Mean: {baseline['mean']:.1f}")
         print(f"  Std Dev: {baseline['stdev']:.1f}")
         print(f"  Range: {baseline['min']:.1f} - {baseline['max']:.1f}")

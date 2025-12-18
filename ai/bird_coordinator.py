@@ -5,9 +5,9 @@ AI-powered bird deployment advisor that coordinates Eagle, Falcon, Owl,
 and Sparrow operations based on threat intelligence and situational awareness.
 """
 
-from typing import Dict, Any, List
-from datetime import datetime
 import logging
+from datetime import datetime
+from typing import Any
 
 
 class BirdCoordinator:
@@ -30,7 +30,7 @@ class BirdCoordinator:
             "sparrow": {"deployed": True, "last_deployment": datetime.now().isoformat()},  # Always on
         }
 
-    def coordinate_deployment(self, situation: Dict[str, Any]) -> Dict[str, Any]:
+    def coordinate_deployment(self, situation: dict[str, Any]) -> dict[str, Any]:
         """
         Coordinate bird deployment based on situation
 
@@ -122,7 +122,7 @@ class BirdCoordinator:
 
         return deployment_plan
 
-    def _assess_situation(self, threats: List[Dict], health: float, level: str) -> str:
+    def _assess_situation(self, threats: list[dict], health: float, level: str) -> str:
         """Assess overall situation"""
         if level == "CRITICAL" or health < 50:
             return "CRITICAL - Full bird deployment recommended"
@@ -133,7 +133,7 @@ class BirdCoordinator:
         else:
             return "LOW - Routine patrols sufficient"
 
-    def _determine_coordination_strategy(self, deployments: List[Dict]) -> Dict[str, Any]:
+    def _determine_coordination_strategy(self, deployments: list[dict]) -> dict[str, Any]:
         """Determine how birds should coordinate"""
         bird_types = [d["bird"] for d in deployments]
 
@@ -159,7 +159,7 @@ class BirdCoordinator:
                 "communication": "Report to dashboard only",
             }
 
-    def _predict_outcome(self, deployments: List[Dict], threats: List[Dict]) -> Dict[str, Any]:
+    def _predict_outcome(self, deployments: list[dict], threats: list[dict]) -> dict[str, Any]:
         """Predict mission outcome"""
         bird_count = len(deployments)
         threat_count = len(threats)
@@ -183,7 +183,7 @@ class BirdCoordinator:
             "potential_challenges": self._identify_challenges(deployments, threats),
         }
 
-    def _estimate_resolution_time(self, deployments: List[Dict], threats: List[Dict]) -> str:
+    def _estimate_resolution_time(self, deployments: list[dict], threats: list[dict]) -> str:
         """Estimate time to resolve situation"""
         threat_count = len(threats)
         has_eagle = any(d["bird"] == "EAGLE" for d in deployments)
@@ -201,7 +201,7 @@ class BirdCoordinator:
 
         return f"{hours}h {minutes}m" if hours > 0 else f"{minutes}m"
 
-    def _identify_challenges(self, deployments: List[Dict], threats: List[Dict]) -> List[str]:
+    def _identify_challenges(self, deployments: list[dict], threats: list[dict]) -> list[str]:
         """Identify potential challenges"""
         challenges = []
 
@@ -216,7 +216,7 @@ class BirdCoordinator:
 
         return challenges if challenges else ["No significant challenges anticipated"]
 
-    def optimize_bird_patrol_routes(self, forest_map: Dict[str, Any]) -> Dict[str, Any]:
+    def optimize_bird_patrol_routes(self, forest_map: dict[str, Any]) -> dict[str, Any]:
         """
         Optimize patrol routes for birds
 
@@ -246,7 +246,7 @@ class BirdCoordinator:
             },
         }
 
-    def _plan_eagle_route(self, trees: List[Dict]) -> Dict[str, Any]:
+    def _plan_eagle_route(self, trees: list[dict]) -> dict[str, Any]:
         """Plan Eagle's strategic overview route"""
         return {
             "pattern": "CIRCULAR_SWEEP",
@@ -256,7 +256,7 @@ class BirdCoordinator:
             "priority_areas": [t["id"] for t in trees if t.get("health", 1.0) < 0.7],
         }
 
-    def _plan_falcon_route(self, trees: List[Dict]) -> Dict[str, Any]:
+    def _plan_falcon_route(self, trees: list[dict]) -> dict[str, Any]:
         """Plan Falcon's rapid response route"""
         # Prioritize high-risk trees
         high_risk = [t for t in trees if t.get("threat_count", 0) > 0]
@@ -269,7 +269,7 @@ class BirdCoordinator:
             "response_time": "<5 minutes to any tree",
         }
 
-    def _plan_owl_route(self, trees: List[Dict]) -> Dict[str, Any]:
+    def _plan_owl_route(self, trees: list[dict]) -> dict[str, Any]:
         """Plan Owl's stealth monitoring route"""
         return {
             "pattern": "STEALTH_GRID",
@@ -279,7 +279,7 @@ class BirdCoordinator:
             "special": "Enhanced detection in shadow areas",
         }
 
-    def _plan_sparrow_route(self, trees: List[Dict]) -> Dict[str, Any]:
+    def _plan_sparrow_route(self, trees: list[dict]) -> dict[str, Any]:
         """Plan Sparrow's routine check route"""
         return {
             "pattern": "SEQUENTIAL",
@@ -289,7 +289,7 @@ class BirdCoordinator:
             "frequency": "Every 15 minutes per tree",
         }
 
-    def get_bird_status(self) -> Dict[str, Any]:
+    def get_bird_status(self) -> dict[str, Any]:
         """Get current status of all birds"""
         return {
             "timestamp": datetime.now().isoformat(),

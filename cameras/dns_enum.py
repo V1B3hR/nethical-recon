@@ -9,10 +9,10 @@ Discovers:
 - DNS security (DNSSEC)
 """
 
-from typing import Dict, Any, List, Optional
-from .base import BaseCamera, CameraMode
-import subprocess
 import socket
+from typing import Any
+
+from .base import BaseCamera, CameraMode
 
 
 class DNSEnumerator(BaseCamera):
@@ -26,7 +26,7 @@ class DNSEnumerator(BaseCamera):
         check_zone_transfer: Attempt zone transfer (default: True)
     """
 
-    def __init__(self, config: Dict[str, Any] = None):
+    def __init__(self, config: dict[str, Any] = None):
         super().__init__("DNSEnumerator", CameraMode.GHOST, config)
         self.wordlist = self.config.get("wordlist")
         self.nameservers = self.config.get("nameservers", [])
@@ -72,7 +72,7 @@ class DNSEnumerator(BaseCamera):
             self.logger.error("dnspython not installed. Install with: pip install dnspython")
             return False
 
-    def scan(self, target: str) -> Dict[str, Any]:
+    def scan(self, target: str) -> dict[str, Any]:
         """
         Enumerate DNS records for target domain
 
@@ -120,7 +120,7 @@ class DNSEnumerator(BaseCamera):
 
         return results
 
-    def _get_nameservers(self, domain: str) -> List[str]:
+    def _get_nameservers(self, domain: str) -> list[str]:
         """Get nameservers for domain"""
         try:
             import dns.resolver
@@ -135,7 +135,7 @@ class DNSEnumerator(BaseCamera):
             self.logger.warning(f"Failed to get nameservers: {e}")
             return []
 
-    def _get_dns_records(self, domain: str) -> Dict[str, List[str]]:
+    def _get_dns_records(self, domain: str) -> dict[str, list[str]]:
         """
         Get various DNS records for a domain
 
@@ -175,12 +175,12 @@ class DNSEnumerator(BaseCamera):
             except dns.resolver.NXDOMAIN:
                 self.logger.warning(f"Domain {domain} does not exist")
                 break
-            except Exception as e:
+            except Exception:
                 continue
 
         return records
 
-    def _enumerate_subdomains(self, domain: str) -> List[str]:
+    def _enumerate_subdomains(self, domain: str) -> list[str]:
         """
         Enumerate subdomains
 
@@ -195,7 +195,7 @@ class DNSEnumerator(BaseCamera):
         # Use wordlist if provided
         if self.wordlist:
             try:
-                with open(self.wordlist, "r") as f:
+                with open(self.wordlist) as f:
                     wordlist = [line.strip() for line in f if line.strip()]
             except Exception as e:
                 self.logger.warning(f"Failed to read wordlist: {e}")
@@ -221,14 +221,14 @@ class DNSEnumerator(BaseCamera):
             except socket.gaierror:
                 # Subdomain doesn't exist
                 continue
-            except socket.timeout:
+            except TimeoutError:
                 continue
-            except Exception as e:
+            except Exception:
                 continue
 
         return subdomains
 
-    def _attempt_zone_transfer(self, domain: str, nameservers: List[str]) -> Dict[str, Any]:
+    def _attempt_zone_transfer(self, domain: str, nameservers: list[str]) -> dict[str, Any]:
         """
         Attempt DNS zone transfer (AXFR)
 
@@ -239,8 +239,8 @@ class DNSEnumerator(BaseCamera):
         Returns:
             Dict with zone transfer results
         """
-        import dns.zone
         import dns.query
+        import dns.zone
 
         result = {"successful": False, "nameserver": None, "records": []}
 
@@ -278,7 +278,7 @@ class DNSEnumerator(BaseCamera):
 
                 break  # Stop after first successful transfer
 
-            except Exception as e:
+            except Exception:
                 continue
 
         if not result["successful"]:
@@ -311,7 +311,7 @@ class DNSEnumerator(BaseCamera):
 
         return False
 
-    def quick_scan(self, domain: str) -> Dict[str, Any]:
+    def quick_scan(self, domain: str) -> dict[str, Any]:
         """
         Quick DNS scan (basic records only)
 

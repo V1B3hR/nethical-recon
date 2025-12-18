@@ -10,27 +10,27 @@ This example demonstrates the complete Silent Marker weapon system including:
 - Integration patterns
 """
 
-import sys
 import os
+import sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from weapons import (
-    MarkerGun,
-    WeaponMode,
-    PneumaticMode,
+    BlackTracer,
+    BlueTracer,
+    BrownTracer,
     CO2SilentMode,
     ElectricMode,
-    RedTracer,
-    PurpleTracer,
-    OrangeTracer,
-    YellowTracer,
-    BlueTracer,
-    WhiteTracer,
-    BlackTracer,
-    BrownTracer,
-    TargetingSystem,
     FireControlSystem,
+    MarkerGun,
+    OrangeTracer,
+    PneumaticMode,
+    PurpleTracer,
+    RedTracer,
+    TargetingSystem,
+    WeaponMode,
+    WhiteTracer,
+    YellowTracer,
 )
 
 
@@ -64,7 +64,7 @@ def example_1_basic_weapon():
     # Set mode and ammo
     gun.set_mode(WeaponMode.CO2_SILENT)
     gun.select_ammo("RED")
-    print(f"✅ Mode: CO2_SILENT, Ammo: RED")
+    print("✅ Mode: CO2_SILENT, Ammo: RED")
 
     # Prepare to fire
     gun.arm()
@@ -90,7 +90,7 @@ def example_1_basic_weapon():
     result = gun.fire(target)
 
     if result["hit"]:
-        print(f"✅ HIT! Target marked successfully")
+        print("✅ HIT! Target marked successfully")
         print(f"   Mode: {result['mode_used']}")
         print(f"   Noise: {result['noise_level_db']} dB")
         print(f"   Stain ID: {result['stain']['tag_id']}")
@@ -100,7 +100,7 @@ def example_1_basic_weapon():
 
     # Get statistics
     stats = gun.get_statistics()
-    print(f"\n📊 Weapon Statistics:")
+    print("\n📊 Weapon Statistics:")
     print(f"   Shots Fired: {stats['shots_fired']}")
     print(f"   Hits: {stats['hits_successful']}")
     print(f"   Accuracy: {stats['accuracy_percent']}%")
@@ -193,7 +193,7 @@ def example_2_all_tracers():
         else:
             print(f"{icon} {test['color']:8} → {test['type']:20} [MISS]")
 
-    print(f"\n📊 Stains by Color:")
+    print("\n📊 Stains by Color:")
     for color, count in stain_count.items():
         print(f"   {color}: {count}")
 
@@ -343,7 +343,7 @@ def example_5_fire_control():
 
     # Statistics
     stats = fire_control.get_engagement_statistics()
-    print(f"📊 Fire Control Statistics:")
+    print("📊 Fire Control Statistics:")
     print(f"   Total Engagements: {stats['total_engagements']}")
     print(f"   Successful Hits: {stats['successful_hits']}")
     print(f"   Accuracy: {stats['accuracy_percent']}%")
@@ -450,7 +450,7 @@ def example_7_forest_integration():
     result = gun.fire(squirrel_target)
 
     if result["hit"]:
-        print(f"🤎 SQUIRREL MARKED jumping between trees")
+        print("🤎 SQUIRREL MARKED jumping between trees")
         print(f"   Tag: {result['stain']['tag_id']}")
         print(f"   Path: {squirrel_target['source_host']} → {squirrel_target['dest_host']}")
         print(f"   Method: {squirrel_target['method']}")
@@ -503,7 +503,7 @@ def example_8_stain_management():
     malware_stains = gun.get_stains_by_type("MALWARE")
     ip_stains = gun.get_stains_by_type("SUSPICIOUS_IP")
 
-    print(f"📊 Stains by Type:")
+    print("📊 Stains by Type:")
     print(f"   MALWARE: {len(malware_stains)}")
     print(f"   SUSPICIOUS_IP: {len(ip_stains)}")
 

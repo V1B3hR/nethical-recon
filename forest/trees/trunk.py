@@ -8,7 +8,8 @@ The trunk is the foundation of the tree, representing:
 - Core system processes
 """
 
-from typing import Dict, Optional, Any
+from typing import Any
+
 from ..base import ForestComponent
 
 
@@ -25,7 +26,7 @@ class Trunk(ForestComponent):
         os_name: str,
         os_version: str,
         kernel_version: str | None = None,
-        metadata: Dict[str, Any] | None = None,
+        metadata: dict[str, Any] | None = None,
     ):
         """
         Initialize a trunk.
@@ -66,7 +67,7 @@ class Trunk(ForestComponent):
         else:
             return f"{minutes}m"
 
-    def get_info(self) -> Dict[str, Any]:
+    def get_info(self) -> dict[str, Any]:
         """Get trunk information as dictionary"""
         info = super().get_info()
         info.update(

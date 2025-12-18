@@ -2,9 +2,9 @@
 Nanobots Status Panel - Shows nanobot swarm status
 """
 
+from rich.align import Align
 from rich.panel import Panel
 from rich.text import Text
-from rich.align import Align
 
 from ..base import UIColors
 

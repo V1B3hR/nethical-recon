@@ -6,9 +6,10 @@ Tag Format: MAL-[HASH]-[DATE]
 Use Case: Malware, trojans, viruses, ransomware
 """
 
-from typing import Dict, Any
-from ..base import BaseTracer, TracerType
 import hashlib
+from typing import Any
+
+from ..base import BaseTracer, TracerType
 
 
 class RedTracer(BaseTracer):
@@ -26,7 +27,7 @@ class RedTracer(BaseTracer):
         self.marker_prefix = "MAL"
         self.description = "Malware marker - for confirmed malicious files"
 
-    def create_tag(self, target: Dict[str, Any]) -> Dict[str, Any]:
+    def create_tag(self, target: dict[str, Any]) -> dict[str, Any]:
         """
         Create malware tag for target
 
@@ -74,17 +75,17 @@ class RedTracer(BaseTracer):
         """Get usage guidelines for this tracer"""
         return """
         RED TRACER USAGE GUIDELINES:
-        
+
         When to use:
         - Confirmed malware detected by AV/EDR
         - Files with known malicious hashes
         - Processes exhibiting malicious behavior
         - Ransomware, trojans, worms, viruses
-        
+
         Required target fields:
         - file_hash (preferred) OR process_name
         - Optional: file_path, malware_family
-        
+
         Severity: CRITICAL
         Action: Immediate quarantine and analysis
         """

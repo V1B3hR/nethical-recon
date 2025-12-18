@@ -6,9 +6,10 @@ Tag Format: BKD-[PORT]-[CVE]-[DATE]
 Use Case: Backdoors, reverse shells, unauthorized access points
 """
 
-from typing import Dict, Any
-from ..base import BaseTracer, TracerType
 import hashlib
+from typing import Any
+
+from ..base import BaseTracer, TracerType
 
 
 class YellowTracer(BaseTracer):
@@ -26,7 +27,7 @@ class YellowTracer(BaseTracer):
         self.marker_prefix = "BKD"
         self.description = "Backdoor marker - for unauthorized access points"
 
-    def create_tag(self, target: Dict[str, Any]) -> Dict[str, Any]:
+    def create_tag(self, target: dict[str, Any]) -> dict[str, Any]:
         """
         Create backdoor tag for target
 
@@ -83,18 +84,18 @@ class YellowTracer(BaseTracer):
         """Get usage guidelines for this tracer"""
         return """
         YELLOW TRACER USAGE GUIDELINES:
-        
+
         When to use:
         - Detected backdoors or reverse shells
         - Unauthorized remote access services
         - Exploited vulnerabilities with persistence
         - Hidden administrative accounts
         - Suspicious listening ports
-        
+
         Required target fields:
         - port OR service OR cve (at least one)
         - Optional: backdoor_type, persistence_method, ip
-        
+
         Severity: CRITICAL
         Action: Immediate closure and patching
         """

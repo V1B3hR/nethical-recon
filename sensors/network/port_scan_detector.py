@@ -4,12 +4,12 @@ Port Scan Detector Sensor
 Analogia: "Pukanie do drzwi" (Knocking on doors)
 """
 
-import time
 import threading
-from typing import Dict, Any, Set, Tuple
+import time
 from collections import defaultdict
+from typing import Any
+
 from ..base import BaseSensor, SensorStatus
-from datetime import datetime, timedelta
 
 
 class PortScanDetector(BaseSensor):
@@ -18,7 +18,7 @@ class PortScanDetector(BaseSensor):
     Identifies SYN scans, connect scans, and other scanning behaviors
     """
 
-    def __init__(self, name: str = "port_scan_detector", config: Dict[str, Any] = None):
+    def __init__(self, name: str = "port_scan_detector", config: dict[str, Any] = None):
         """
         Initialize Port Scan Detector
 
@@ -78,7 +78,7 @@ class PortScanDetector(BaseSensor):
             self.logger.error(f"Error stopping port scan detector: {e}")
             return False
 
-    def check(self) -> Dict[str, Any]:
+    def check(self) -> dict[str, Any]:
         """Perform a single scan detection check"""
         try:
             scanners = self._detect_scanners()
@@ -138,7 +138,7 @@ class PortScanDetector(BaseSensor):
                 if not self._connection_attempts[ip]:
                     del self._connection_attempts[ip]
 
-    def _detect_scanners(self) -> Set[str]:
+    def _detect_scanners(self) -> set[str]:
         """
         Detect potential port scanners
 
@@ -189,7 +189,7 @@ class PortScanDetector(BaseSensor):
             severity, f"Port scan detected from {scanner_ip}: {len(unique_ports)} ports scanned", scan_info
         )
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get port scan detection statistics"""
         with self._lock:
             active_ips = len(self._connection_attempts)

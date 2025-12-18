@@ -4,16 +4,16 @@ Example: Basic Sensor Usage
 Demonstrates how to use Nethical Recon sensors for network and system monitoring
 """
 
-import time
-import sys
 import os
+import sys
+import time
 
 # Add parent directory to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from sensors import SensorManager
 from sensors.network import PortScanDetector
-from sensors.system import ResourceMonitor, HeartbeatMonitor
+from sensors.system import HeartbeatMonitor, ResourceMonitor
 
 
 def print_banner():

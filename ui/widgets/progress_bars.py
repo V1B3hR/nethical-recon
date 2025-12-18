@@ -2,8 +2,7 @@
 Custom progress bars for the Command Center
 """
 
-from typing import Optional
-from rich.progress import Progress, BarColumn, TextColumn, TimeRemainingColumn
+from rich.progress import BarColumn, Progress, TextColumn, TimeRemainingColumn
 
 
 def create_progress_bar(filled: int, total: int, char: str = "█", empty_char: str = "░") -> str:

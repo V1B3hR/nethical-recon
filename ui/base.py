@@ -2,7 +2,6 @@
 Base UI components and utilities for Nethical Hunter Command Center
 """
 
-from typing import Dict, List, Optional, Any
 from datetime import datetime
 from enum import Enum
 
@@ -80,16 +79,16 @@ class SystemStatus:
         self.cameras_online: int = 0
         self.nanobots_active: int = 0
         self.nanobots_mode: str = "STANDBY"
-        self.birds_status: Dict[str, str] = {}
+        self.birds_status: dict[str, str] = {}
         self.forest_trees: int = 0
         self.forest_branches: int = 0
         self.forest_leaves: int = 0
-        self.forest_threats: Dict[str, int] = {}
+        self.forest_threats: dict[str, int] = {}
         self.weapon_status: str = "ARMED"
         self.weapon_mode: str = "CO2 Silent"
         self.weapon_stealth: int = 50
-        self.ammo_counts: Dict[str, int] = {}
-        self.recent_alerts: List[Alert] = []
+        self.ammo_counts: dict[str, int] = {}
+        self.recent_alerts: list[Alert] = []
 
 
 class UIColors:

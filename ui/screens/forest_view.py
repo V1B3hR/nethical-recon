@@ -2,7 +2,6 @@
 Forest View Screen - Detailed forest visualization
 """
 
-from typing import List
 from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
@@ -15,14 +14,14 @@ class ForestViewScreen:
     """Screen for detailed forest visualization"""
 
     def __init__(self):
-        self.trees: List[TreeWidget] = []
+        self.trees: list[TreeWidget] = []
         self.selected_tree: int = 0
 
     def add_tree(self, tree: TreeWidget):
         """Add a tree to the forest"""
         self.trees.append(tree)
 
-    def set_trees(self, trees: List[TreeWidget]):
+    def set_trees(self, trees: list[TreeWidget]):
         """Set all trees"""
         self.trees = trees
 

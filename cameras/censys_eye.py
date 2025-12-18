@@ -9,9 +9,10 @@ Uses Censys API to discover:
 - Services
 """
 
-from typing import Dict, Any, Optional, List
-from .base import BaseCamera, CameraMode
 import os
+from typing import Any
+
+from .base import BaseCamera, CameraMode
 
 
 class CensysEye(BaseCamera):
@@ -24,7 +25,7 @@ class CensysEye(BaseCamera):
         max_results: Maximum number of results to return (default: 100)
     """
 
-    def __init__(self, config: Dict[str, Any] = None):
+    def __init__(self, config: dict[str, Any] = None):
         super().__init__("CensysEye", CameraMode.NIGHT, config)
         self.api_id = self.config.get("api_id") or os.getenv("CENSYS_API_ID")
         self.api_secret = self.config.get("api_secret") or os.getenv("CENSYS_API_SECRET")
@@ -45,7 +46,7 @@ class CensysEye(BaseCamera):
             return True
 
         try:
-            from censys.search import CensysHosts, CensysCerts
+            from censys.search import CensysCerts, CensysHosts
 
             self.censys_hosts = CensysHosts(self.api_id, self.api_secret)
             self.censys_certs = CensysCerts(self.api_id, self.api_secret)
@@ -58,7 +59,7 @@ class CensysEye(BaseCamera):
             self.logger.error(f"Failed to initialize Censys API: {e}")
             return False
 
-    def scan(self, target: str) -> Dict[str, Any]:
+    def scan(self, target: str) -> dict[str, Any]:
         """
         Scan target using Censys
 
@@ -100,7 +101,7 @@ class CensysEye(BaseCamera):
         ip_pattern = r"^(\d{1,3}\.){3}\d{1,3}$"
         return bool(re.match(ip_pattern, target))
 
-    def _scan_host(self, ip: str) -> Dict[str, Any] | None:
+    def _scan_host(self, ip: str) -> dict[str, Any] | None:
         """
         Get detailed information about a specific host
 
@@ -159,7 +160,7 @@ class CensysEye(BaseCamera):
             self.logger.error(f"Failed to get host info for {ip}: {e}")
             return None
 
-    def _search_query(self, query: str) -> List[Dict[str, Any]]:
+    def _search_query(self, query: str) -> list[dict[str, Any]]:
         """
         Perform a Censys search query
 
@@ -200,7 +201,7 @@ class CensysEye(BaseCamera):
             self.logger.error(f"Search query failed: {e}")
             return []
 
-    def search_certificates(self, query: str) -> List[Dict[str, Any]]:
+    def search_certificates(self, query: str) -> list[dict[str, Any]]:
         """
         Search for SSL/TLS certificates
 

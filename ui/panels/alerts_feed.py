@@ -2,7 +2,6 @@
 Alerts Feed Panel - Shows recent bird song alerts
 """
 
-from typing import List
 from rich.panel import Panel
 from rich.text import Text
 
@@ -13,7 +12,7 @@ class AlertsFeedPanel:
     """Panel showing recent alerts (bird songs)"""
 
     def __init__(self, max_alerts: int = 4):
-        self.alerts: List[Alert] = []
+        self.alerts: list[Alert] = []
         self.max_alerts = max_alerts
 
     def add_alert(self, alert: Alert):
@@ -55,6 +54,6 @@ class AlertsFeedPanel:
 
         return Panel(text, title="BIRD SONGS (Recent Alerts)", border_style=UIColors.BIRD, padding=(0, 1), width=width)
 
-    def render_compact(self) -> List[str]:
+    def render_compact(self) -> list[str]:
         """Render compact text version"""
         return [str(alert) for alert in self.alerts]

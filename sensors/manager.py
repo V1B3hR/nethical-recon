@@ -3,11 +3,12 @@ Sensor Manager
 Orchestrates multiple sensors and manages their lifecycle
 """
 
-from typing import Dict, List, Optional, Any
-from .base import BaseSensor, SensorStatus
 import logging
 import threading
 import time
+from typing import Any
+
+from .base import BaseSensor, SensorStatus
 
 
 class SensorManager:
@@ -18,7 +19,7 @@ class SensorManager:
 
     def __init__(self):
         """Initialize the Sensor Manager"""
-        self.sensors: Dict[str, BaseSensor] = {}
+        self.sensors: dict[str, BaseSensor] = {}
         self.logger = logging.getLogger("nethical.sensor_manager")
         self._initialize_logger()
         self._monitoring_thread = None
@@ -160,7 +161,7 @@ class SensorManager:
         """
         return self.sensors.get(name)
 
-    def list_sensors(self) -> List[str]:
+    def list_sensors(self) -> list[str]:
         """
         List all registered sensor names
 
@@ -169,7 +170,7 @@ class SensorManager:
         """
         return list(self.sensors.keys())
 
-    def get_all_alerts(self, severity: str | None = None) -> Dict[str, List]:
+    def get_all_alerts(self, severity: str | None = None) -> dict[str, list]:
         """
         Get alerts from all sensors
 
@@ -187,7 +188,7 @@ class SensorManager:
 
         return alerts
 
-    def get_status_all(self) -> Dict[str, Any]:
+    def get_status_all(self) -> dict[str, Any]:
         """
         Get status of all sensors
 
@@ -207,7 +208,7 @@ class SensorManager:
 
         self.logger.info("Cleared alerts from all sensors")
 
-    def health_check(self) -> Dict[str, Any]:
+    def health_check(self) -> dict[str, Any]:
         """
         Perform health check on all sensors
 

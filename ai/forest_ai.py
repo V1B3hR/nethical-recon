@@ -5,9 +5,8 @@ Forest-specific artificial intelligence for tree health prediction,
 branch anomaly detection, leaf pattern recognition, and threat analysis.
 """
 
-from typing import Dict, Any, List
-from datetime import datetime
 import logging
+from typing import Any
 
 
 class ForestAI:
@@ -26,7 +25,7 @@ class ForestAI:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
 
-    def predict_tree_health(self, tree_data: Dict[str, Any], historical_data: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def predict_tree_health(self, tree_data: dict[str, Any], historical_data: list[dict[str, Any]]) -> dict[str, Any]:
         """
         Predict future tree health
 
@@ -78,7 +77,7 @@ class ForestAI:
             "recommendations": self._tree_health_recommendations(outlook, tree_data),
         }
 
-    def _identify_risk_factors(self, tree_data: Dict) -> List[Dict[str, Any]]:
+    def _identify_risk_factors(self, tree_data: dict) -> list[dict[str, Any]]:
         """Identify factors affecting tree health"""
         factors = []
 
@@ -99,7 +98,7 @@ class ForestAI:
 
         return factors
 
-    def _tree_health_recommendations(self, outlook: str, tree_data: Dict) -> List[str]:
+    def _tree_health_recommendations(self, outlook: str, tree_data: dict) -> list[str]:
         """Generate health recommendations"""
         recommendations = []
 
@@ -123,7 +122,7 @@ class ForestAI:
 
         return recommendations
 
-    def detect_branch_anomalies(self, branch_data: List[Dict[str, Any]], baseline: Dict[str, Any]) -> Dict[str, Any]:
+    def detect_branch_anomalies(self, branch_data: list[dict[str, Any]], baseline: dict[str, Any]) -> dict[str, Any]:
         """
         Detect anomalies in branch behavior
 
@@ -190,7 +189,7 @@ class ForestAI:
             "severity": "HIGH" if any(a.get("total_anomalies", 0) >= 2 for a in anomalies) else "MEDIUM",
         }
 
-    def _branch_anomaly_recommendations(self, anomalies: List[Dict]) -> List[str]:
+    def _branch_anomaly_recommendations(self, anomalies: list[dict]) -> list[str]:
         """Generate recommendations for branch anomalies"""
         recommendations = []
 
@@ -204,7 +203,7 @@ class ForestAI:
 
         return recommendations
 
-    def recognize_leaf_patterns(self, leaf_data: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def recognize_leaf_patterns(self, leaf_data: list[dict[str, Any]]) -> dict[str, Any]:
         """
         Recognize patterns in leaf (thread/session/packet) behavior
 
@@ -254,7 +253,7 @@ class ForestAI:
             "recommendations": self._leaf_pattern_recommendations(patterns),
         }
 
-    def _leaf_pattern_recommendations(self, patterns: List[Dict]) -> List[str]:
+    def _leaf_pattern_recommendations(self, patterns: list[dict]) -> list[str]:
         """Generate recommendations for leaf patterns"""
         recommendations = []
 
@@ -268,7 +267,7 @@ class ForestAI:
 
         return recommendations
 
-    def analyze_crow_behavior(self, crow_data: Dict[str, Any]) -> Dict[str, Any]:
+    def analyze_crow_behavior(self, crow_data: dict[str, Any]) -> dict[str, Any]:
         """
         Analyze crow (malware) behavior in forest
 
@@ -314,7 +313,7 @@ class ForestAI:
         else:
             return "MEDIUM"
 
-    def _crow_behavior_recommendations(self, patience: str, stealth: str) -> List[str]:
+    def _crow_behavior_recommendations(self, patience: str, stealth: str) -> list[str]:
         """Generate recommendations for crow behavior"""
         recommendations = []
 
@@ -329,7 +328,7 @@ class ForestAI:
 
         return recommendations
 
-    def predict_squirrel_path(self, squirrel_data: Dict[str, Any], forest_map: Dict[str, Any]) -> Dict[str, Any]:
+    def predict_squirrel_path(self, squirrel_data: dict[str, Any], forest_map: dict[str, Any]) -> dict[str, Any]:
         """
         Predict lateral movement path of squirrel
 
@@ -373,7 +372,7 @@ class ForestAI:
             "recommendations": self._squirrel_path_recommendations(scored_targets[:3]),
         }
 
-    def _squirrel_path_recommendations(self, targets: List[Dict]) -> List[str]:
+    def _squirrel_path_recommendations(self, targets: list[dict]) -> list[str]:
         """Generate recommendations for squirrel path"""
         recommendations = []
 

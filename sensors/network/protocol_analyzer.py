@@ -4,11 +4,12 @@ Protocol Analyzer Sensor
 Analogia: "Analityk tropów" (Tracker analyst)
 """
 
+import re
 import subprocess
 import threading
 import time
-import re
-from typing import Dict, Any, List
+from typing import Any
+
 from ..base import BaseSensor, SensorStatus
 
 
@@ -18,7 +19,7 @@ class ProtocolAnalyzer(BaseSensor):
     Detects protocol violations and suspicious patterns
     """
 
-    def __init__(self, name: str = "protocol_analyzer", config: Dict[str, Any] = None):
+    def __init__(self, name: str = "protocol_analyzer", config: dict[str, Any] = None):
         """
         Initialize Protocol Analyzer
 
@@ -78,7 +79,7 @@ class ProtocolAnalyzer(BaseSensor):
             self.logger.error(f"Error stopping protocol analyzer: {e}")
             return False
 
-    def check(self) -> Dict[str, Any]:
+    def check(self) -> dict[str, Any]:
         """Perform a single protocol analysis check"""
         try:
             results = {}
@@ -112,7 +113,7 @@ class ProtocolAnalyzer(BaseSensor):
                 self.logger.error(f"Error in protocol monitoring: {e}")
                 time.sleep(self.check_interval)
 
-    def _analyze_http(self) -> Dict[str, Any]:
+    def _analyze_http(self) -> dict[str, Any]:
         """
         Analyze HTTP traffic
 
@@ -166,7 +167,7 @@ class ProtocolAnalyzer(BaseSensor):
             "packets_analyzed": len(packets) if "packets" in locals() else 0,
         }
 
-    def _analyze_dns(self) -> Dict[str, Any]:
+    def _analyze_dns(self) -> dict[str, Any]:
         """
         Analyze DNS traffic
 
@@ -205,7 +206,7 @@ class ProtocolAnalyzer(BaseSensor):
             "packets_analyzed": len(packets) if "packets" in locals() else 0,
         }
 
-    def _analyze_tls(self) -> Dict[str, Any]:
+    def _analyze_tls(self) -> dict[str, Any]:
         """
         Analyze TLS/SSL traffic
 
@@ -238,7 +239,7 @@ class ProtocolAnalyzer(BaseSensor):
             "packets_analyzed": len(packets) if "packets" in locals() else 0,
         }
 
-    def _handle_protocol_anomaly(self, protocol: str, finding: Dict[str, Any]):
+    def _handle_protocol_anomaly(self, protocol: str, finding: dict[str, Any]):
         """
         Handle detected protocol anomaly
 
@@ -259,7 +260,7 @@ class ProtocolAnalyzer(BaseSensor):
             severity, f"Protocol anomaly in {protocol}: {anomaly_type}", {"protocol": protocol, "finding": finding}
         )
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get protocol analysis statistics"""
         return {
             "status": self.status.value,

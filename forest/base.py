@@ -10,15 +10,15 @@ The Forest module maps infrastructure as a hierarchical tree structure:
 """
 
 from abc import ABC, abstractmethod
-from typing import Dict, List, Optional, Any
 from datetime import datetime
 from enum import Enum
+from typing import Any
 
 
 class ForestComponent(ABC):
     """Abstract base class for all forest components"""
 
-    def __init__(self, component_id: str, name: str, metadata: Dict[str, Any] | None = None):
+    def __init__(self, component_id: str, name: str, metadata: dict[str, Any] | None = None):
         """
         Initialize a forest component.
 
@@ -74,7 +74,7 @@ class ForestComponent(ABC):
         """Check if component has any threats"""
         return len(self.threats) > 0
 
-    def get_info(self) -> Dict[str, Any]:
+    def get_info(self) -> dict[str, Any]:
         """Get component information as dictionary"""
         return {
             "component_id": self.component_id,
@@ -137,11 +137,11 @@ class ForestBase(ABC):
         """Get a component by ID"""
         return self.components.get(component_id)
 
-    def get_all_components(self) -> List[ForestComponent]:
+    def get_all_components(self) -> list[ForestComponent]:
         """Get all components in the forest"""
         return list(self.components.values())
 
-    def get_components_by_type(self, component_type: str) -> List[ForestComponent]:
+    def get_components_by_type(self, component_type: str) -> list[ForestComponent]:
         """Get all components of a specific type"""
         return [c for c in self.components.values() if c.get_type() == component_type]
 
@@ -153,7 +153,7 @@ class ForestBase(ABC):
         total_score = sum(c.health_score for c in self.components.values())
         return total_score / len(self.components)
 
-    def get_threatened_components(self) -> List[ForestComponent]:
+    def get_threatened_components(self) -> list[ForestComponent]:
         """Get all components with threats"""
         return [c for c in self.components.values() if c.has_threats()]
 
@@ -161,14 +161,14 @@ class ForestBase(ABC):
         """Get total number of threats in the forest"""
         return sum(c.get_threat_count() for c in self.components.values())
 
-    def get_status_summary(self) -> Dict[str, int]:
+    def get_status_summary(self) -> dict[str, int]:
         """Get count of components by status"""
         summary = {status.name: 0 for status in ComponentStatus}
         for component in self.components.values():
             summary[component.status.name] += 1
         return summary
 
-    def get_forest_info(self) -> Dict[str, Any]:
+    def get_forest_info(self) -> dict[str, Any]:
         """Get forest information summary"""
         return {
             "forest_name": self.forest_name,

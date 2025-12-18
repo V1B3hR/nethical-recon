@@ -4,9 +4,9 @@ AI Threat Predictor
 Predicts next attacks, forecasts risk trends, and analyzes threat evolution.
 """
 
-from typing import Dict, Any, List
-from datetime import datetime, timedelta
 import logging
+from datetime import datetime, timedelta
+from typing import Any
 
 
 class ThreatPredictor:
@@ -24,7 +24,7 @@ class ThreatPredictor:
         self.logger = logging.getLogger(__name__)
         self.historical_data = []
 
-    def predict_next_attack(self, threat_history: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def predict_next_attack(self, threat_history: list[dict[str, Any]]) -> dict[str, Any]:
         """
         Predict next likely attack based on historical patterns
 
@@ -71,7 +71,7 @@ class ThreatPredictor:
             "preventive_actions": self._suggest_preventive_actions(most_common),
         }
 
-    def _predict_target(self, threat_history: List[Dict]) -> str:
+    def _predict_target(self, threat_history: list[dict]) -> str:
         """Predict most likely target"""
         targets = [t.get("target", {}).get("hostname", "unknown") for t in threat_history if t.get("target")]
 
@@ -79,7 +79,7 @@ class ThreatPredictor:
             return max(set(targets), key=targets.count)
         return "unknown"
 
-    def _suggest_preventive_actions(self, threat_type: str) -> List[str]:
+    def _suggest_preventive_actions(self, threat_type: str) -> list[str]:
         """Suggest actions to prevent predicted attack"""
         actions = {
             "crow": ["Increase process monitoring", "Deploy additional nanobots", "Review execution policies"],
@@ -88,7 +88,7 @@ class ThreatPredictor:
         }
         return actions.get(threat_type, ["Increase general monitoring"])
 
-    def forecast_risk(self, current_state: Dict[str, Any], days_ahead: int = 7) -> Dict[str, Any]:
+    def forecast_risk(self, current_state: dict[str, Any], days_ahead: int = 7) -> dict[str, Any]:
         """
         Forecast risk level for upcoming period
 
@@ -124,7 +124,7 @@ class ThreatPredictor:
             "mitigation_strategies": self._suggest_mitigation(forecast_risk),
         }
 
-    def _identify_risk_factors(self, state: Dict) -> List[Dict[str, Any]]:
+    def _identify_risk_factors(self, state: dict) -> list[dict[str, Any]]:
         """Identify factors contributing to risk"""
         factors = []
 
@@ -138,7 +138,7 @@ class ThreatPredictor:
 
         return factors
 
-    def _suggest_mitigation(self, risk_level: float) -> List[str]:
+    def _suggest_mitigation(self, risk_level: float) -> list[str]:
         """Suggest mitigation strategies"""
         if risk_level >= 7.0:
             return [
@@ -152,7 +152,7 @@ class ThreatPredictor:
         else:
             return ["Maintain current posture", "Continue routine patrols"]
 
-    def analyze_trend(self, time_series_data: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def analyze_trend(self, time_series_data: list[dict[str, Any]]) -> dict[str, Any]:
         """
         Analyze threat trends over time
 
@@ -200,7 +200,7 @@ class ThreatPredictor:
         }
         return outlooks.get(trend, "Unable to determine outlook")
 
-    def predict_threat_evolution(self, threat_data: Dict[str, Any]) -> Dict[str, Any]:
+    def predict_threat_evolution(self, threat_data: dict[str, Any]) -> dict[str, Any]:
         """
         Predict how a threat might evolve
 
@@ -236,7 +236,7 @@ class ThreatPredictor:
             "countermeasures": self._suggest_countermeasures(threat_type, next_stages),
         }
 
-    def _identify_warning_signs(self, threat_type: str, stages: List[str]) -> List[str]:
+    def _identify_warning_signs(self, threat_type: str, stages: list[str]) -> list[str]:
         """Identify warning signs for next stages"""
         if not stages:
             return []
@@ -250,7 +250,7 @@ class ThreatPredictor:
 
         return signs.get(stages[0], ["Monitor for unusual activity"])
 
-    def _suggest_countermeasures(self, threat_type: str, stages: List[str]) -> List[str]:
+    def _suggest_countermeasures(self, threat_type: str, stages: list[str]) -> list[str]:
         """Suggest countermeasures for predicted evolution"""
         if not stages:
             return ["Maintain current defenses"]

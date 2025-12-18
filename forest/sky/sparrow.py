@@ -5,9 +5,10 @@
 > "The friendly neighborhood watch"
 """
 
-from typing import Dict, List, Any
 from datetime import datetime
-from .base_bird import BaseBird, BirdType, FlightMode, AlertLevel, BirdAlert
+from typing import Any
+
+from .base_bird import AlertLevel, BaseBird, BirdAlert, BirdType, FlightMode
 
 
 class Sparrow(BaseBird):
@@ -31,10 +32,10 @@ class Sparrow(BaseBird):
         self.patrol_frequency = "regular"
         self.check_type = "routine"
         self.friendly = True
-        self.baseline_data: Dict[str, Any] = {}
-        self.health_history: List[Dict[str, Any]] = []
+        self.baseline_data: dict[str, Any] = {}
+        self.health_history: list[dict[str, Any]] = []
 
-    def get_capabilities(self) -> Dict[str, str]:
+    def get_capabilities(self) -> dict[str, str]:
         """Get Sparrow's unique capabilities"""
         return {
             "frequency": "Regular patrols - consistent monitoring",
@@ -45,7 +46,7 @@ class Sparrow(BaseBird):
             "specialization": "Routine monitoring and health checks",
         }
 
-    def scan(self, forest_data: Dict[str, Any]) -> List[BirdAlert]:
+    def scan(self, forest_data: dict[str, Any]) -> list[BirdAlert]:
         """
         Routine scan for basic health and status
 
@@ -98,9 +99,9 @@ class Sparrow(BaseBird):
                     f"chirp! Tree offline: {tree_name}",
                     location={"tree": tree_name, "status": "offline"},
                     evidence=[
-                        f"Status: Offline",
+                        "Status: Offline",
                         f"Last seen: {tree.get('last_seen', 'unknown')}",
-                        f"Action: Check connectivity",
+                        "Action: Check connectivity",
                     ],
                 )
                 alerts.append(alert)
@@ -112,7 +113,7 @@ class Sparrow(BaseBird):
                     AlertLevel.WARNING,
                     f"chirp! Tree unhealthy: {tree_name} - {tree_health*100:.0f}% health",
                     location={"tree": tree_name, "status": "unhealthy"},
-                    evidence=[f"Health: {tree_health*100:.0f}%", f"Action: Investigate issues"],
+                    evidence=[f"Health: {tree_health*100:.0f}%", "Action: Investigate issues"],
                 )
                 alerts.append(alert)
 
@@ -129,7 +130,7 @@ class Sparrow(BaseBird):
                 evidence=[
                     f"Healthy trees: {healthy_count}",
                     f"Overall health: {overall_health*100:.0f}%",
-                    f"Status: Normal operations",
+                    "Status: Normal operations",
                 ],
             )
             alerts.append(alert)
@@ -143,7 +144,7 @@ class Sparrow(BaseBird):
                 evidence=[
                     f"Total trees: {len(trees)}",
                     f"Issues found: {unhealthy_count + offline_count}",
-                    f"Requires attention",
+                    "Requires attention",
                 ],
             )
             alerts.append(alert)
@@ -191,7 +192,7 @@ class Sparrow(BaseBird):
 
         return alerts
 
-    def _update_baseline(self, forest_data: Dict[str, Any]):
+    def _update_baseline(self, forest_data: dict[str, Any]):
         """Update baseline with normal behavior data"""
         self.baseline_data = {
             "timestamp": datetime.now().isoformat(),
@@ -201,7 +202,7 @@ class Sparrow(BaseBird):
             "status": "normal",
         }
 
-    def heartbeat_check(self, tree: Dict[str, Any]) -> Dict[str, Any]:
+    def heartbeat_check(self, tree: dict[str, Any]) -> dict[str, Any]:
         """
         Perform heartbeat check on a tree
 
@@ -244,7 +245,7 @@ class Sparrow(BaseBird):
 
         return status
 
-    def routine_report(self) -> Dict[str, Any]:
+    def routine_report(self) -> dict[str, Any]:
         """
         Generate routine status report
 
@@ -278,7 +279,7 @@ class Sparrow(BaseBird):
             "recommendations": self._get_routine_recommendations(avg_health, trend),
         }
 
-    def _get_routine_recommendations(self, avg_health: float, trend: str) -> List[str]:
+    def _get_routine_recommendations(self, avg_health: float, trend: str) -> list[str]:
         """Generate routine recommendations"""
         recommendations = []
 
@@ -299,7 +300,7 @@ class Sparrow(BaseBird):
 
         return recommendations
 
-    def get_baseline(self) -> Dict[str, Any]:
+    def get_baseline(self) -> dict[str, Any]:
         """Get established baseline data"""
         if not self.baseline_data:
             return {"status": "not_established", "note": "Still learning normal behavior"}

@@ -2,12 +2,10 @@
 Threat Level Panel - Shows current threat assessment
 """
 
-from rich.console import Console
+from rich.align import Align
 from rich.panel import Panel
 from rich.text import Text
-from rich.align import Align
 
-from ..base import ThreatLevel, UIColors
 from ..widgets.threat_indicator import ThreatIndicator
 
 
