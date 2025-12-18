@@ -9,11 +9,12 @@ The Forest Manager:
 - Provides central control
 """
 
-from typing import Dict, List, Optional, Any
 from datetime import datetime
-from .base import ForestBase, ComponentStatus
-from .trees import Tree, Trunk, Branch, Crown, ForestMap
-from .threats import ThreatDetector, BaseThreat
+from typing import Any
+
+from .base import ForestBase
+from .threats import BaseThreat, ThreatDetector
+from .trees import ForestMap, Tree
 
 
 class ForestManager(ForestBase):
@@ -73,7 +74,7 @@ class ForestManager(ForestBase):
         """Get a tree by IP address"""
         return self.forest_map.get_tree_by_ip(ip_address)
 
-    def get_all_trees(self) -> List[Tree]:
+    def get_all_trees(self) -> list[Tree]:
         """Get all trees in the forest"""
         return list(self.trees.values())
 
@@ -105,7 +106,7 @@ class ForestManager(ForestBase):
                         if leaf:
                             leaf.add_threat(threat)
 
-    def scan_forest(self) -> Dict[str, Any]:
+    def scan_forest(self) -> dict[str, Any]:
         """
         Perform a complete forest scan.
 
@@ -143,7 +144,7 @@ class ForestManager(ForestBase):
 
         return scan_results
 
-    def get_forest_status(self) -> Dict[str, Any]:
+    def get_forest_status(self) -> dict[str, Any]:
         """Get complete forest status"""
         return {
             "forest_name": self.forest_name,

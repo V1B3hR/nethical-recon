@@ -14,7 +14,7 @@ from pathlib import Path
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from cameras import CameraManager, ShodanEye, CensysEye, HarvesterEye, SSLScanner, DNSEnumerator, WAFDetector
+from cameras import CameraManager, DNSEnumerator, ShodanEye, SSLScanner, WAFDetector
 
 
 def print_banner():
@@ -54,7 +54,7 @@ def example_dns_enumeration():
     for subdomain in results["subdomains"][:5]:  # Show first 5
         print(f"    - {subdomain}")
 
-    print(f"\n[+] Nameservers:")
+    print("\n[+] Nameservers:")
     for ns in results["nameservers"]:
         print(f"    - {ns}")
 
@@ -63,7 +63,7 @@ def example_dns_enumeration():
         print(f"    {record_type}: {', '.join(values[:3])}")  # Show first 3
 
     if results.get("zone_transfer", {}).get("successful"):
-        print(f"\n[!] WARNING: Zone transfer successful! (Security issue)")
+        print("\n[!] WARNING: Zone transfer successful! (Security issue)")
 
     # Display discoveries
     discoveries = dns_cam.get_discoveries()
@@ -136,7 +136,7 @@ def example_waf_detector():
             print(f"    Confidence: {results['confidence']:.0%}")
             print(f"    Evidence: {', '.join(results['evidence'][:3])}")
         else:
-            print(f"[+] No WAF detected")
+            print("[+] No WAF detected")
 
 
 def example_camera_manager():
@@ -179,7 +179,7 @@ def example_camera_manager():
 
     # Get statistics
     stats = manager.get_statistics()
-    print(f"\n[+] Statistics:")
+    print("\n[+] Statistics:")
     print(f"    Total cameras: {stats['total_cameras']}")
     print(f"    Total discoveries: {stats['total_discoveries']}")
     print(f"    By severity: {stats['by_severity']}")

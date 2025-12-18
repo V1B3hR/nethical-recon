@@ -4,11 +4,12 @@ Heartbeat Monitor Sensor
 Analogia: "Puls systemu" (System pulse)
 """
 
-import subprocess
 import socket
+import subprocess
 import threading
 import time
-from typing import Dict, Any, List
+from typing import Any
+
 from ..base import BaseSensor, SensorStatus
 
 
@@ -18,7 +19,7 @@ class HeartbeatMonitor(BaseSensor):
     Detects when services go down or become unresponsive
     """
 
-    def __init__(self, name: str = "heartbeat_monitor", config: Dict[str, Any] = None):
+    def __init__(self, name: str = "heartbeat_monitor", config: dict[str, Any] = None):
         """
         Initialize Heartbeat Monitor
 
@@ -78,7 +79,7 @@ class HeartbeatMonitor(BaseSensor):
             self.logger.error(f"Error stopping heartbeat monitor: {e}")
             return False
 
-    def check(self) -> Dict[str, Any]:
+    def check(self) -> dict[str, Any]:
         """Perform a single heartbeat check"""
         try:
             results = {"services": {}, "ports": {}}
@@ -145,7 +146,7 @@ class HeartbeatMonitor(BaseSensor):
                     ["service", service_name, "status"], capture_output=True, text=True, timeout=self.timeout
                 )
                 return result.returncode == 0
-            except:
+            except Exception:
                 return False
         except Exception as e:
             self.logger.error(f"Error checking service {service_name}: {e}")
@@ -223,7 +224,7 @@ class HeartbeatMonitor(BaseSensor):
                     "CRITICAL", f"Port {port_key} is not accessible!", {"host": host, "port": port, "status": "closed"}
                 )
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get heartbeat monitoring statistics"""
         return {
             "status": self.status.value,

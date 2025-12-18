@@ -4,10 +4,10 @@ Forest Patrol - Scout nanobot that patrols tree branches.
 Part of the forest guard mode (🌳 forest protection).
 """
 
-from typing import Dict, Any, Optional, List
 from datetime import datetime
+from typing import Any
 
-from ..base import BaseNanobot, ActionResult, NanobotMode, ActionType, ActionStatus
+from ..base import ActionResult, ActionStatus, ActionType, BaseNanobot, NanobotMode
 
 
 class ForestPatrolNanobot(BaseNanobot):
@@ -17,7 +17,7 @@ class ForestPatrolNanobot(BaseNanobot):
     Monitors tree health, branch activity, and leaf status.
     """
 
-    def __init__(self, nanobot_id: str = "forest_patrol", config: Dict[str, Any] | None = None):
+    def __init__(self, nanobot_id: str = "forest_patrol", config: dict[str, Any] | None = None):
         """
         Initialize forest patrol nanobot.
 
@@ -33,15 +33,15 @@ class ForestPatrolNanobot(BaseNanobot):
         self.max_trees = self.config.get("max_trees", 100)
 
         # Track patrol status
-        self.patrolled_trees: Dict[str, Dict[str, Any]] = {}
-        self.patrol_findings: List[Dict[str, Any]] = []
+        self.patrolled_trees: dict[str, dict[str, Any]] = {}
+        self.patrol_findings: list[dict[str, Any]] = []
         self.last_patrol: datetime | None = None
 
-    def can_handle(self, event: Dict[str, Any]) -> bool:
+    def can_handle(self, event: dict[str, Any]) -> bool:
         """Check if this event is forest-related"""
         return "tree_id" in event or "branch_id" in event or "forest_event" in event or "patrol_request" in event
 
-    def assess_threat(self, event: Dict[str, Any]) -> float:
+    def assess_threat(self, event: dict[str, Any]) -> float:
         """
         Assess if patrol is needed.
 
@@ -75,7 +75,7 @@ class ForestPatrolNanobot(BaseNanobot):
 
         return min(confidence, 1.0)
 
-    def execute_action(self, event: Dict[str, Any], confidence: float) -> ActionResult:
+    def execute_action(self, event: dict[str, Any], confidence: float) -> ActionResult:
         """
         Execute patrol on forest tree.
 
@@ -140,7 +140,7 @@ class ForestPatrolNanobot(BaseNanobot):
                 error_message=f"Failed to patrol tree: {tree_id}",
             )
 
-    def _patrol_tree(self, tree_id: str, event: Dict[str, Any]) -> Dict[str, Any]:
+    def _patrol_tree(self, tree_id: str, event: dict[str, Any]) -> dict[str, Any]:
         """
         Patrol a tree (simulation).
 
@@ -166,7 +166,7 @@ class ForestPatrolNanobot(BaseNanobot):
 
         return {"success": True, "findings": findings}
 
-    def get_patrol_status(self) -> Dict[str, Any]:
+    def get_patrol_status(self) -> dict[str, Any]:
         """Get patrol status"""
         return {
             "trees_patrolled": len(self.patrolled_trees),
@@ -175,7 +175,7 @@ class ForestPatrolNanobot(BaseNanobot):
             "active": self.is_active,
         }
 
-    def get_tree_status(self, tree_id: str) -> Dict[str, Any] | None:
+    def get_tree_status(self, tree_id: str) -> dict[str, Any] | None:
         """
         Get patrol status for a specific tree.
 
@@ -187,7 +187,7 @@ class ForestPatrolNanobot(BaseNanobot):
         """
         return self.patrolled_trees.get(tree_id)
 
-    def get_recent_findings(self, limit: int = 20) -> List[Dict[str, Any]]:
+    def get_recent_findings(self, limit: int = 20) -> list[dict[str, Any]]:
         """
         Get recent patrol findings.
 

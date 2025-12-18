@@ -3,9 +3,10 @@ SQLite Store Implementation
 Local file-based database for single-user development and testing
 """
 
-import sqlite3
 import json
-from typing import Dict, Any, List, Optional
+import sqlite3
+from typing import Any
+
 from .base_store import BaseStore, StoreBackend
 
 
@@ -20,7 +21,7 @@ class SQLiteStore(BaseStore):
     - Zero configuration setup
     """
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         """
         Initialize SQLite store
 
@@ -120,7 +121,7 @@ class SQLiteStore(BaseStore):
             print(f"Schema initialization error: {e}")
             return False
 
-    def save_stain(self, stain: Dict[str, Any]) -> bool:
+    def save_stain(self, stain: dict[str, Any]) -> bool:
         """Save a stain to SQLite database"""
         try:
             # Extract nested stain data
@@ -161,7 +162,7 @@ class SQLiteStore(BaseStore):
             print(f"Save stain error: {e}")
             return False
 
-    def get_stain(self, tag_id: str) -> Dict[str, Any] | None:
+    def get_stain(self, tag_id: str) -> dict[str, Any] | None:
         """Retrieve a stain by tag ID"""
         try:
             self.cursor.execute("SELECT * FROM stains WHERE tag_id = ?", (tag_id,))
@@ -173,7 +174,7 @@ class SQLiteStore(BaseStore):
             print(f"Get stain error: {e}")
             return None
 
-    def get_all_stains(self, limit: int | None = None, offset: int = 0) -> List[Dict[str, Any]]:
+    def get_all_stains(self, limit: int | None = None, offset: int = 0) -> list[dict[str, Any]]:
         """Retrieve all stains with pagination"""
         try:
             query = "SELECT * FROM stains ORDER BY timestamp_first_seen DESC"
@@ -187,7 +188,7 @@ class SQLiteStore(BaseStore):
             print(f"Get all stains error: {e}")
             return []
 
-    def get_stains_by_type(self, marker_type: str, limit: int | None = None) -> List[Dict[str, Any]]:
+    def get_stains_by_type(self, marker_type: str, limit: int | None = None) -> list[dict[str, Any]]:
         """Retrieve stains filtered by marker type"""
         try:
             query = "SELECT * FROM stains WHERE marker_type = ? ORDER BY timestamp_first_seen DESC"
@@ -201,7 +202,7 @@ class SQLiteStore(BaseStore):
             print(f"Get stains by type error: {e}")
             return []
 
-    def get_stains_by_color(self, color: str, limit: int | None = None) -> List[Dict[str, Any]]:
+    def get_stains_by_color(self, color: str, limit: int | None = None) -> list[dict[str, Any]]:
         """Retrieve stains filtered by color"""
         try:
             query = "SELECT * FROM stains WHERE color = ? ORDER BY timestamp_first_seen DESC"
@@ -215,7 +216,7 @@ class SQLiteStore(BaseStore):
             print(f"Get stains by color error: {e}")
             return []
 
-    def get_stains_by_ip(self, ip: str) -> List[Dict[str, Any]]:
+    def get_stains_by_ip(self, ip: str) -> list[dict[str, Any]]:
         """Retrieve stains associated with an IP address"""
         try:
             self.cursor.execute(
@@ -227,7 +228,7 @@ class SQLiteStore(BaseStore):
             print(f"Get stains by IP error: {e}")
             return []
 
-    def get_stains_by_threat_score(self, min_score: float, max_score: float = 10.0) -> List[Dict[str, Any]]:
+    def get_stains_by_threat_score(self, min_score: float, max_score: float = 10.0) -> list[dict[str, Any]]:
         """Retrieve stains within a threat score range"""
         try:
             self.cursor.execute(
@@ -240,7 +241,7 @@ class SQLiteStore(BaseStore):
             print(f"Get stains by threat score error: {e}")
             return []
 
-    def update_stain(self, tag_id: str, updates: Dict[str, Any]) -> bool:
+    def update_stain(self, tag_id: str, updates: dict[str, Any]) -> bool:
         """Update an existing stain"""
         try:
             # Whitelist of allowed column names to prevent SQL injection
@@ -307,7 +308,7 @@ class SQLiteStore(BaseStore):
             print(f"Delete stain error: {e}")
             return False
 
-    def search_stains(self, query: str, fields: List[str] | None = None) -> List[Dict[str, Any]]:
+    def search_stains(self, query: str, fields: list[str] | None = None) -> list[dict[str, Any]]:
         """Search for stains matching a query"""
         try:
             # Simple full-text search across JSON fields
@@ -331,7 +332,7 @@ class SQLiteStore(BaseStore):
             print(f"Search stains error: {e}")
             return []
 
-    def count_stains(self, filters: Dict[str, Any] | None = None) -> int:
+    def count_stains(self, filters: dict[str, Any] | None = None) -> int:
         """Count stains with optional filters"""
         try:
             if not filters:
@@ -352,7 +353,7 @@ class SQLiteStore(BaseStore):
             print(f"Count stains error: {e}")
             return 0
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get database statistics"""
         try:
             stats = {}
@@ -386,7 +387,7 @@ class SQLiteStore(BaseStore):
             print(f"Get statistics error: {e}")
             return {}
 
-    def _row_to_dict(self, row: sqlite3.Row) -> Dict[str, Any]:
+    def _row_to_dict(self, row: sqlite3.Row) -> dict[str, Any]:
         """Convert SQLite row to stain dictionary"""
         return {
             "tag_id": row["tag_id"],

@@ -7,8 +7,9 @@ Analogia: "Trzask gałęzi" (Crack of a branch)
 import re
 import threading
 import time
-from typing import Dict, Any
 from collections import defaultdict
+from typing import Any
+
 from ..base import BaseSensor, SensorStatus
 
 
@@ -18,7 +19,7 @@ class AuthMonitor(BaseSensor):
     brute force attacks, and suspicious authentication patterns
     """
 
-    def __init__(self, name: str = "auth_monitor", config: Dict[str, Any] = None):
+    def __init__(self, name: str = "auth_monitor", config: dict[str, Any] = None):
         """
         Initialize Auth Monitor
 
@@ -82,7 +83,7 @@ class AuthMonitor(BaseSensor):
             self.logger.error(f"Error stopping auth monitor: {e}")
             return False
 
-    def check(self) -> Dict[str, Any]:
+    def check(self) -> dict[str, Any]:
         """Perform a single auth log check"""
         try:
             events = self._parse_new_log_entries()
@@ -114,7 +115,7 @@ class AuthMonitor(BaseSensor):
         """Initialize position tracking for log files"""
         for log_file in self.log_files:
             try:
-                with open(log_file, "r") as f:
+                with open(log_file) as f:
                     # Seek to end of file
                     f.seek(0, 2)
                     self._last_position[log_file] = f.tell()
@@ -136,7 +137,7 @@ class AuthMonitor(BaseSensor):
 
         for log_file in self.log_files:
             try:
-                with open(log_file, "r") as f:
+                with open(log_file) as f:
                     # Seek to last position
                     start_position = self._last_position.get(log_file, 0)
                     f.seek(start_position)
@@ -159,7 +160,7 @@ class AuthMonitor(BaseSensor):
 
         return events
 
-    def _parse_auth_line(self, line: str) -> Dict[str, Any]:
+    def _parse_auth_line(self, line: str) -> dict[str, Any]:
         """
         Parse a single auth log line
 
@@ -213,7 +214,7 @@ class AuthMonitor(BaseSensor):
 
         return event
 
-    def _analyze_auth_event(self, event: Dict[str, Any]):
+    def _analyze_auth_event(self, event: dict[str, Any]):
         """
         Analyze authentication event
 
@@ -252,7 +253,7 @@ class AuthMonitor(BaseSensor):
             if event.get("root_login_attempt") or user == "root":
                 self.raise_alert("WARNING", f"Root login: {user} from {source}", event)
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get auth monitoring statistics"""
         return {
             "status": self.status.value,

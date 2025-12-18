@@ -2,11 +2,12 @@
 Settings Screen - Configuration and preferences
 """
 
-from typing import Dict, Any
+from typing import Any
+
 from rich.console import Console
 from rich.panel import Panel
-from rich.text import Text
 from rich.table import Table
+from rich.text import Text
 
 from ..base import UIColors
 
@@ -15,7 +16,7 @@ class SettingsScreen:
     """Screen for settings and configuration"""
 
     def __init__(self):
-        self.settings: Dict[str, Any] = {
+        self.settings: dict[str, Any] = {
             "auto_response": True,
             "alert_sounds": True,
             "stealth_mode": False,

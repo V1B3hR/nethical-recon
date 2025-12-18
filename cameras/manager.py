@@ -3,11 +3,11 @@ Camera Manager
 Orchestrates multiple cameras (IR scanners) and manages their lifecycle
 """
 
-from typing import Dict, List, Optional, Any
-from .base import BaseCamera, CameraStatus, CameraDiscovery
 import logging
 import threading
-import time
+from typing import Any
+
+from .base import BaseCamera, CameraStatus
 
 
 class CameraManager:
@@ -21,10 +21,10 @@ class CameraManager:
 
     def __init__(self):
         """Initialize the Camera Manager"""
-        self.cameras: Dict[str, BaseCamera] = {}
+        self.cameras: dict[str, BaseCamera] = {}
         self.logger = logging.getLogger("nethical.camera_manager")
         self._initialize_logger()
-        self._scan_threads: Dict[str, threading.Thread] = {}
+        self._scan_threads: dict[str, threading.Thread] = {}
 
     def _initialize_logger(self):
         """Initialize logging for the manager"""
@@ -76,7 +76,7 @@ class CameraManager:
         self.logger.info(f"Unregistered camera: {name}")
         return True
 
-    def scan_with_camera(self, name: str, target: str, async_mode: bool = False) -> Dict[str, Any] | None:
+    def scan_with_camera(self, name: str, target: str, async_mode: bool = False) -> dict[str, Any] | None:
         """
         Perform a scan with a specific camera
 
@@ -124,7 +124,7 @@ class CameraManager:
             self.logger.error(f"Async scan failed with {camera.name}: {e}")
             camera.stop()
 
-    def scan_all(self, target: str, async_mode: bool = False) -> Dict[str, Any]:
+    def scan_all(self, target: str, async_mode: bool = False) -> dict[str, Any]:
         """
         Scan with all registered cameras
 
@@ -201,7 +201,7 @@ class CameraManager:
 
         return success
 
-    def get_camera_status(self, name: str) -> Dict[str, Any] | None:
+    def get_camera_status(self, name: str) -> dict[str, Any] | None:
         """
         Get status of a specific camera
 
@@ -216,7 +216,7 @@ class CameraManager:
 
         return self.cameras[name].get_status()
 
-    def get_status_all(self) -> Dict[str, Dict[str, Any]]:
+    def get_status_all(self) -> dict[str, dict[str, Any]]:
         """
         Get status of all cameras
 
@@ -225,7 +225,7 @@ class CameraManager:
         """
         return {name: camera.get_status() for name, camera in self.cameras.items()}
 
-    def get_all_discoveries(self, severity: str | None = None) -> List[Dict[str, Any]]:
+    def get_all_discoveries(self, severity: str | None = None) -> list[dict[str, Any]]:
         """
         Get all discoveries from all cameras
 
@@ -247,7 +247,7 @@ class CameraManager:
 
         return all_discoveries
 
-    def get_discoveries_by_camera(self, name: str, **filters) -> List[Dict[str, Any]]:
+    def get_discoveries_by_camera(self, name: str, **filters) -> list[dict[str, Any]]:
         """
         Get discoveries from a specific camera
 
@@ -271,7 +271,7 @@ class CameraManager:
             camera.clear_discoveries()
         self.logger.info("Cleared all discoveries from all cameras")
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """
         Get aggregated statistics from all cameras
 
@@ -302,7 +302,7 @@ class CameraManager:
             "by_severity": by_severity,
         }
 
-    def get_camera_by_mode(self, mode: str) -> List[BaseCamera]:
+    def get_camera_by_mode(self, mode: str) -> list[BaseCamera]:
         """
         Get all cameras with a specific mode
 

@@ -13,14 +13,11 @@ from datetime import datetime
 sys.path.insert(0, "/home/runner/work/nethical-recon/nethical-recon")
 
 from forest.sky import (
-    create_sky_surveillance,
-    FlightController,
     Eagle,
     Falcon,
+    FlightController,
     Owl,
-    Sparrow,
-    BirdSong,
-    format_colored_alert,
+    create_sky_surveillance,
 )
 from forest.visualization import render_sky_view, render_threat_map
 
@@ -139,7 +136,7 @@ def example_1_basic_deployment():
 
     # Show status
     status = controller.get_fleet_status()
-    print(f"\n📊 Fleet Status:")
+    print("\n📊 Fleet Status:")
     print(f"   Active birds: {status['active_birds']}/{status['total_birds']}")
     print(f"   Eagle: {status['fleet_composition']['eagle']}")
     print(f"   Falcons: {status['fleet_composition']['falcons']}")
@@ -156,7 +153,7 @@ def example_2_standard_fleet():
     print("✅ Standard fleet deployed and activated")
 
     status = sky.get_fleet_status()
-    print(f"\n📊 Standard Fleet:")
+    print("\n📊 Standard Fleet:")
     print(f"   Total birds: {status['total_birds']}")
     print(f"   All systems active: {status['controller_active']}")
 
@@ -229,12 +226,12 @@ def example_4_eagle_executive_report():
     print(f"Threat Level: {report['overall_status']['threat_emoji']} {report['overall_status']['threat_level']}")
     print(f"Forest Health: {report['overall_status']['forest_health']}")
     print()
-    print(f"Infrastructure:")
+    print("Infrastructure:")
     print(f"  Total Trees: {report['infrastructure']['total_trees']}")
     print(f"  Healthy: {report['infrastructure']['healthy_trees']}")
     print(f"  Compromised: {report['infrastructure']['compromised_trees']}")
     print()
-    print(f"Threats:")
+    print("Threats:")
     print(f"  Total: {report['threats']['total']}")
     print(f"  Crows (Malware): {report['threats']['crows']}")
     print(f"  Squirrels (Lateral): {report['threats']['squirrels']}")

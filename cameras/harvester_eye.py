@@ -11,12 +11,13 @@ Uses theHarvester to gather:
 - Banners
 """
 
-from typing import Dict, Any, List
-from .base import BaseCamera, CameraMode
-import subprocess
 import json
-import tempfile
 import os
+import subprocess
+import tempfile
+from typing import Any
+
+from .base import BaseCamera, CameraMode
 
 
 class HarvesterEye(BaseCamera):
@@ -29,7 +30,7 @@ class HarvesterEye(BaseCamera):
         timeout: Timeout in seconds (default: 120)
     """
 
-    def __init__(self, config: Dict[str, Any] = None):
+    def __init__(self, config: dict[str, Any] = None):
         super().__init__("HarvesterEye", CameraMode.BAD_WEATHER, config)
         self.sources = self.config.get("sources", ["google", "bing", "duckduckgo", "baidu"])
         self.limit = self.config.get("limit", 500)
@@ -48,7 +49,7 @@ class HarvesterEye(BaseCamera):
             self.logger.error(f"Failed to check for theHarvester: {e}")
             return False
 
-    def scan(self, target: str) -> Dict[str, Any]:
+    def scan(self, target: str) -> dict[str, Any]:
         """
         Scan target using theHarvester
 
@@ -119,7 +120,7 @@ class HarvesterEye(BaseCamera):
 
         return results
 
-    def _run_harvester(self, domain: str, source: str) -> Dict[str, Any]:
+    def _run_harvester(self, domain: str, source: str) -> dict[str, Any]:
         """
         Run theHarvester for a specific source
 
@@ -154,7 +155,7 @@ class HarvesterEye(BaseCamera):
             # Read JSON output
             json_file = output_file
             if os.path.exists(json_file):
-                with open(json_file, "r") as f:
+                with open(json_file) as f:
                     data = json.load(f)
                 return data
             else:
@@ -178,10 +179,10 @@ class HarvesterEye(BaseCamera):
             try:
                 if os.path.exists(output_file):
                     os.unlink(output_file)
-            except:
+            except Exception:
                 pass
 
-    def _parse_stdout(self, stdout: str) -> Dict[str, Any]:
+    def _parse_stdout(self, stdout: str) -> dict[str, Any]:
         """
         Parse theHarvester stdout output (fallback)
 
@@ -213,7 +214,7 @@ class HarvesterEye(BaseCamera):
 
         return results
 
-    def quick_scan(self, target: str, source: str = "google") -> Dict[str, Any]:
+    def quick_scan(self, target: str, source: str = "google") -> dict[str, Any]:
         """
         Quick scan with a single source
 

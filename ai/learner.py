@@ -5,9 +5,9 @@ Learns patterns from threats, adjusts baselines, reduces false positives,
 and identifies crow behavior patterns.
 """
 
-from typing import Dict, Any, List
-from datetime import datetime
 import logging
+from datetime import datetime
+from typing import Any
 
 
 class PatternLearner:
@@ -27,7 +27,7 @@ class PatternLearner:
         self.baseline = {}
         self.false_positive_signatures = []
 
-    def learn_pattern(self, threat_data: Dict[str, Any]) -> Dict[str, Any]:
+    def learn_pattern(self, threat_data: dict[str, Any]) -> dict[str, Any]:
         """
         Learn a new pattern from threat data
 
@@ -59,7 +59,7 @@ class PatternLearner:
             self.learned_patterns.append(pattern)
             return pattern
 
-    def _extract_behavior_signature(self, threat_data: Dict) -> Dict[str, Any]:
+    def _extract_behavior_signature(self, threat_data: dict) -> dict[str, Any]:
         """Extract behavioral signature from threat"""
         return {
             "actions": threat_data.get("actions", []),
@@ -68,7 +68,7 @@ class PatternLearner:
             "persistence_method": threat_data.get("persistence", "none"),
         }
 
-    def _find_similar_pattern(self, new_pattern: Dict) -> Dict:
+    def _find_similar_pattern(self, new_pattern: dict) -> dict:
         """Find similar existing pattern"""
         for pattern in self.learned_patterns:
             if pattern["threat_type"] == new_pattern["threat_type"]:
@@ -82,7 +82,7 @@ class PatternLearner:
                         return pattern
         return None
 
-    def adjust_baseline(self, current_data: Dict[str, Any], historical_data: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def adjust_baseline(self, current_data: dict[str, Any], historical_data: list[dict[str, Any]]) -> dict[str, Any]:
         """
         Adjust system baseline based on current and historical data
 
@@ -126,7 +126,7 @@ class PatternLearner:
             "data_points": len(historical_data),
         }
 
-    def reduce_false_positives(self, alerts: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def reduce_false_positives(self, alerts: list[dict[str, Any]]) -> dict[str, Any]:
         """
         Identify and reduce false positives
 
@@ -163,7 +163,7 @@ class PatternLearner:
             "signatures_updated": len([c for c in false_positive_candidates if c["fp_probability"] >= 0.9]),
         }
 
-    def _calculate_fp_probability(self, alert: Dict) -> float:
+    def _calculate_fp_probability(self, alert: dict) -> float:
         """Calculate false positive probability"""
         fp_score = 0.0
 
@@ -182,11 +182,11 @@ class PatternLearner:
 
         return min(fp_score, 1.0)
 
-    def _matches_signature(self, alert: Dict, signature: Dict) -> bool:
+    def _matches_signature(self, alert: dict, signature: dict) -> bool:
         """Check if alert matches FP signature"""
         return alert.get("type") == signature.get("type") and alert.get("source") == signature.get("source")
 
-    def _explain_fp_reasons(self, alert: Dict, score: float) -> List[str]:
+    def _explain_fp_reasons(self, alert: dict, score: float) -> list[str]:
         """Explain why alert might be false positive"""
         reasons = []
 
@@ -201,7 +201,7 @@ class PatternLearner:
 
         return reasons
 
-    def _add_fp_signature(self, candidate: Dict):
+    def _add_fp_signature(self, candidate: dict):
         """Add new false positive signature"""
         alert_id = candidate.get("alert_id")
         # In real implementation, would extract signature from alert
@@ -212,7 +212,7 @@ class PatternLearner:
         }
         self.false_positive_signatures.append(signature)
 
-    def identify_crow_patterns(self, crow_data: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def identify_crow_patterns(self, crow_data: list[dict[str, Any]]) -> dict[str, Any]:
         """
         Identify behavior patterns specific to crows (malware)
 
@@ -249,7 +249,7 @@ class PatternLearner:
             "recommendations": self._generate_crow_recommendations(patterns),
         }
 
-    def _analyze_crow_timing(self, crow_data: List[Dict]) -> Dict:
+    def _analyze_crow_timing(self, crow_data: list[dict]) -> dict:
         """Analyze when crows are most active"""
         hours = [
             datetime.fromisoformat(c.get("timestamp", datetime.now().isoformat())).hour
@@ -277,7 +277,7 @@ class PatternLearner:
             "insight": f"Crows most active during {time_of_day} hours (around {most_active_hour:02d}:00)",
         }
 
-    def _analyze_crow_persistence(self, crow_data: List[Dict]) -> Dict:
+    def _analyze_crow_persistence(self, crow_data: list[dict]) -> dict:
         """Analyze crow persistence methods"""
         persistence_methods = [c.get("persistence_method") for c in crow_data if c.get("persistence_method")]
 
@@ -293,7 +293,7 @@ class PatternLearner:
             "insight": f"Crows primarily use {most_common} for persistence",
         }
 
-    def _analyze_crow_targets(self, crow_data: List[Dict]) -> Dict:
+    def _analyze_crow_targets(self, crow_data: list[dict]) -> dict:
         """Analyze crow target preferences"""
         targets = []
         for crow in crow_data:
@@ -313,7 +313,7 @@ class PatternLearner:
             "insight": f"Crows prefer targeting {most_targeted}",
         }
 
-    def _generate_crow_recommendations(self, patterns: List[Dict]) -> List[str]:
+    def _generate_crow_recommendations(self, patterns: list[dict]) -> list[str]:
         """Generate recommendations based on crow patterns"""
         recommendations = []
 
@@ -335,7 +335,7 @@ class PatternLearner:
 
         return recommendations
 
-    def export_learned_knowledge(self) -> Dict[str, Any]:
+    def export_learned_knowledge(self) -> dict[str, Any]:
         """
         Export all learned knowledge
 
@@ -354,7 +354,7 @@ class PatternLearner:
             },
         }
 
-    def import_learned_knowledge(self, knowledge_base: Dict[str, Any]) -> bool:
+    def import_learned_knowledge(self, knowledge_base: dict[str, Any]) -> bool:
         """
         Import learned knowledge
 

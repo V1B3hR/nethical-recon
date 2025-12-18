@@ -6,16 +6,16 @@ Provides targeting intelligence and target validation
 before firing the marker gun.
 """
 
-from typing import Dict, Any, List, Optional
-from dataclasses import dataclass
 import datetime
+from dataclasses import dataclass
+from typing import Any
 
 
 @dataclass
 class Target:
     """Represents a target for marking"""
 
-    def __init__(self, target_data: Dict[str, Any]):
+    def __init__(self, target_data: dict[str, Any]):
         """Initialize target from data dictionary"""
         self.data = target_data
         self.target_id = target_data.get("target_id", self._generate_id())
@@ -41,7 +41,7 @@ class Target:
         timestamp = str(datetime.datetime.now().timestamp())
         return hashlib.md5(timestamp.encode()).hexdigest()[:12]
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert target to dictionary"""
         return {
             "target_id": self.target_id,
@@ -67,9 +67,9 @@ class TargetingSystem:
     """
 
     def __init__(self):
-        self.active_targets: List[Target] = []
+        self.active_targets: list[Target] = []
         self.locked_target: Target | None = None
-        self.target_history: List[Target] = []
+        self.target_history: list[Target] = []
         self.validation_rules = {
             "min_threat_score": 3.0,
             "min_confidence": 0.5,
@@ -77,7 +77,7 @@ class TargetingSystem:
             "require_threat_type": False,
         }
 
-    def acquire_target(self, target_data: Dict[str, Any]) -> Target:
+    def acquire_target(self, target_data: dict[str, Any]) -> Target:
         """
         Acquire a new target
 
@@ -91,7 +91,7 @@ class TargetingSystem:
         self.active_targets.append(target)
         return target
 
-    def validate_target(self, target: Target) -> Dict[str, Any]:
+    def validate_target(self, target: Target) -> dict[str, Any]:
         """
         Validate if target meets engagement criteria
 
@@ -160,7 +160,7 @@ class TargetingSystem:
         """Get currently locked target"""
         return self.locked_target
 
-    def prioritize_targets(self) -> List[Target]:
+    def prioritize_targets(self) -> list[Target]:
         """
         Prioritize active targets by threat score and confidence
 
@@ -194,7 +194,7 @@ class TargetingSystem:
         """Get number of active targets"""
         return len(self.active_targets)
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get targeting system statistics"""
         return {
             "active_targets": len(self.active_targets),

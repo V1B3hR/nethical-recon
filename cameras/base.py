@@ -6,11 +6,11 @@ Cameras are the "IR Night Vision" components that see into the dark web,
 hidden services, and deep infrastructure that normal sensors can't detect.
 """
 
-from abc import ABC, abstractmethod
-from enum import Enum
-from typing import Dict, Any, Optional, List
-from datetime import datetime
 import logging
+from abc import ABC, abstractmethod
+from datetime import datetime
+from enum import Enum
+from typing import Any
 
 
 class CameraMode(Enum):
@@ -38,7 +38,7 @@ class CameraDiscovery:
     """Represents a discovery made by a camera"""
 
     def __init__(
-        self, discovery_type: str, target: str, data: Dict[str, Any], confidence: float = 1.0, severity: str = "INFO"
+        self, discovery_type: str, target: str, data: dict[str, Any], confidence: float = 1.0, severity: str = "INFO"
     ):
         self.timestamp = datetime.now()
         self.discovery_type = discovery_type  # service, subdomain, vulnerability, etc.
@@ -47,7 +47,7 @@ class CameraDiscovery:
         self.confidence = confidence  # 0.0 to 1.0
         self.severity = severity  # INFO, WARNING, CRITICAL
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert discovery to dictionary"""
         return {
             "timestamp": self.timestamp.isoformat(),
@@ -72,7 +72,7 @@ class BaseCamera(ABC):
     - Mask detection (WAF detection) - sees hidden defenses
     """
 
-    def __init__(self, name: str, mode: CameraMode, config: Dict[str, Any] = None):
+    def __init__(self, name: str, mode: CameraMode, config: dict[str, Any] = None):
         """
         Initialize the camera
 
@@ -85,7 +85,7 @@ class BaseCamera(ABC):
         self.mode = mode
         self.config = config or {}
         self.status = CameraStatus.IDLE
-        self.discoveries: List[CameraDiscovery] = []
+        self.discoveries: list[CameraDiscovery] = []
         self.logger = logging.getLogger(f"nethical.camera.{name}")
         self._initialize_logger()
 
@@ -99,7 +99,7 @@ class BaseCamera(ABC):
             self.logger.setLevel(logging.INFO)
 
     @abstractmethod
-    def scan(self, target: str) -> Dict[str, Any]:
+    def scan(self, target: str) -> dict[str, Any]:
         """
         Perform a scan on the target
 
@@ -172,7 +172,7 @@ class BaseCamera(ABC):
         return False
 
     def record_discovery(
-        self, discovery_type: str, target: str, data: Dict[str, Any], confidence: float = 1.0, severity: str = "INFO"
+        self, discovery_type: str, target: str, data: dict[str, Any], confidence: float = 1.0, severity: str = "INFO"
     ):
         """
         Record a discovery made by this camera
@@ -197,7 +197,7 @@ class BaseCamera(ABC):
 
         return discovery
 
-    def get_discoveries(self, discovery_type: str | None = None, severity: str | None = None) -> List[CameraDiscovery]:
+    def get_discoveries(self, discovery_type: str | None = None, severity: str | None = None) -> list[CameraDiscovery]:
         """
         Get discoveries from this camera
 
@@ -222,7 +222,7 @@ class BaseCamera(ABC):
         """Clear all discoveries"""
         self.discoveries.clear()
 
-    def get_status(self) -> Dict[str, Any]:
+    def get_status(self) -> dict[str, Any]:
         """
         Get current camera status
 
@@ -246,7 +246,7 @@ class BaseCamera(ABC):
         """
         return True
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """
         Get statistics about discoveries
 

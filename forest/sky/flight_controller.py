@@ -4,9 +4,10 @@
 > "Air traffic control for the forest - managing all birds in harmony"
 """
 
-from typing import Dict, List, Any, Optional
 from datetime import datetime
-from .base_bird import BaseBird, BirdType, FlightMode, AlertLevel, BirdAlert
+from typing import Any
+
+from .base_bird import AlertLevel, BaseBird, BirdAlert, FlightMode
 from .eagle import Eagle
 from .falcon import Falcon
 from .owl import Owl
@@ -27,12 +28,12 @@ class FlightController:
 
     def __init__(self):
         """Initialize flight controller"""
-        self.birds: Dict[str, BaseBird] = {}
+        self.birds: dict[str, BaseBird] = {}
         self.eagle: Eagle | None = None
-        self.falcons: List[Falcon] = []
-        self.owls: List[Owl] = []
-        self.sparrows: List[Sparrow] = []
-        self.all_alerts: List[BirdAlert] = []
+        self.falcons: list[Falcon] = []
+        self.owls: list[Owl] = []
+        self.sparrows: list[Sparrow] = []
+        self.all_alerts: list[BirdAlert] = []
         self.is_active = False
 
     def deploy_eagle(self, name: str = "Eagle-Alpha") -> Eagle:
@@ -108,7 +109,7 @@ class FlightController:
             bird.land()
         self.is_active = False
 
-    def scan_forest(self, forest_data: Dict[str, Any]) -> Dict[str, List[BirdAlert]]:
+    def scan_forest(self, forest_data: dict[str, Any]) -> dict[str, list[BirdAlert]]:
         """
         Coordinate full forest scan with all birds
 
@@ -152,15 +153,15 @@ class FlightController:
 
         return results
 
-    def get_critical_alerts(self) -> List[BirdAlert]:
+    def get_critical_alerts(self) -> list[BirdAlert]:
         """Get all critical and breach level alerts"""
         return [alert for alert in self.all_alerts if alert.level in [AlertLevel.CRITICAL, AlertLevel.BREACH]]
 
-    def get_recent_alerts(self, count: int = 20) -> List[BirdAlert]:
+    def get_recent_alerts(self, count: int = 20) -> list[BirdAlert]:
         """Get most recent alerts across all birds"""
         return sorted(self.all_alerts, key=lambda a: a.timestamp, reverse=True)[:count]
 
-    def get_fleet_status(self) -> Dict[str, Any]:
+    def get_fleet_status(self) -> dict[str, Any]:
         """Get status of entire bird fleet"""
         return {
             "controller_active": self.is_active,
@@ -177,7 +178,7 @@ class FlightController:
             "birds": {name: bird.get_status() for name, bird in self.birds.items()},
         }
 
-    def coordinate_response(self, threat: Dict[str, Any]) -> Dict[str, Any]:
+    def coordinate_response(self, threat: dict[str, Any]) -> dict[str, Any]:
         """
         Coordinate bird response to a threat
 
@@ -225,7 +226,7 @@ class FlightController:
 
         return response
 
-    def generate_sky_report(self, forest_data: Dict[str, Any]) -> Dict[str, Any]:
+    def generate_sky_report(self, forest_data: dict[str, Any]) -> dict[str, Any]:
         """
         Generate comprehensive sky surveillance report
 

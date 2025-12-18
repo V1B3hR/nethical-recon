@@ -50,7 +50,6 @@ def job_submit(
 ):
     """Submit a new scan job to the worker queue."""
     import ipaddress
-    from uuid import uuid4
 
     from nethical_recon.core.models import ScanJob, Target, TargetScope, TargetType
     from nethical_recon.core.storage import init_database
@@ -108,7 +107,7 @@ def job_submit(
 
             # Submit to worker queue
             task = run_scan_job.delay(str(job.id))
-            typer.echo(f"✓ Submitted to worker queue")
+            typer.echo("✓ Submitted to worker queue")
             typer.echo(f"  Task ID: {task.id}")
             typer.echo(f"\nUse 'nethical job status {job.id}' to check progress")
 
@@ -168,9 +167,7 @@ def job_status(
                         typer.echo(f"    Findings: {len(findings)}")
                         severity_counts = {}
                         for finding in findings:
-                            severity_counts[finding.severity.value] = (
-                                severity_counts.get(finding.severity.value, 0) + 1
-                            )
+                            severity_counts[finding.severity.value] = severity_counts.get(finding.severity.value, 0) + 1
                         for severity, count in sorted(severity_counts.items()):
                             typer.echo(f"      {severity}: {count}")
 

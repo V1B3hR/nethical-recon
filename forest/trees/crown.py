@@ -8,9 +8,10 @@ The crown sits atop the tree and provides:
 - Resource utilization overview
 """
 
-from typing import Dict, List, Optional, Any
 from datetime import datetime
-from ..base import ForestComponent, ComponentStatus
+from typing import Any
+
+from ..base import ForestComponent
 
 
 class Crown(ForestComponent):
@@ -20,7 +21,7 @@ class Crown(ForestComponent):
     Analogia: 👑 Korona - The top of the tree, overseeing everything below
     """
 
-    def __init__(self, crown_id: str, tree_hostname: str, metadata: Dict[str, Any] | None = None):
+    def __init__(self, crown_id: str, tree_hostname: str, metadata: dict[str, Any] | None = None):
         """
         Initialize a crown.
 
@@ -50,7 +51,7 @@ class Crown(ForestComponent):
         self.observations.append(obs)
         self.last_updated = datetime.now()
 
-    def add_scan_record(self, scan_type: str, results: Dict[str, Any]):
+    def add_scan_record(self, scan_type: str, results: dict[str, Any]):
         """
         Add a scan record to the history.
 
@@ -61,15 +62,15 @@ class Crown(ForestComponent):
         record = {"timestamp": datetime.now().isoformat(), "scan_type": scan_type, "results": results}
         self.scan_history.append(record)
 
-    def get_recent_observations(self, count: int = 10) -> List[Dict[str, Any]]:
+    def get_recent_observations(self, count: int = 10) -> list[dict[str, Any]]:
         """Get the most recent observations"""
         return self.observations[-count:]
 
-    def get_recent_scans(self, count: int = 5) -> List[Dict[str, Any]]:
+    def get_recent_scans(self, count: int = 5) -> list[dict[str, Any]]:
         """Get the most recent scans"""
         return self.scan_history[-count:]
 
-    def get_critical_observations(self) -> List[Dict[str, Any]]:
+    def get_critical_observations(self) -> list[dict[str, Any]]:
         """Get all critical observations"""
         return [obs for obs in self.observations if obs["severity"] == "CRITICAL"]
 
@@ -80,7 +81,7 @@ class Crown(ForestComponent):
             obs for obs in self.observations if datetime.fromisoformat(obs["timestamp"]).timestamp() > cutoff
         ]
 
-    def get_info(self) -> Dict[str, Any]:
+    def get_info(self) -> dict[str, Any]:
         """Get crown information as dictionary"""
         info = super().get_info()
         info.update(

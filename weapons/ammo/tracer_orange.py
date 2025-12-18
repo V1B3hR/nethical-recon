@@ -6,7 +6,8 @@ Tag Format: SIP-[IP]-[SCORE]-[DATE]
 Use Case: Suspicious IPs, known bad actors, anomalous sources
 """
 
-from typing import Dict, Any
+from typing import Any
+
 from ..base import BaseTracer, TracerType
 
 
@@ -25,7 +26,7 @@ class OrangeTracer(BaseTracer):
         self.marker_prefix = "SIP"
         self.description = "Suspicious IP marker - for anomalous sources"
 
-    def create_tag(self, target: Dict[str, Any]) -> Dict[str, Any]:
+    def create_tag(self, target: dict[str, Any]) -> dict[str, Any]:
         """
         Create suspicious IP tag for target
 
@@ -77,19 +78,19 @@ class OrangeTracer(BaseTracer):
         """Get usage guidelines for this tracer"""
         return """
         ORANGE TRACER USAGE GUIDELINES:
-        
+
         When to use:
         - IPs with suspicious behavior patterns
         - Sources matching threat intelligence feeds
         - Repeated failed authentication attempts
         - Port scanning sources
         - Anomalous traffic patterns
-        
+
         Required target fields:
         - ip (required)
         - threat_score (recommended)
         - Optional: country, asn, reputation, attack_types
-        
+
         Severity: VARIABLE (based on threat_score)
         Action: Monitor and apply rate limiting
         """

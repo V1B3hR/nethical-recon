@@ -9,9 +9,10 @@ Characteristics:
 - Use Case: Stealthy reconnaissance, minimal detection risk
 """
 
-from typing import Dict, Any
-from ..base import BaseWeaponMode, BaseTracer
 import random
+from typing import Any
+
+from ..base import BaseTracer, BaseWeaponMode
 
 
 class PneumaticMode(BaseWeaponMode):
@@ -32,7 +33,7 @@ class PneumaticMode(BaseWeaponMode):
         self.description = "Whisper mode - Silent air-powered delivery"
         self.hit_probability = 0.85  # 85% base hit rate
 
-    def fire(self, target: Dict[str, Any], ammo: BaseTracer) -> Dict[str, Any]:
+    def fire(self, target: dict[str, Any], ammo: BaseTracer) -> dict[str, Any]:
         """
         Fire weapon in pneumatic mode
 
@@ -67,7 +68,7 @@ class PneumaticMode(BaseWeaponMode):
 
         return result
 
-    def get_tactical_info(self) -> Dict[str, str]:
+    def get_tactical_info(self) -> dict[str, str]:
         """Get tactical information for this mode"""
         return {
             "best_for": "Stealth operations, reconnaissance, low-priority threats",

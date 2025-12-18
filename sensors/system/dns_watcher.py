@@ -4,12 +4,13 @@ DNS Watcher Sensor
 Analogia: "Szepty w lesie" (Whispers in the forest)
 """
 
-import subprocess
 import re
+import subprocess
 import threading
 import time
-from typing import Dict, Any, Set
 from collections import Counter
+from typing import Any
+
 from ..base import BaseSensor, SensorStatus
 
 
@@ -22,7 +23,7 @@ class DNSWatcher(BaseSensor):
     - Unusual query volumes
     """
 
-    def __init__(self, name: str = "dns_watcher", config: Dict[str, Any] = None):
+    def __init__(self, name: str = "dns_watcher", config: dict[str, Any] = None):
         """
         Initialize DNS Watcher
 
@@ -83,7 +84,7 @@ class DNSWatcher(BaseSensor):
             self.logger.error(f"Error stopping DNS watcher: {e}")
             return False
 
-    def check(self) -> Dict[str, Any]:
+    def check(self) -> dict[str, Any]:
         """Perform a single DNS check"""
         try:
             queries = self._capture_dns_queries(duration=10)
@@ -151,7 +152,7 @@ class DNSWatcher(BaseSensor):
 
         return queries
 
-    def _parse_dns_query(self, line: str) -> Dict[str, Any]:
+    def _parse_dns_query(self, line: str) -> dict[str, Any]:
         """
         Parse DNS query from tcpdump output
 
@@ -173,7 +174,7 @@ class DNSWatcher(BaseSensor):
 
         return None
 
-    def _analyze_queries(self, queries: list) -> Dict[str, Any]:
+    def _analyze_queries(self, queries: list) -> dict[str, Any]:
         """
         Analyze DNS queries for suspicious patterns
 
@@ -273,7 +274,7 @@ class DNSWatcher(BaseSensor):
             {"query_count": query_count, "threshold": self.query_threshold, "interval": self.check_interval},
         )
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get DNS monitoring statistics"""
         return {
             "status": self.status.value,

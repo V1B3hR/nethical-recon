@@ -9,9 +9,10 @@ Identifies Web Application Firewalls and security layers:
 - Security products
 """
 
-from typing import Dict, Any, List, Optional
-from .base import BaseCamera, CameraMode
 import re
+from typing import Any
+
+from .base import BaseCamera, CameraMode
 
 
 class WAFDetector(BaseCamera):
@@ -25,7 +26,7 @@ class WAFDetector(BaseCamera):
         verify_ssl: Verify SSL certificates (default: False for recon)
     """
 
-    def __init__(self, config: Dict[str, Any] = None):
+    def __init__(self, config: dict[str, Any] = None):
         super().__init__("WAFDetector", CameraMode.MASK, config)
         self.timeout = self.config.get("timeout", 10)
         self.user_agent = self.config.get("user_agent", "Nethical/2.0")
@@ -37,7 +38,7 @@ class WAFDetector(BaseCamera):
         # WAF signatures
         self.waf_signatures = self._load_waf_signatures()
 
-    def _load_waf_signatures(self) -> Dict[str, Dict[str, List[str]]]:
+    def _load_waf_signatures(self) -> dict[str, dict[str, list[str]]]:
         """Load WAF detection signatures"""
         return {
             "Cloudflare": {
@@ -78,7 +79,7 @@ class WAFDetector(BaseCamera):
             self.logger.error("requests library not installed. Install with: pip install requests")
             return False
 
-    def scan(self, target: str) -> Dict[str, Any]:
+    def scan(self, target: str) -> dict[str, Any]:
         """
         Detect WAF on target
 
@@ -139,7 +140,7 @@ class WAFDetector(BaseCamera):
 
         return results
 
-    def _detect_waf(self, url: str) -> List[Dict[str, Any]]:
+    def _detect_waf(self, url: str) -> list[dict[str, Any]]:
         """
         Detect WAF using multiple techniques
 
@@ -149,8 +150,9 @@ class WAFDetector(BaseCamera):
         Returns:
             List of detected WAFs with confidence scores
         """
-        import requests
         import warnings
+
+        import requests
 
         detections = []
 
@@ -228,7 +230,7 @@ class WAFDetector(BaseCamera):
 
         return detections
 
-    def _test_with_payloads(self, url: str) -> List[Dict[str, Any]]:
+    def _test_with_payloads(self, url: str) -> list[dict[str, Any]]:
         """
         Test WAF with malicious payloads
 

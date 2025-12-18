@@ -4,12 +4,12 @@ File Watcher Sensor
 Analogia: "Ślady na ziemi" (Footprints on the ground)
 """
 
-import os
 import hashlib
+import os
 import threading
 import time
-from typing import Dict, Any, Set
-from pathlib import Path
+from typing import Any
+
 from ..base import BaseSensor, SensorStatus
 
 
@@ -19,7 +19,7 @@ class FileWatcher(BaseSensor):
     Detects modifications, creations, and deletions
     """
 
-    def __init__(self, name: str = "file_watcher", config: Dict[str, Any] = None):
+    def __init__(self, name: str = "file_watcher", config: dict[str, Any] = None):
         """
         Initialize File Watcher
 
@@ -85,7 +85,7 @@ class FileWatcher(BaseSensor):
             self.logger.error(f"Error stopping file watcher: {e}")
             return False
 
-    def check(self) -> Dict[str, Any]:
+    def check(self) -> dict[str, Any]:
         """Perform a single file integrity check"""
         try:
             changes = self._detect_changes()
@@ -143,7 +143,7 @@ class FileWatcher(BaseSensor):
         except Exception as e:
             self.logger.error(f"Error establishing baseline: {e}")
 
-    def _get_files_in_directory(self, directory: str) -> Set[str]:
+    def _get_files_in_directory(self, directory: str) -> set[str]:
         """
         Get all files in a directory
 
@@ -274,7 +274,7 @@ class FileWatcher(BaseSensor):
 
         return changes
 
-    def _handle_file_change(self, change: Dict[str, Any]):
+    def _handle_file_change(self, change: dict[str, Any]):
         """
         Handle detected file change
 
@@ -304,7 +304,7 @@ class FileWatcher(BaseSensor):
 
         self.raise_alert(severity, message, change)
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get file watching statistics"""
         return {
             "status": self.status.value,

@@ -9,9 +9,10 @@ Provides:
 - Status updates
 """
 
-from typing import Dict, List, Optional, Any
 from datetime import datetime
-from .base import ForestComponent, ComponentStatus
+from typing import Any
+
+from .base import ComponentStatus, ForestComponent
 
 
 class HealthChecker:
@@ -26,7 +27,7 @@ class HealthChecker:
         self.check_history = []
         self.health_thresholds = {"excellent": 90.0, "good": 75.0, "fair": 60.0, "poor": 40.0, "critical": 20.0}
 
-    def check_component(self, component: ForestComponent) -> Dict[str, Any]:
+    def check_component(self, component: ForestComponent) -> dict[str, Any]:
         """
         Perform health check on a component.
 
@@ -64,7 +65,7 @@ class HealthChecker:
 
         return result
 
-    def check_multiple_components(self, components: List[ForestComponent]) -> List[Dict[str, Any]]:
+    def check_multiple_components(self, components: list[ForestComponent]) -> list[dict[str, Any]]:
         """
         Check multiple components.
 
@@ -77,8 +78,8 @@ class HealthChecker:
         return [self.check_component(comp) for comp in components]
 
     def get_unhealthy_components(
-        self, components: List[ForestComponent], threshold: float = 75.0
-    ) -> List[ForestComponent]:
+        self, components: list[ForestComponent], threshold: float = 75.0
+    ) -> list[ForestComponent]:
         """
         Get components with health below threshold.
 
@@ -91,7 +92,7 @@ class HealthChecker:
         """
         return [c for c in components if c.health_score < threshold]
 
-    def get_compromised_components(self, components: List[ForestComponent]) -> List[ForestComponent]:
+    def get_compromised_components(self, components: list[ForestComponent]) -> list[ForestComponent]:
         """
         Get components with compromised status.
 
@@ -103,7 +104,7 @@ class HealthChecker:
         """
         return [c for c in components if c.status == ComponentStatus.COMPROMISED]
 
-    def get_health_summary(self, components: List[ForestComponent]) -> Dict[str, Any]:
+    def get_health_summary(self, components: list[ForestComponent]) -> dict[str, Any]:
         """
         Get overall health summary for components.
 
@@ -156,7 +157,7 @@ class HealthChecker:
         else:
             return "failing"
 
-    def get_check_history(self, limit: int = 100) -> List[Dict[str, Any]]:
+    def get_check_history(self, limit: int = 100) -> list[dict[str, Any]]:
         """Get recent check history"""
         return self.check_history[-limit:]
 

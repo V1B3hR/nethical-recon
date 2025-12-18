@@ -10,9 +10,10 @@ Uses Shodan API to discover:
 - Geographic locations
 """
 
-from typing import Dict, Any, Optional, List
-from .base import BaseCamera, CameraMode
 import os
+from typing import Any
+
+from .base import BaseCamera, CameraMode
 
 
 class ShodanEye(BaseCamera):
@@ -24,7 +25,7 @@ class ShodanEye(BaseCamera):
         max_results: Maximum number of results to return (default: 100)
     """
 
-    def __init__(self, config: Dict[str, Any] = None):
+    def __init__(self, config: dict[str, Any] = None):
         super().__init__("ShodanEye", CameraMode.NIGHT, config)
         self.api_key = self.config.get("api_key") or os.getenv("SHODAN_API_KEY")
         self.max_results = self.config.get("max_results", 100)
@@ -55,7 +56,7 @@ class ShodanEye(BaseCamera):
             self.logger.error(f"Failed to initialize Shodan API: {e}")
             return False
 
-    def scan(self, target: str) -> Dict[str, Any]:
+    def scan(self, target: str) -> dict[str, Any]:
         """
         Scan target using Shodan
 
@@ -97,7 +98,7 @@ class ShodanEye(BaseCamera):
         ip_pattern = r"^(\d{1,3}\.){3}\d{1,3}$"
         return bool(re.match(ip_pattern, target))
 
-    def _scan_host(self, ip: str) -> Dict[str, Any] | None:
+    def _scan_host(self, ip: str) -> dict[str, Any] | None:
         """
         Get detailed information about a specific host
 
@@ -152,7 +153,7 @@ class ShodanEye(BaseCamera):
             self.logger.error(f"Failed to get host info for {ip}: {e}")
             return None
 
-    def _search_query(self, query: str) -> List[Dict[str, Any]]:
+    def _search_query(self, query: str) -> list[dict[str, Any]]:
         """
         Perform a Shodan search query
 
@@ -190,7 +191,7 @@ class ShodanEye(BaseCamera):
             self.logger.error(f"Search query failed: {e}")
             return []
 
-    def search_exploits(self, query: str) -> List[Dict[str, Any]]:
+    def search_exploits(self, query: str) -> list[dict[str, Any]]:
         """
         Search for exploits related to a query
 

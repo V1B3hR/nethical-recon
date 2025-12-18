@@ -9,9 +9,10 @@ Characteristics:
 - Use Case: Standard operations, balanced stealth and effectiveness
 """
 
-from typing import Dict, Any
-from ..base import BaseWeaponMode, BaseTracer
 import random
+from typing import Any
+
+from ..base import BaseTracer, BaseWeaponMode
 
 
 class CO2SilentMode(BaseWeaponMode):
@@ -32,7 +33,7 @@ class CO2SilentMode(BaseWeaponMode):
         self.description = "Silent mode - CO2-powered balanced delivery"
         self.hit_probability = 0.92  # 92% base hit rate
 
-    def fire(self, target: Dict[str, Any], ammo: BaseTracer) -> Dict[str, Any]:
+    def fire(self, target: dict[str, Any], ammo: BaseTracer) -> dict[str, Any]:
         """
         Fire weapon in CO2 silent mode
 
@@ -68,7 +69,7 @@ class CO2SilentMode(BaseWeaponMode):
 
         return result
 
-    def get_tactical_info(self) -> Dict[str, str]:
+    def get_tactical_info(self) -> dict[str, str]:
         """Get tactical information for this mode"""
         return {
             "best_for": "Standard operations, most threats, balanced approach",

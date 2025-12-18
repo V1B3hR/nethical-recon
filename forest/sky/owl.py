@@ -5,9 +5,10 @@
 > "Wisdom, patience, and vision in the shadows"
 """
 
-from typing import Dict, List, Any, Optional
-from datetime import datetime, time
-from .base_bird import BaseBird, BirdType, FlightMode, AlertLevel, BirdAlert
+from datetime import datetime
+from typing import Any
+
+from .base_bird import AlertLevel, BaseBird, BirdAlert, BirdType, FlightMode
 
 
 class Owl(BaseBird):
@@ -31,10 +32,10 @@ class Owl(BaseBird):
         self.stealth_mode = True
         self.night_vision = True
         self.patience_level = "maximum"
-        self.wisdom_db: List[Dict[str, Any]] = []  # Pattern learning
-        self.hidden_observations: List[Dict[str, Any]] = []
+        self.wisdom_db: list[dict[str, Any]] = []  # Pattern learning
+        self.hidden_observations: list[dict[str, Any]] = []
 
-    def get_capabilities(self) -> Dict[str, str]:
+    def get_capabilities(self) -> dict[str, str]:
         """Get Owl's unique capabilities"""
         return {
             "stealth": "Silent flight - undetectable monitoring",
@@ -45,7 +46,7 @@ class Owl(BaseBird):
             "specialization": "Stealth and hidden threat detection",
         }
 
-    def scan(self, forest_data: Dict[str, Any]) -> List[BirdAlert]:
+    def scan(self, forest_data: dict[str, Any]) -> list[BirdAlert]:
         """
         Stealth scan for hidden and night-time threats
 
@@ -109,8 +110,8 @@ class Owl(BaseBird):
                     location={"tree": tree.get("name"), "type": "rootkit"},
                     evidence=[
                         f"Indicators: {', '.join(rootkit_indicators)}",
-                        f"Severity: Critical - kernel-level threat",
-                        f"Recommendation: Forensic analysis required",
+                        "Severity: Critical - kernel-level threat",
+                        "Recommendation: Forensic analysis required",
                     ],
                 )
                 alerts.append(alert)
@@ -130,8 +131,8 @@ class Owl(BaseBird):
                         evidence=[
                             f"Activity level: {activity_level*100:.0f}%",
                             f"Time: {current_time.strftime('%H:%M')} (night hours)",
-                            f"Baseline: Low activity expected",
-                            f"Pattern: Suspicious off-hours behavior",
+                            "Baseline: Low activity expected",
+                            "Pattern: Suspicious off-hours behavior",
                         ],
                     )
                     alerts.append(alert)
@@ -176,7 +177,7 @@ class Owl(BaseBird):
                         f"Mechanism: {mech.get('type')}",
                         f"Location: {mech.get('location')}",
                         f"Method: {mech.get('method')}",
-                        f"Risk: Long-term compromise",
+                        "Risk: Long-term compromise",
                     ],
                 )
                 alerts.append(alert)
@@ -191,7 +192,7 @@ class Owl(BaseBird):
         current_hour = current_time.hour
         return current_hour >= 22 or current_hour < 6
 
-    def _detect_behavioral_anomalies(self, forest_data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def _detect_behavioral_anomalies(self, forest_data: dict[str, Any]) -> list[dict[str, Any]]:
         """
         Detect behavioral anomalies using Owl's wisdom
 
@@ -236,7 +237,7 @@ class Owl(BaseBird):
 
         return anomalies
 
-    def _correlate_patterns(self, forest_data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def _correlate_patterns(self, forest_data: dict[str, Any]) -> list[dict[str, Any]]:
         """
         Correlate patterns across time and trees
 
@@ -305,7 +306,7 @@ class Owl(BaseBird):
 
         return patterns
 
-    def deep_observation(self, target: Dict[str, Any], duration_minutes: int = 30) -> Dict[str, Any]:
+    def deep_observation(self, target: dict[str, Any], duration_minutes: int = 30) -> dict[str, Any]:
         """
         Perform deep stealth observation of a target
 
@@ -357,7 +358,7 @@ class Owl(BaseBird):
 
         return observation
 
-    def share_wisdom(self) -> Dict[str, Any]:
+    def share_wisdom(self) -> dict[str, Any]:
         """
         Share accumulated wisdom with other birds
 
@@ -372,7 +373,7 @@ class Owl(BaseBird):
             "insights": self._generate_insights(),
         }
 
-    def _summarize_patterns(self) -> List[str]:
+    def _summarize_patterns(self) -> list[str]:
         """Summarize learned patterns"""
         if not self.wisdom_db:
             return ["No patterns learned yet"]
@@ -390,7 +391,7 @@ class Owl(BaseBird):
 
         return patterns
 
-    def _generate_insights(self) -> List[str]:
+    def _generate_insights(self) -> list[str]:
         """Generate insights from observations"""
         insights = []
 

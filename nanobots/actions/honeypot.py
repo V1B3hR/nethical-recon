@@ -4,10 +4,10 @@ Honeypot Deployment - Defensive nanobot that deploys honeypots.
 Part of the defensive mode (🛡️ antibody behavior).
 """
 
-from typing import Dict, Any, Optional, List
 from datetime import datetime
+from typing import Any
 
-from ..base import BaseNanobot, ActionResult, NanobotMode, ActionType, ActionStatus
+from ..base import ActionResult, ActionStatus, ActionType, BaseNanobot, NanobotMode
 
 
 class HoneypotNanobot(BaseNanobot):
@@ -17,7 +17,7 @@ class HoneypotNanobot(BaseNanobot):
     Deploys decoy services and monitors interactions to gather intelligence.
     """
 
-    def __init__(self, nanobot_id: str = "honeypot_deployer", config: Dict[str, Any] | None = None):
+    def __init__(self, nanobot_id: str = "honeypot_deployer", config: dict[str, Any] | None = None):
         """
         Initialize honeypot nanobot.
 
@@ -35,10 +35,10 @@ class HoneypotNanobot(BaseNanobot):
         self.auto_deploy = self.config.get("auto_deploy", True)
 
         # Track deployed honeypots
-        self.active_honeypots: Dict[str, Dict[str, Any]] = {}
-        self.interactions: List[Dict[str, Any]] = []
+        self.active_honeypots: dict[str, dict[str, Any]] = {}
+        self.interactions: list[dict[str, Any]] = []
 
-    def can_handle(self, event: Dict[str, Any]) -> bool:
+    def can_handle(self, event: dict[str, Any]) -> bool:
         """Check if this event warrants honeypot deployment"""
         # Deploy honeypots for reconnaissance attempts
         return (
@@ -48,7 +48,7 @@ class HoneypotNanobot(BaseNanobot):
             or "honeypot_trigger" in event
         )
 
-    def assess_threat(self, event: Dict[str, Any]) -> float:
+    def assess_threat(self, event: dict[str, Any]) -> float:
         """
         Assess threat level for honeypot deployment.
 
@@ -83,7 +83,7 @@ class HoneypotNanobot(BaseNanobot):
 
         return min(confidence, 1.0)
 
-    def execute_action(self, event: Dict[str, Any], confidence: float) -> ActionResult:
+    def execute_action(self, event: dict[str, Any], confidence: float) -> ActionResult:
         """
         Deploy a honeypot.
 
@@ -139,7 +139,7 @@ class HoneypotNanobot(BaseNanobot):
                 error_message=f"Failed to deploy honeypot: {honeypot_type}",
             )
 
-    def _select_honeypot_type(self, event: Dict[str, Any]) -> str:
+    def _select_honeypot_type(self, event: dict[str, Any]) -> str:
         """Select honeypot type based on event characteristics"""
         # Check which ports were scanned
         ports_scanned = event.get("ports_scanned", [])
@@ -169,7 +169,7 @@ class HoneypotNanobot(BaseNanobot):
         }
         return port_map.get(honeypot_type, 9999)
 
-    def _deploy_honeypot(self, honeypot_id: str, honeypot_type: str, event: Dict[str, Any]) -> bool:
+    def _deploy_honeypot(self, honeypot_id: str, honeypot_type: str, event: dict[str, Any]) -> bool:
         """
         Deploy a honeypot (simulation).
 
@@ -181,7 +181,7 @@ class HoneypotNanobot(BaseNanobot):
         # Simulation - always succeeds
         return True
 
-    def record_interaction(self, honeypot_id: str, interaction_data: Dict[str, Any]):
+    def record_interaction(self, honeypot_id: str, interaction_data: dict[str, Any]):
         """
         Record an interaction with a honeypot.
 
@@ -212,11 +212,11 @@ class HoneypotNanobot(BaseNanobot):
             return True
         return False
 
-    def get_active_honeypots(self) -> Dict[str, Dict[str, Any]]:
+    def get_active_honeypots(self) -> dict[str, dict[str, Any]]:
         """Get all active honeypots"""
         return self.active_honeypots.copy()
 
-    def get_interactions(self, honeypot_id: str | None = None, limit: int = 50) -> List[Dict[str, Any]]:
+    def get_interactions(self, honeypot_id: str | None = None, limit: int = 50) -> list[dict[str, Any]]:
         """
         Get honeypot interactions.
 

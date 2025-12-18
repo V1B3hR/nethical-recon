@@ -2,12 +2,13 @@
 Targeting Screen - Weapon targeting interface
 """
 
-from typing import Optional, Dict, Any
+from typing import Any
+
 from rich.console import Console
-from rich.panel import Panel
-from rich.text import Text
-from rich.table import Table
 from rich.layout import Layout
+from rich.panel import Panel
+from rich.table import Table
+from rich.text import Text
 
 from ..base import ThreatType, UIColors
 from ..widgets.progress_bars import create_confidence_bar
@@ -21,7 +22,7 @@ class Target:
         ip: str,
         port: int = 0,
         target_type: str = "UNKNOWN",
-        forest_location: Dict[str, str] = None,
+        forest_location: dict[str, str] = None,
         threat: ThreatType | None = None,
         confidence: float = 0.0,
         previous_stains: int = 0,
@@ -159,7 +160,7 @@ class TargetingScreen:
         # Controls
         console.print("[SPACE] 🔫 FIRE    [T] Track    [F] Forest View    [ESC] Back", style=UIColors.DIM)
 
-    def fire(self) -> Dict[str, Any]:
+    def fire(self) -> dict[str, Any]:
         """Execute fire command"""
         if not self.current_target:
             return {"success": False, "error": "No target selected"}

@@ -8,8 +8,9 @@ A tree has:
 - Branches: Processes, services, connections
 """
 
-from typing import Dict, List, Optional, Any
-from ..base import ForestComponent, ComponentStatus
+from typing import Any
+
+from ..base import ComponentStatus, ForestComponent
 
 
 class Tree(ForestComponent):
@@ -25,7 +26,7 @@ class Tree(ForestComponent):
         hostname: str,
         ip_address: str,
         os_type: str | None = None,
-        metadata: Dict[str, Any] | None = None,
+        metadata: dict[str, Any] | None = None,
     ):
         """
         Initialize a tree (host).
@@ -81,11 +82,11 @@ class Tree(ForestComponent):
         """Get a specific branch by ID"""
         return self.branches.get(branch_id)
 
-    def get_all_branches(self) -> List:
+    def get_all_branches(self) -> list:
         """Get all branches on this tree"""
         return list(self.branches.values())
 
-    def get_branches_with_threats(self) -> List:
+    def get_branches_with_threats(self) -> list:
         """Get all branches that have threats"""
         return [b for b in self.branches.values() if b.has_threats()]
 
@@ -151,7 +152,7 @@ class Tree(ForestComponent):
         else:
             self.status = ComponentStatus.COMPROMISED
 
-    def get_info(self) -> Dict[str, Any]:
+    def get_info(self) -> dict[str, Any]:
         """Get tree information as dictionary"""
         info = super().get_info()
         info.update(
@@ -176,7 +177,7 @@ class Tree(ForestComponent):
         if self.has_threats():
             threat_marker = " ⚠️ THREATS!"
 
-        lines = [f"        👑 Crown{threat_marker}", f"         │", f"    🌳 {self.hostname}", f"    ╱│╲", f"   ╱ │ ╲"]
+        lines = [f"        👑 Crown{threat_marker}", "         │", f"    🌳 {self.hostname}", "    ╱│╲", "   ╱ │ ╲"]
 
         # Show up to 5 branches
         branch_list = list(self.branches.values())[:5]
@@ -187,7 +188,7 @@ class Tree(ForestComponent):
         if len(self.branches) > 5:
             lines.append(f"  ... and {len(self.branches) - 5} more branches")
 
-        lines.append(f"    ║")
+        lines.append("    ║")
         lines.append(f"  🪵 Trunk ({self.os_type})")
 
         return "\n".join(lines)

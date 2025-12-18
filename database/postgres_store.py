@@ -3,14 +3,15 @@ PostgreSQL Store Implementation
 Enterprise-grade relational database for team deployments
 """
 
-from typing import Dict, Any, List, Optional
 import json
+from typing import Any
+
 from .base_store import BaseStore, StoreBackend
 
 try:
     import psycopg2
-    from psycopg2.extras import RealDictCursor
     from psycopg2 import sql
+    from psycopg2.extras import RealDictCursor
 
     PSYCOPG2_AVAILABLE = True
 except ImportError:
@@ -30,7 +31,7 @@ class PostgreSQLStore(BaseStore):
     Requires: psycopg2 or psycopg2-binary package
     """
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         """
         Initialize PostgreSQL store
 
@@ -166,7 +167,7 @@ class PostgreSQLStore(BaseStore):
             self.connection.rollback()
             return False
 
-    def save_stain(self, stain: Dict[str, Any]) -> bool:
+    def save_stain(self, stain: dict[str, Any]) -> bool:
         """Save a stain to PostgreSQL database"""
         try:
             stain_data = stain.get("stain", {})
@@ -211,7 +212,7 @@ class PostgreSQLStore(BaseStore):
             self.connection.rollback()
             return False
 
-    def get_stain(self, tag_id: str) -> Dict[str, Any] | None:
+    def get_stain(self, tag_id: str) -> dict[str, Any] | None:
         """Retrieve a stain by tag ID"""
         try:
             self.cursor.execute("SELECT * FROM stains WHERE tag_id = %s", (tag_id,))
@@ -223,7 +224,7 @@ class PostgreSQLStore(BaseStore):
             print(f"Get stain error: {e}")
             return None
 
-    def get_all_stains(self, limit: int | None = None, offset: int = 0) -> List[Dict[str, Any]]:
+    def get_all_stains(self, limit: int | None = None, offset: int = 0) -> list[dict[str, Any]]:
         """Retrieve all stains with pagination"""
         try:
             query = "SELECT * FROM stains ORDER BY timestamp_first_seen DESC"
@@ -237,7 +238,7 @@ class PostgreSQLStore(BaseStore):
             print(f"Get all stains error: {e}")
             return []
 
-    def get_stains_by_type(self, marker_type: str, limit: int | None = None) -> List[Dict[str, Any]]:
+    def get_stains_by_type(self, marker_type: str, limit: int | None = None) -> list[dict[str, Any]]:
         """Retrieve stains filtered by marker type"""
         try:
             query = "SELECT * FROM stains WHERE marker_type = %s ORDER BY timestamp_first_seen DESC"
@@ -251,7 +252,7 @@ class PostgreSQLStore(BaseStore):
             print(f"Get stains by type error: {e}")
             return []
 
-    def get_stains_by_color(self, color: str, limit: int | None = None) -> List[Dict[str, Any]]:
+    def get_stains_by_color(self, color: str, limit: int | None = None) -> list[dict[str, Any]]:
         """Retrieve stains filtered by color"""
         try:
             query = "SELECT * FROM stains WHERE color = %s ORDER BY timestamp_first_seen DESC"
@@ -265,7 +266,7 @@ class PostgreSQLStore(BaseStore):
             print(f"Get stains by color error: {e}")
             return []
 
-    def get_stains_by_ip(self, ip: str) -> List[Dict[str, Any]]:
+    def get_stains_by_ip(self, ip: str) -> list[dict[str, Any]]:
         """Retrieve stains associated with an IP address"""
         try:
             # Use JSONB containment operator
@@ -279,7 +280,7 @@ class PostgreSQLStore(BaseStore):
             print(f"Get stains by IP error: {e}")
             return []
 
-    def get_stains_by_threat_score(self, min_score: float, max_score: float = 10.0) -> List[Dict[str, Any]]:
+    def get_stains_by_threat_score(self, min_score: float, max_score: float = 10.0) -> list[dict[str, Any]]:
         """Retrieve stains within a threat score range"""
         try:
             self.cursor.execute(
@@ -292,7 +293,7 @@ class PostgreSQLStore(BaseStore):
             print(f"Get stains by threat score error: {e}")
             return []
 
-    def update_stain(self, tag_id: str, updates: Dict[str, Any]) -> bool:
+    def update_stain(self, tag_id: str, updates: dict[str, Any]) -> bool:
         """Update an existing stain"""
         try:
             # Whitelist of allowed column names to prevent SQL injection
@@ -361,7 +362,7 @@ class PostgreSQLStore(BaseStore):
             self.connection.rollback()
             return False
 
-    def search_stains(self, query: str, fields: List[str] | None = None) -> List[Dict[str, Any]]:
+    def search_stains(self, query: str, fields: list[str] | None = None) -> list[dict[str, Any]]:
         """Search for stains using PostgreSQL full-text search"""
         try:
             # Use full-text search
@@ -384,7 +385,7 @@ class PostgreSQLStore(BaseStore):
             print(f"Search stains error: {e}")
             return []
 
-    def count_stains(self, filters: Dict[str, Any] | None = None) -> int:
+    def count_stains(self, filters: dict[str, Any] | None = None) -> int:
         """Count stains with optional filters"""
         try:
             if not filters:
@@ -404,7 +405,7 @@ class PostgreSQLStore(BaseStore):
             print(f"Count stains error: {e}")
             return 0
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get database statistics"""
         try:
             stats = {}
@@ -438,7 +439,7 @@ class PostgreSQLStore(BaseStore):
             print(f"Get statistics error: {e}")
             return {}
 
-    def _row_to_dict(self, row: Dict[str, Any]) -> Dict[str, Any]:
+    def _row_to_dict(self, row: dict[str, Any]) -> dict[str, Any]:
         """Convert PostgreSQL row to stain dictionary"""
         return {
             "tag_id": row["tag_id"],

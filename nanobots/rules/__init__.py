@@ -1,7 +1,7 @@
 """Rules submodule"""
 
-from .engine import RulesEngine, Rule, RuleCondition, RuleOperator
-from .hybrid_mode import HybridDecisionMaker, DecisionMode
+from .engine import Rule, RuleCondition, RuleOperator, RulesEngine
+from .hybrid_mode import DecisionMode, HybridDecisionMaker
 
 __all__ = [
     "RulesEngine",

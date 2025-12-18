@@ -4,9 +4,9 @@ Rules Engine - Decision-making engine for nanobots.
 Evaluates rules to determine when and how nanobots should act.
 """
 
-from typing import Dict, Any, List, Optional, Callable
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any
 
 
 class RuleOperator(Enum):
@@ -32,7 +32,7 @@ class RuleCondition:
     operator: RuleOperator
     value: Any
 
-    def evaluate(self, event: Dict[str, Any]) -> bool:
+    def evaluate(self, event: dict[str, Any]) -> bool:
         """Evaluate condition against event"""
         # Get field value from event (support nested fields with dot notation)
         field_value = self._get_field_value(event, self.field)
@@ -64,7 +64,7 @@ class RuleCondition:
 
         return False
 
-    def _get_field_value(self, event: Dict[str, Any], field: str) -> Any:
+    def _get_field_value(self, event: dict[str, Any], field: str) -> Any:
         """Get field value from event (supports nested fields)"""
         parts = field.split(".")
         value = event
@@ -92,14 +92,14 @@ class Rule:
 
     rule_id: str
     name: str
-    conditions: List[RuleCondition]
+    conditions: list[RuleCondition]
     logic: str = "AND"  # AND or OR
     priority: int = 0
     action_type: str | None = None
     confidence_modifier: float = 0.0  # Add/subtract from base confidence
     enabled: bool = True
 
-    def matches(self, event: Dict[str, Any]) -> bool:
+    def matches(self, event: dict[str, Any]) -> bool:
         """Check if rule matches event"""
         if not self.enabled:
             return False
@@ -136,7 +136,7 @@ class RulesEngine:
 
     def __init__(self):
         """Initialize rules engine"""
-        self.rules: Dict[str, Rule] = {}
+        self.rules: dict[str, Rule] = {}
         self._load_default_rules()
 
     def _load_default_rules(self):
@@ -266,7 +266,7 @@ class RulesEngine:
             return True
         return False
 
-    def evaluate(self, event: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def evaluate(self, event: dict[str, Any]) -> list[dict[str, Any]]:
         """
         Evaluate all rules against an event.
 
@@ -296,7 +296,7 @@ class RulesEngine:
 
         return matches
 
-    def get_recommended_action(self, event: Dict[str, Any], base_confidence: float) -> Dict[str, Any] | None:
+    def get_recommended_action(self, event: dict[str, Any], base_confidence: float) -> dict[str, Any] | None:
         """
         Get recommended action based on rules.
 
@@ -326,7 +326,7 @@ class RulesEngine:
             "all_matches": matches,
         }
 
-    def get_all_rules(self) -> List[Rule]:
+    def get_all_rules(self) -> list[Rule]:
         """Get all rules"""
         return list(self.rules.values())
 

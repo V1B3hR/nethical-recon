@@ -8,8 +8,9 @@ A leaf is the smallest unit in the forest hierarchy:
 - Individual packet
 """
 
-from typing import Dict, Optional, Any
 from enum import Enum
+from typing import Any
+
 from ..base import ForestComponent
 
 
@@ -29,7 +30,7 @@ class Leaf(ForestComponent):
     Analogia: 🍃 Liść - The smallest unit, growing from branches
     """
 
-    def __init__(self, leaf_id: str, name: str, leaf_type: LeafType, metadata: Dict[str, Any] | None = None):
+    def __init__(self, leaf_id: str, name: str, leaf_type: LeafType, metadata: dict[str, Any] | None = None):
         """
         Initialize a leaf.
 
@@ -58,7 +59,7 @@ class Leaf(ForestComponent):
         """Return component type"""
         return "leaf"
 
-    def get_info(self) -> Dict[str, Any]:
+    def get_info(self) -> dict[str, Any]:
         """Get leaf information as dictionary"""
         info = super().get_info()
         info.update({"leaf_type": self.leaf_type.value})

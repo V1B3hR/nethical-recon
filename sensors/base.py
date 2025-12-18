@@ -3,11 +3,11 @@ Base Sensor Class
 Provides the foundation for all sensor implementations in Nethical Recon
 """
 
-from abc import ABC, abstractmethod
-from enum import Enum
-from typing import Dict, Any, Optional, List
-from datetime import datetime
 import logging
+from abc import ABC, abstractmethod
+from datetime import datetime
+from enum import Enum
+from typing import Any
 
 
 class SensorStatus(Enum):
@@ -23,13 +23,13 @@ class SensorStatus(Enum):
 class SensorAlert:
     """Represents an alert raised by a sensor"""
 
-    def __init__(self, severity: str, message: str, data: Dict[str, Any] = None):
+    def __init__(self, severity: str, message: str, data: dict[str, Any] = None):
         self.timestamp = datetime.now()
         self.severity = severity  # INFO, WARNING, CRITICAL
         self.message = message
         self.data = data or {}
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert alert to dictionary"""
         return {
             "timestamp": self.timestamp.isoformat(),
@@ -47,7 +47,7 @@ class BaseSensor(ABC):
     aspects of network and system activity.
     """
 
-    def __init__(self, name: str, config: Dict[str, Any] = None):
+    def __init__(self, name: str, config: dict[str, Any] = None):
         """
         Initialize the sensor
 
@@ -58,7 +58,7 @@ class BaseSensor(ABC):
         self.name = name
         self.config = config or {}
         self.status = SensorStatus.IDLE
-        self.alerts: List[SensorAlert] = []
+        self.alerts: list[SensorAlert] = []
         self.logger = logging.getLogger(f"nethical.sensor.{name}")
         self._initialize_logger()
 
@@ -92,7 +92,7 @@ class BaseSensor(ABC):
         pass
 
     @abstractmethod
-    def check(self) -> Dict[str, Any]:
+    def check(self) -> dict[str, Any]:
         """
         Perform a single check/scan
 
@@ -127,7 +127,7 @@ class BaseSensor(ABC):
             return True
         return False
 
-    def raise_alert(self, severity: str, message: str, data: Dict[str, Any] = None):
+    def raise_alert(self, severity: str, message: str, data: dict[str, Any] = None):
         """
         Raise an alert from this sensor
 
@@ -149,7 +149,7 @@ class BaseSensor(ABC):
 
         return alert
 
-    def get_alerts(self, severity: str | None = None) -> List[SensorAlert]:
+    def get_alerts(self, severity: str | None = None) -> list[SensorAlert]:
         """
         Get alerts from this sensor
 
@@ -167,7 +167,7 @@ class BaseSensor(ABC):
         """Clear all alerts"""
         self.alerts.clear()
 
-    def get_status(self) -> Dict[str, Any]:
+    def get_status(self) -> dict[str, Any]:
         """
         Get current sensor status
 

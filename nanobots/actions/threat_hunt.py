@@ -4,10 +4,10 @@ Threat Hunting - Scout nanobot that actively hunts threats.
 Part of the forest guard mode (🌳 forest protection).
 """
 
-from typing import Dict, Any, Optional, List
 from datetime import datetime
+from typing import Any
 
-from ..base import BaseNanobot, ActionResult, NanobotMode, ActionType, ActionStatus
+from ..base import ActionResult, ActionStatus, ActionType, BaseNanobot, NanobotMode
 
 
 class ThreatHunterNanobot(BaseNanobot):
@@ -17,7 +17,7 @@ class ThreatHunterNanobot(BaseNanobot):
     Proactively searches for malware, data stealers, and other threats.
     """
 
-    def __init__(self, nanobot_id: str = "threat_hunter", config: Dict[str, Any] | None = None):
+    def __init__(self, nanobot_id: str = "threat_hunter", config: dict[str, Any] | None = None):
         """
         Initialize threat hunter nanobot.
 
@@ -33,10 +33,10 @@ class ThreatHunterNanobot(BaseNanobot):
         self.aggressive = self.config.get("aggressive", False)
 
         # Track hunts
-        self.active_hunts: Dict[str, Dict[str, Any]] = {}
-        self.caught_threats: List[Dict[str, Any]] = []
+        self.active_hunts: dict[str, dict[str, Any]] = {}
+        self.caught_threats: list[dict[str, Any]] = []
 
-    def can_handle(self, event: Dict[str, Any]) -> bool:
+    def can_handle(self, event: dict[str, Any]) -> bool:
         """Check if this event warrants threat hunting"""
         return (
             "threat_indicator" in event
@@ -46,7 +46,7 @@ class ThreatHunterNanobot(BaseNanobot):
             or "threat_type" in event
         )
 
-    def assess_threat(self, event: Dict[str, Any]) -> float:
+    def assess_threat(self, event: dict[str, Any]) -> float:
         """
         Assess if hunting is warranted.
 
@@ -83,7 +83,7 @@ class ThreatHunterNanobot(BaseNanobot):
 
         return min(confidence, 1.0)
 
-    def execute_action(self, event: Dict[str, Any], confidence: float) -> ActionResult:
+    def execute_action(self, event: dict[str, Any], confidence: float) -> ActionResult:
         """
         Execute threat hunt.
 
@@ -137,7 +137,7 @@ class ThreatHunterNanobot(BaseNanobot):
                 error_message=f"Hunt failed: {threat_type} on {target}",
             )
 
-    def _execute_hunt(self, hunt_id: str, threat_type: str, target: str, event: Dict[str, Any]) -> Dict[str, Any]:
+    def _execute_hunt(self, hunt_id: str, threat_type: str, target: str, event: dict[str, Any]) -> dict[str, Any]:
         """
         Execute threat hunt (simulation).
 
@@ -194,11 +194,11 @@ class ThreatHunterNanobot(BaseNanobot):
 
         return True
 
-    def get_active_hunts(self) -> Dict[str, Dict[str, Any]]:
+    def get_active_hunts(self) -> dict[str, dict[str, Any]]:
         """Get all active hunts"""
         return {hunt_id: info for hunt_id, info in self.active_hunts.items() if info["status"] == "hunting"}
 
-    def get_caught_threats(self, threat_type: str | None = None, limit: int = 50) -> List[Dict[str, Any]]:
+    def get_caught_threats(self, threat_type: str | None = None, limit: int = 50) -> list[dict[str, Any]]:
         """
         Get caught threats.
 
@@ -216,7 +216,7 @@ class ThreatHunterNanobot(BaseNanobot):
 
         return threats[-limit:]
 
-    def get_hunt_statistics(self) -> Dict[str, Any]:
+    def get_hunt_statistics(self) -> dict[str, Any]:
         """Get hunt statistics"""
         by_type = {}
         for threat in self.caught_threats:

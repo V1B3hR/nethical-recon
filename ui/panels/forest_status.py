@@ -2,23 +2,22 @@
 Forest Status Panel - Shows forest health and threats
 """
 
-from typing import Dict
 from rich.panel import Panel
 from rich.text import Text
 
-from ..base import UIColors, ThreatType
+from ..base import UIColors
 
 
 class ForestStatusPanel:
     """Panel showing forest status"""
 
-    def __init__(self, trees: int = 0, branches: int = 0, leaves: int = 0, threats: Dict[str, int] = None):
+    def __init__(self, trees: int = 0, branches: int = 0, leaves: int = 0, threats: dict[str, int] = None):
         self.trees = trees
         self.branches = branches
         self.leaves = leaves
         self.threats = threats or {}
 
-    def update(self, trees: int = None, branches: int = None, leaves: int = None, threats: Dict[str, int] = None):
+    def update(self, trees: int = None, branches: int = None, leaves: int = None, threats: dict[str, int] = None):
         """Update forest status"""
         if trees is not None:
             self.trees = trees

@@ -4,11 +4,11 @@ Rate Limiting Action - Defensive nanobot that limits request rates.
 Part of the defensive mode (🛡️ antibody behavior).
 """
 
-from typing import Dict, Any, Optional, List
 from collections import defaultdict
 from datetime import datetime, timedelta
+from typing import Any
 
-from ..base import BaseNanobot, ActionResult, NanobotMode, ActionType, ActionStatus
+from ..base import ActionResult, ActionStatus, ActionType, BaseNanobot, NanobotMode
 
 
 class RateLimiterNanobot(BaseNanobot):
@@ -18,7 +18,7 @@ class RateLimiterNanobot(BaseNanobot):
     Tracks request rates and applies throttling when thresholds are exceeded.
     """
 
-    def __init__(self, nanobot_id: str = "rate_limiter", config: Dict[str, Any] | None = None):
+    def __init__(self, nanobot_id: str = "rate_limiter", config: dict[str, Any] | None = None):
         """
         Initialize rate limiter nanobot.
 
@@ -36,14 +36,14 @@ class RateLimiterNanobot(BaseNanobot):
         self.time_window = self.config.get("time_window", 60)
 
         # Track rate limits per source
-        self.rate_limits: Dict[str, Dict[str, Any]] = {}
-        self.request_history: Dict[str, List[datetime]] = defaultdict(list)
+        self.rate_limits: dict[str, dict[str, Any]] = {}
+        self.request_history: dict[str, list[datetime]] = defaultdict(list)
 
-    def can_handle(self, event: Dict[str, Any]) -> bool:
+    def can_handle(self, event: dict[str, Any]) -> bool:
         """Check if this event is related to request rate"""
         return "source_ip" in event or "source" in event
 
-    def assess_threat(self, event: Dict[str, Any]) -> float:
+    def assess_threat(self, event: dict[str, Any]) -> float:
         """
         Assess threat level based on request rate patterns.
 
@@ -90,7 +90,7 @@ class RateLimiterNanobot(BaseNanobot):
 
         return min(confidence, 1.0)
 
-    def execute_action(self, event: Dict[str, Any], confidence: float) -> ActionResult:
+    def execute_action(self, event: dict[str, Any], confidence: float) -> ActionResult:
         """
         Apply rate limiting to the source.
 
@@ -186,7 +186,7 @@ class RateLimiterNanobot(BaseNanobot):
 
         return True
 
-    def get_rate_limit(self, source: str) -> Dict[str, Any] | None:
+    def get_rate_limit(self, source: str) -> dict[str, Any] | None:
         """
         Get rate limit details for a source.
 
@@ -216,7 +216,7 @@ class RateLimiterNanobot(BaseNanobot):
             return True
         return False
 
-    def get_all_rate_limits(self) -> Dict[str, Dict[str, Any]]:
+    def get_all_rate_limits(self) -> dict[str, dict[str, Any]]:
         """Get all active rate limits"""
         # Clean expired limits
         now = datetime.now()

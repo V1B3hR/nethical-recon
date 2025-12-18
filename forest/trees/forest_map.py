@@ -9,8 +9,8 @@ The forest map provides:
 - Infrastructure health dashboard
 """
 
-from typing import Dict, List, Optional, Any
 from datetime import datetime
+from typing import Any
 
 
 class ForestMap:
@@ -81,15 +81,15 @@ class ForestMap:
         """Get a tree by IP address"""
         return self.trees_by_ip.get(ip_address)
 
-    def get_all_trees(self) -> List:
+    def get_all_trees(self) -> list:
         """Get all trees in the forest"""
         return list(self.trees.values())
 
-    def get_threatened_trees(self) -> List:
+    def get_threatened_trees(self) -> list:
         """Get all trees with threats"""
         return [tree for tree in self.trees.values() if tree.has_threats()]
 
-    def add_network_segment(self, segment_name: str, tree_ids: List[str]):
+    def add_network_segment(self, segment_name: str, tree_ids: list[str]):
         """
         Add a network segment grouping.
 
@@ -100,7 +100,7 @@ class ForestMap:
         self.network_segments[segment_name] = tree_ids
         self.last_updated = datetime.now()
 
-    def get_network_segment(self, segment_name: str) -> List:
+    def get_network_segment(self, segment_name: str) -> list:
         """Get all trees in a network segment"""
         tree_ids = self.network_segments.get(segment_name, [])
         return [self.trees[tid] for tid in tree_ids if tid in self.trees]
@@ -125,7 +125,7 @@ class ForestMap:
 
         self.last_updated = datetime.now()
 
-    def get_connected_trees(self, tree_id: str) -> List:
+    def get_connected_trees(self, tree_id: str) -> list:
         """Get all trees connected to a specific tree"""
         connected_ids = self.tree_relationships.get(tree_id, [])
         return [self.trees[tid] for tid in connected_ids if tid in self.trees]
@@ -148,7 +148,7 @@ class ForestMap:
         total_health = sum(tree.health_score for tree in self.trees.values())
         return total_health / len(self.trees)
 
-    def get_forest_summary(self) -> Dict[str, Any]:
+    def get_forest_summary(self) -> dict[str, Any]:
         """Get a summary of the entire forest"""
         self.update_statistics()
 
@@ -165,7 +165,7 @@ class ForestMap:
             "network_segments": len(self.network_segments),
         }
 
-    def get_threat_map(self) -> Dict[str, Any]:
+    def get_threat_map(self) -> dict[str, Any]:
         """Get a map of all threats in the forest"""
         threat_map = {}
 

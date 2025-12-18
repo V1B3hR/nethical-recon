@@ -6,9 +6,10 @@ Tag Format: UNK-[ID]-[DATE]
 Use Case: Unknown threats, anomalies requiring investigation
 """
 
-from typing import Dict, Any
-from ..base import BaseTracer, TracerType
 import hashlib
+from typing import Any
+
+from ..base import BaseTracer, TracerType
 
 
 class WhiteTracer(BaseTracer):
@@ -26,7 +27,7 @@ class WhiteTracer(BaseTracer):
         self.marker_prefix = "UNK"
         self.description = "Unknown threat marker - for anomalies requiring investigation"
 
-    def create_tag(self, target: Dict[str, Any]) -> Dict[str, Any]:
+    def create_tag(self, target: dict[str, Any]) -> dict[str, Any]:
         """
         Create unknown threat tag for target
 
@@ -76,18 +77,18 @@ class WhiteTracer(BaseTracer):
         """Get usage guidelines for this tracer"""
         return """
         WHITE TRACER USAGE GUIDELINES:
-        
+
         When to use:
         - Anomalies that don't fit other categories
         - Unknown threat patterns
         - Events requiring further investigation
         - First-time observations
         - Suspicious but unconfirmed activity
-        
+
         Required target fields:
         - Any available identifying information
         - Optional: anomaly_type, anomaly_score, detection_method
-        
+
         Severity: MEDIUM (default)
         Action: Investigate and reclassify with appropriate colored tracer
         """

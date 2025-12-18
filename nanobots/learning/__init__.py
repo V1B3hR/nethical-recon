@@ -1,7 +1,7 @@
 """Learning submodule"""
 
-from .baseline import BaselineLearner
 from .anomaly_ml import SimpleMLAnomalyDetector
+from .baseline import BaselineLearner
 
 __all__ = [
     "BaselineLearner",

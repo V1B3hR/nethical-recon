@@ -4,10 +4,12 @@ Resource Monitor Sensor
 Analogia: "Nerwowe ruchy" (Nervous movements)
 """
 
-import psutil
 import threading
 import time
-from typing import Dict, Any
+from typing import Any
+
+import psutil
+
 from ..base import BaseSensor, SensorStatus
 
 
@@ -17,7 +19,7 @@ class ResourceMonitor(BaseSensor):
     Detects anomalous spikes that may indicate attacks or issues
     """
 
-    def __init__(self, name: str = "resource_monitor", config: Dict[str, Any] = None):
+    def __init__(self, name: str = "resource_monitor", config: dict[str, Any] = None):
         """
         Initialize Resource Monitor
 
@@ -80,7 +82,7 @@ class ResourceMonitor(BaseSensor):
             self.logger.error(f"Error stopping resource monitor: {e}")
             return False
 
-    def check(self) -> Dict[str, Any]:
+    def check(self) -> dict[str, Any]:
         """Perform a single resource check"""
         try:
             metrics = self._get_current_metrics()
@@ -132,7 +134,7 @@ class ResourceMonitor(BaseSensor):
             self.logger.warning(f"Could not establish baseline: {e}")
             self._baseline = {}
 
-    def _get_current_metrics(self) -> Dict[str, Any]:
+    def _get_current_metrics(self) -> dict[str, Any]:
         """
         Get current system resource metrics
 
@@ -152,7 +154,7 @@ class ResourceMonitor(BaseSensor):
             "network_recv_mb": psutil.net_io_counters().bytes_recv / (1024**2),
         }
 
-    def _check_thresholds(self, metrics: Dict[str, Any]):
+    def _check_thresholds(self, metrics: dict[str, Any]):
         """
         Check if metrics exceed thresholds
 
@@ -214,11 +216,11 @@ class ResourceMonitor(BaseSensor):
                     {"current": metrics["memory_percent"], "baseline": self._baseline["memory"], "spike": mem_spike},
                 )
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get resource monitoring statistics"""
         try:
             current_metrics = self._get_current_metrics()
-        except:
+        except Exception:
             current_metrics = {}
 
         return {

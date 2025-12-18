@@ -8,8 +8,9 @@ The crow is:
 - Intelligent, learns the environment
 """
 
-from typing import Dict, Optional, Any
-from .base import BaseThreat, ThreatType, ThreatSeverity
+from typing import Any
+
+from .base import BaseThreat, ThreatSeverity, ThreatType
 
 
 class Crow(BaseThreat):
@@ -24,7 +25,7 @@ class Crow(BaseThreat):
         threat_id: str,
         name: str,
         severity: ThreatSeverity = ThreatSeverity.HIGH,
-        metadata: Dict[str, Any] | None = None,
+        metadata: dict[str, Any] | None = None,
     ):
         """
         Initialize a Crow threat.

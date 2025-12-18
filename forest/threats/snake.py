@@ -8,8 +8,9 @@ The snake:
 - Silent and deadly
 """
 
-from typing import Dict, Optional, Any
-from .base import BaseThreat, ThreatType, ThreatSeverity
+from typing import Any
+
+from .base import BaseThreat, ThreatSeverity, ThreatType
 
 
 class Snake(BaseThreat):
@@ -24,7 +25,7 @@ class Snake(BaseThreat):
         threat_id: str,
         name: str,
         severity: ThreatSeverity = ThreatSeverity.CRITICAL,
-        metadata: Dict[str, Any] | None = None,
+        metadata: dict[str, Any] | None = None,
     ):
         """
         Initialize a Snake threat.

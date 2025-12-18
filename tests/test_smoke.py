@@ -3,8 +3,7 @@ Smoke tests for Nethical Recon package
 These tests verify basic functionality is working
 """
 
-import pytest
-from nethical_recon import __version__, __author__
+from nethical_recon import __author__, __version__
 
 
 def test_version():

@@ -8,12 +8,12 @@ The swarm manager coordinates nanobots across different modes:
 - Forest guard mode (patrol)
 """
 
-from typing import Dict, List, Optional, Any
-from datetime import datetime
 import threading
 import time
+from datetime import datetime
+from typing import Any
 
-from .base import BaseNanobot, ActionResult, NanobotMode, ActionStatus
+from .base import ActionResult, BaseNanobot, NanobotMode
 
 
 class NanobotSwarm:
@@ -32,8 +32,8 @@ class NanobotSwarm:
             swarm_id: Unique identifier for this swarm
         """
         self.swarm_id = swarm_id
-        self.nanobots: Dict[str, BaseNanobot] = {}
-        self.event_queue: List[Dict[str, Any]] = []
+        self.nanobots: dict[str, BaseNanobot] = {}
+        self.event_queue: list[dict[str, Any]] = []
         self.is_active = False
         self.processing_thread: threading.Thread | None = None
         self._lock = threading.Lock()
@@ -83,7 +83,7 @@ class NanobotSwarm:
         """Get nanobot by ID"""
         return self.nanobots.get(nanobot_id)
 
-    def get_nanobots_by_mode(self, mode: NanobotMode) -> List[BaseNanobot]:
+    def get_nanobots_by_mode(self, mode: NanobotMode) -> list[BaseNanobot]:
         """Get all nanobots operating in a specific mode"""
         return [nb for nb in self.nanobots.values() if nb.mode == mode]
 
@@ -111,7 +111,7 @@ class NanobotSwarm:
             for nanobot in self.get_nanobots_by_mode(mode):
                 nanobot.deactivate()
 
-    def submit_event(self, event: Dict[str, Any]):
+    def submit_event(self, event: dict[str, Any]):
         """
         Submit an event to the swarm for processing.
 
@@ -121,7 +121,7 @@ class NanobotSwarm:
         with self._lock:
             self.event_queue.append(event)
 
-    def process_event(self, event: Dict[str, Any]) -> List[ActionResult]:
+    def process_event(self, event: dict[str, Any]) -> list[ActionResult]:
         """
         Process an event through all capable nanobots.
 
@@ -188,7 +188,7 @@ class NanobotSwarm:
             self.processing_thread.join(timeout=5.0)
             self.processing_thread = None
 
-    def get_swarm_status(self) -> Dict[str, Any]:
+    def get_swarm_status(self) -> dict[str, Any]:
         """Get overall swarm status"""
         with self._lock:
             active_count = sum(1 for nb in self.nanobots.values() if nb.is_active)
@@ -217,7 +217,7 @@ class NanobotSwarm:
                 "uptime_seconds": uptime,
             }
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get detailed statistics for all nanobots"""
         stats = {"swarm_status": self.get_swarm_status(), "nanobots": {}}
 
@@ -227,7 +227,7 @@ class NanobotSwarm:
 
         return stats
 
-    def get_recent_actions(self, limit: int = 20) -> List[Dict[str, Any]]:
+    def get_recent_actions(self, limit: int = 20) -> list[dict[str, Any]]:
         """
         Get recent actions from all nanobots.
 

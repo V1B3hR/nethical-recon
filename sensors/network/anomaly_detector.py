@@ -4,14 +4,14 @@ Anomaly Detector Sensor
 Analogia: "Dziwne zachowania" (Suspicious behaviors)
 """
 
-import subprocess
 import os
-import json
+import subprocess
 import threading
 import time
-from typing import Dict, Any, List
-from ..base import BaseSensor, SensorStatus
 from pathlib import Path
+from typing import Any
+
+from ..base import BaseSensor, SensorStatus
 
 
 class AnomalyDetector(BaseSensor):
@@ -20,7 +20,7 @@ class AnomalyDetector(BaseSensor):
     Monitors for unusual patterns that deviate from normal behavior
     """
 
-    def __init__(self, name: str = "anomaly_detector", config: Dict[str, Any] = None):
+    def __init__(self, name: str = "anomaly_detector", config: dict[str, Any] = None):
         """
         Initialize Anomaly Detector
 
@@ -49,7 +49,7 @@ class AnomalyDetector(BaseSensor):
         try:
             result = subprocess.run(["which", self.zeek_path], capture_output=True, timeout=5)
             if result.returncode != 0:
-                self.logger.warning(f"Zeek not found. Anomaly detection will use fallback mode")
+                self.logger.warning("Zeek not found. Anomaly detection will use fallback mode")
                 return True  # Allow fallback mode
         except Exception as e:
             self.logger.warning(f"Could not validate Zeek: {e}")
@@ -110,7 +110,7 @@ class AnomalyDetector(BaseSensor):
             self.logger.error(f"Error stopping anomaly detector: {e}")
             return False
 
-    def check(self) -> Dict[str, Any]:
+    def check(self) -> dict[str, Any]:
         """Perform a single anomaly check"""
         try:
             # Check if Zeek logs exist and analyze them
@@ -168,7 +168,7 @@ class AnomalyDetector(BaseSensor):
             self.logger.warning(f"Could not start Zeek: {e}. Using fallback mode")
             return False
 
-    def _analyze_zeek_logs(self) -> List[Dict[str, Any]]:
+    def _analyze_zeek_logs(self) -> list[dict[str, Any]]:
         """
         Analyze Zeek logs for anomalies
 
@@ -197,7 +197,7 @@ class AnomalyDetector(BaseSensor):
 
         return anomalies
 
-    def _analyze_connection_anomalies(self, log_path: str) -> List[Dict[str, Any]]:
+    def _analyze_connection_anomalies(self, log_path: str) -> list[dict[str, Any]]:
         """Analyze connection logs for anomalies"""
         anomalies = []
         # Placeholder for connection anomaly detection
@@ -207,7 +207,7 @@ class AnomalyDetector(BaseSensor):
         # - Suspicious connection durations
         return anomalies
 
-    def _analyze_dns_anomalies(self, log_path: str) -> List[Dict[str, Any]]:
+    def _analyze_dns_anomalies(self, log_path: str) -> list[dict[str, Any]]:
         """Analyze DNS logs for anomalies"""
         anomalies = []
         # Placeholder for DNS anomaly detection
@@ -217,7 +217,7 @@ class AnomalyDetector(BaseSensor):
         # - Unusual query volumes
         return anomalies
 
-    def _analyze_http_anomalies(self, log_path: str) -> List[Dict[str, Any]]:
+    def _analyze_http_anomalies(self, log_path: str) -> list[dict[str, Any]]:
         """Analyze HTTP logs for anomalies"""
         anomalies = []
         # Placeholder for HTTP anomaly detection
@@ -227,11 +227,11 @@ class AnomalyDetector(BaseSensor):
         # - Data exfiltration patterns
         return anomalies
 
-    def _analyze_notices(self, log_path: str) -> List[Dict[str, Any]]:
+    def _analyze_notices(self, log_path: str) -> list[dict[str, Any]]:
         """Analyze Zeek notices (alerts)"""
         anomalies = []
         try:
-            with open(log_path, "r") as f:
+            with open(log_path) as f:
                 for line in f:
                     if line.startswith("#"):
                         continue
@@ -242,7 +242,7 @@ class AnomalyDetector(BaseSensor):
 
         return anomalies
 
-    def _handle_anomaly(self, anomaly: Dict[str, Any]):
+    def _handle_anomaly(self, anomaly: dict[str, Any]):
         """
         Handle detected anomaly
 
@@ -258,7 +258,7 @@ class AnomalyDetector(BaseSensor):
 
         self.raise_alert(severity, f"Network anomaly detected: {anomaly_type}", anomaly)
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get anomaly detection statistics"""
         return {
             "status": self.status.value,

@@ -73,6 +73,7 @@ def job_submit(
                 target_type = TargetType.DOMAIN  # Default to domain
                 try:
                     import ipaddress
+
                     ip = ipaddress.ip_address(target)
                     if isinstance(ip, ipaddress.IPv4Address):
                         target_type = TargetType.IPV4
@@ -167,9 +168,7 @@ def job_status(
                         typer.echo(f"    Findings: {len(findings)}")
                         severity_counts = {}
                         for finding in findings:
-                            severity_counts[finding.severity.value] = (
-                                severity_counts.get(finding.severity.value, 0) + 1
-                            )
+                            severity_counts[finding.severity.value] = severity_counts.get(finding.severity.value, 0) + 1
                         for severity, count in sorted(severity_counts.items()):
                             typer.echo(f"      {severity}: {count}")
 
@@ -184,7 +183,6 @@ def job_list(
 ):
     """List recent scan jobs."""
     from nethical_recon.core.storage import init_database
-    from nethical_recon.core.storage.repository import ScanJobRepository
 
     try:
         db = init_database()
@@ -193,6 +191,7 @@ def job_list(
 
             # Get all jobs (in production, add pagination)
             from sqlalchemy import select
+
             from nethical_recon.core.storage.models import ScanJobModel
 
             stmt = select(ScanJobModel).order_by(ScanJobModel.created_at.desc()).limit(limit)
@@ -223,6 +222,7 @@ def job_list(
     except Exception as e:
         typer.echo(f"Error: {e}", err=True)
         raise typer.Exit(1) from e
+
 
 @job_app.command("logs")
 def job_logs(

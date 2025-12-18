@@ -5,8 +5,8 @@ Provides recommendations for next actions, best weapon selection,
 hunt strategy, and bird deployment.
 """
 
-from typing import Dict, Any, List, Optional
 import logging
+from typing import Any
 
 
 class HuntAdvisor:
@@ -23,7 +23,7 @@ class HuntAdvisor:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
 
-    def recommend_next_action(self, situation: Dict[str, Any]) -> Dict[str, Any]:
+    def recommend_next_action(self, situation: dict[str, Any]) -> dict[str, Any]:
         """
         Recommend next action based on current situation
 
@@ -74,7 +74,7 @@ class HuntAdvisor:
             "steps": self._generate_action_steps(action, highest_threat),
         }
 
-    def _generate_action_steps(self, action: str, threat: Dict) -> List[str]:
+    def _generate_action_steps(self, action: str, threat: dict) -> list[str]:
         """Generate detailed action steps"""
         steps = {
             "MARK_AND_CONTAIN": [
@@ -102,7 +102,7 @@ class HuntAdvisor:
         }
         return steps.get(action, ["Continue monitoring"])
 
-    def select_best_weapon(self, threat: Dict[str, Any], environment: Dict[str, Any]) -> Dict[str, Any]:
+    def select_best_weapon(self, threat: dict[str, Any], environment: dict[str, Any]) -> dict[str, Any]:
         """
         Select best marker weapon for the threat
 
@@ -151,7 +151,7 @@ class HuntAdvisor:
             "alternative_options": self._suggest_alternatives(weapon_mode),
         }
 
-    def _suggest_alternatives(self, primary_mode: str) -> List[Dict[str, str]]:
+    def _suggest_alternatives(self, primary_mode: str) -> list[dict[str, str]]:
         """Suggest alternative weapon options"""
         alternatives = {
             "ELECTRIC": [
@@ -169,7 +169,7 @@ class HuntAdvisor:
         }
         return alternatives.get(primary_mode, [])
 
-    def devise_hunt_strategy(self, situation: Dict[str, Any]) -> Dict[str, Any]:
+    def devise_hunt_strategy(self, situation: dict[str, Any]) -> dict[str, Any]:
         """
         Devise comprehensive hunt strategy
 
@@ -210,7 +210,7 @@ class HuntAdvisor:
             "contingency_plans": self._prepare_contingencies(strategy_type),
         }
 
-    def _plan_hunt_phases(self, strategy: str, threats: List[Dict]) -> List[Dict[str, Any]]:
+    def _plan_hunt_phases(self, strategy: str, threats: list[dict]) -> list[dict[str, Any]]:
         """Plan hunt phases"""
         if strategy == "AGGRESSIVE":
             return [
@@ -251,7 +251,7 @@ class HuntAdvisor:
                 {"phase": 3, "name": "RECOVER", "duration": "1-2 hours", "actions": ["Restore forest health"]},
             ]
 
-    def _allocate_resources(self, strategy: str, available: Dict) -> Dict[str, Any]:
+    def _allocate_resources(self, strategy: str, available: dict) -> dict[str, Any]:
         """Allocate resources for strategy"""
         allocations = {
             "AGGRESSIVE": {
@@ -292,7 +292,7 @@ class HuntAdvisor:
 
         return f"{hours}h {minutes}m"
 
-    def _define_success_criteria(self, strategy: str) -> List[str]:
+    def _define_success_criteria(self, strategy: str) -> list[str]:
         """Define success criteria"""
         base_criteria = [
             "All threats marked and documented",
@@ -307,7 +307,7 @@ class HuntAdvisor:
 
         return base_criteria
 
-    def _prepare_contingencies(self, strategy: str) -> List[Dict[str, str]]:
+    def _prepare_contingencies(self, strategy: str) -> list[dict[str, str]]:
         """Prepare contingency plans"""
         return [
             {"scenario": "New threat emerges", "action": "Reassess priorities, deploy Falcon"},
@@ -315,7 +315,7 @@ class HuntAdvisor:
             {"scenario": "Threat escalation", "action": "Activate Eagle mode, request backup"},
         ]
 
-    def recommend_bird_deployment(self, situation: Dict[str, Any]) -> Dict[str, Any]:
+    def recommend_bird_deployment(self, situation: dict[str, Any]) -> dict[str, Any]:
         """
         Recommend bird deployment strategy
 

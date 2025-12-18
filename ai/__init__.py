@@ -15,14 +15,14 @@ recommendations for the Nethical Hunter system:
 🎭 THREAT CLASSIFIER - Crow/Magpie/Squirrel classification
 """
 
-from .analyzer import ThreatAnalyzer
-from .reporter import AIReporter
-from .predictor import ThreatPredictor
 from .advisor import HuntAdvisor
-from .correlator import StainCorrelator
-from .learner import PatternLearner
-from .forest_ai import ForestAI
+from .analyzer import ThreatAnalyzer
 from .bird_coordinator import BirdCoordinator
+from .correlator import StainCorrelator
+from .forest_ai import ForestAI
+from .learner import PatternLearner
+from .predictor import ThreatPredictor
+from .reporter import AIReporter
 from .threat_classifier import ThreatClassifier
 
 __all__ = [

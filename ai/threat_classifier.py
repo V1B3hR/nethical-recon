@@ -5,9 +5,9 @@ Classifies threats into specific animal types (Crow, Magpie, Squirrel, Snake, Pa
 based on behavior patterns and indicators.
 """
 
-from typing import Dict, Any, List, Optional
-from datetime import datetime
 import logging
+from datetime import datetime
+from typing import Any
 
 
 class ThreatClassifier:
@@ -27,7 +27,7 @@ class ThreatClassifier:
         self.logger = logging.getLogger(__name__)
         self.classification_rules = self._load_classification_rules()
 
-    def _load_classification_rules(self) -> Dict[str, Dict[str, Any]]:
+    def _load_classification_rules(self) -> dict[str, dict[str, Any]]:
         """Load classification rules for each threat type"""
         return {
             "crow": {
@@ -103,7 +103,7 @@ class ThreatClassifier:
             },
         }
 
-    def classify_threat(self, threat_data: Dict[str, Any]) -> Dict[str, Any]:
+    def classify_threat(self, threat_data: dict[str, Any]) -> dict[str, Any]:
         """
         Classify a threat into one of the animal types
 
@@ -152,7 +152,7 @@ class ThreatClassifier:
             "timestamp": datetime.now().isoformat(),
         }
 
-    def _calculate_classification_score(self, indicators: set, behaviors: set, rules: Dict) -> float:
+    def _calculate_classification_score(self, indicators: set, behaviors: set, rules: dict) -> float:
         """Calculate classification score for a threat type"""
         rule_indicators = set(rules["indicators"])
         rule_behaviors = set(rules["behaviors"])
@@ -174,7 +174,7 @@ class ThreatClassifier:
 
         return total_score
 
-    def _get_classification_recommendations(self, threat_type: str) -> List[str]:
+    def _get_classification_recommendations(self, threat_type: str) -> list[str]:
         """Get specific recommendations for classified threat"""
         recommendations = {
             "crow": [
@@ -223,7 +223,7 @@ class ThreatClassifier:
 
         return recommendations.get(threat_type, ["Mark threat and monitor"])
 
-    def classify_multiple_threats(self, threats: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def classify_multiple_threats(self, threats: list[dict[str, Any]]) -> dict[str, Any]:
         """
         Classify multiple threats at once
 
@@ -254,7 +254,7 @@ class ThreatClassifier:
             "summary": self._generate_classification_summary(counts),
         }
 
-    def _generate_classification_summary(self, counts: Dict[str, int]) -> str:
+    def _generate_classification_summary(self, counts: dict[str, int]) -> str:
         """Generate human-readable classification summary"""
         total = sum(counts.values())
         if total == 0:
@@ -280,7 +280,7 @@ class ThreatClassifier:
 
         return ", ".join(parts) if parts else "No threats classified"
 
-    def suggest_bird_for_threat(self, threat_classification: Dict[str, Any]) -> Dict[str, Any]:
+    def suggest_bird_for_threat(self, threat_classification: dict[str, Any]) -> dict[str, Any]:
         """
         Suggest which bird should handle this threat type
 
@@ -353,7 +353,7 @@ class ThreatClassifier:
             "deployment_priority": "CRITICAL" if confidence >= 0.8 else "HIGH" if confidence >= 0.6 else "MEDIUM",
         }
 
-    def get_threat_statistics(self) -> Dict[str, Any]:
+    def get_threat_statistics(self) -> dict[str, Any]:
         """Get statistics about threat classifications"""
         return {
             "supported_types": list(self.classification_rules.keys()),

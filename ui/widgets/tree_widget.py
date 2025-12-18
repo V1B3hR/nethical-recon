@@ -2,9 +2,7 @@
 Tree widget for forest visualization
 """
 
-from typing import Dict, List, Optional, Tuple
 from rich.tree import Tree as RichTree
-from rich.text import Text
 
 from ..base import ThreatType
 
@@ -14,8 +12,8 @@ class TreeWidget:
 
     def __init__(self, name: str = "Unknown"):
         self.name = name
-        self.branches: List[Dict[str, any]] = []
-        self.threats: List[Tuple[ThreatType, str]] = []
+        self.branches: list[dict[str, any]] = []
+        self.threats: list[tuple[ThreatType, str]] = []
         self.health: str = "healthy"
 
     def add_branch(self, name: str, leaves_count: int = 0):
@@ -77,7 +75,7 @@ class TreeWidget:
         return self.render_simple()
 
 
-def create_forest_map(trees: List[TreeWidget]) -> str:
+def create_forest_map(trees: list[TreeWidget]) -> str:
     """
     Create a simple ASCII forest map
 
@@ -113,7 +111,7 @@ def create_forest_map(trees: List[TreeWidget]) -> str:
     return "\n".join(lines)
 
 
-def render_forest_status(trees_count: int, branches_count: int, leaves_count: int, threats: Dict[str, int]) -> str:
+def render_forest_status(trees_count: int, branches_count: int, leaves_count: int, threats: dict[str, int]) -> str:
     """
     Render forest status summary
 

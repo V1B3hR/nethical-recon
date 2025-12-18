@@ -6,9 +6,10 @@ Tag Format: CRW-[TYPE]-[TREE]-[DATE]
 Use Case: Malware detected in forest canopy, crows in trees
 """
 
-from typing import Dict, Any
-from ..base import BaseTracer, TracerType
 import hashlib
+from typing import Any
+
+from ..base import BaseTracer, TracerType
 
 
 class BlackTracer(BaseTracer):
@@ -26,7 +27,7 @@ class BlackTracer(BaseTracer):
         self.marker_prefix = "CRW"
         self.description = "Crow marker - for malware in forest canopy"
 
-    def create_tag(self, target: Dict[str, Any]) -> Dict[str, Any]:
+    def create_tag(self, target: dict[str, Any]) -> dict[str, Any]:
         """
         Create crow tag for target
 
@@ -84,21 +85,21 @@ class BlackTracer(BaseTracer):
         """Get usage guidelines for this tracer"""
         return """
         BLACK TRACER USAGE GUIDELINES:
-        
+
         When to use:
         - Malware detected in forest tree crowns
         - Patient, waiting threats (crow behavior)
         - Threats hiding in the canopy
         - Obfuscated malware in process trees
         - APT-style persistent threats
-        
+
         Required target fields:
         - crow_type OR threat_type
         - forest_location (with tree, branch, crown info)
         - Optional: behavior, patience_level, hiding_method
-        
+
         Severity: HIGH
         Action: Hunt and eliminate the crow from the canopy
-        
+
         Note: Use this for forest-specific threat tracking
         """
