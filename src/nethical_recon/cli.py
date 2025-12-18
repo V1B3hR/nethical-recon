@@ -11,7 +11,7 @@ app = typer.Typer(
 )
 
 # Job management subcommand
-job_app = typer. Typer(help="Job management commands")
+job_app = typer.Typer(help="Job management commands")
 app.add_typer(job_app, name="job")
 
 
@@ -32,7 +32,7 @@ def interactive():
 
 @app.command()
 def scan(
-    target:  str = typer.Argument(... , help="Target to scan (domain, IP, or CIDR)"),
+    target: str = typer.Argument(..., help="Target to scan (domain, IP, or CIDR)"),
     output: str | None = typer.Option(None, "--output", "-o", help="Output directory"),
 ):
     """Scan a target."""
@@ -43,8 +43,8 @@ def scan(
 # Job management commands
 @job_app.command("submit")
 def job_submit(
-    target:  str = typer.Argument(... , help="Target to scan"),
-    name: str = typer.Option(... , "--name", "-n", help="Job name"),
+    target: str = typer.Argument(..., help="Target to scan"),
+    name: str = typer.Option(..., "--name", "-n", help="Job name"),
     tools: str = typer.Option("nmap", "--tools", "-t", help="Comma-separated list of tools"),
     description: str | None = typer.Option(None, "--description", "-d", help="Job description"),
 ):
@@ -68,7 +68,7 @@ def job_submit(
             existing_target = target_repo.get_by_value(target)
             if existing_target:
                 target_obj = existing_target
-                typer.echo(f"Using existing target: {target_obj. id}")
+                typer.echo(f"Using existing target: {target_obj.id}")
             else:
                 # Determine target type using proper IP validation
                 target_type = TargetType.DOMAIN  # Default to domain
@@ -101,7 +101,7 @@ def job_submit(
             job = job_repo.create(job)
             session.commit()
 
-            typer. echo(f"✓ Created job: {job.id}")
+            typer.echo(f"✓ Created job: {job.id}")
             typer.echo(f"  Target: {target}")
             typer.echo(f"  Tools: {', '.join(tool_list)}")
 
@@ -116,9 +116,9 @@ def job_submit(
         raise typer.Exit(1) from e
 
 
-@job_app. command("status")
+@job_app.command("status")
 def job_status(
-    job_id:  str = typer.Argument(... , help="Job ID to check"),
+    job_id: str = typer.Argument(..., help="Job ID to check"),
 ):
     """Check the status of a scan job."""
     from uuid import UUID
@@ -141,14 +141,14 @@ def job_status(
 
             typer.echo(f"\n=== Job Status: {job.name} ===")
             typer.echo(f"ID: {job.id}")
-            typer.echo(f"Status: {job.status.value. upper()}")
+            typer.echo(f"Status: {job.status.value.upper()}")
             typer.echo(f"Created: {job.created_at}")
             if job.started_at:
-                typer. echo(f"Started: {job.started_at}")
+                typer.echo(f"Started: {job.started_at}")
             if job.completed_at:
                 typer.echo(f"Completed: {job.completed_at}")
             if job.error_message:
-                typer.echo(f"Error: {job. error_message}")
+                typer.echo(f"Error: {job.error_message}")
 
             # Get tool runs
             tool_runs = tool_repo.get_by_job(UUID(job_id))
@@ -159,10 +159,10 @@ def job_status(
                     typer.echo(f"    Status: {run.status.value}")
                     typer.echo(f"    Exit code: {run.exit_code}")
                     if run.duration_seconds:
-                        typer. echo(f"    Duration: {run.duration_seconds:.2f}s")
+                        typer.echo(f"    Duration: {run.duration_seconds:.2f}s")
 
                     # Get findings for this run
-                    findings = finding_repo.get_by_run(run. id)
+                    findings = finding_repo.get_by_run(run.id)
                     if findings:
                         typer.echo(f"    Findings: {len(findings)}")
                         severity_counts = {}
@@ -180,7 +180,7 @@ def job_status(
 
 @job_app.command("list")
 def job_list(
-    limit: int = typer. Option(10, "--limit", "-l", help="Maximum number of jobs to show"),
+    limit: int = typer.Option(10, "--limit", "-l", help="Maximum number of jobs to show"),
 ):
     """List recent scan jobs."""
     from sqlalchemy import select
@@ -194,12 +194,12 @@ def job_list(
         with db.session() as session:
 
             # Get all jobs (in production, add pagination)
-            stmt = select(ScanJobModel).order_by(ScanJobModel. created_at.desc()).limit(limit)
+            stmt = select(ScanJobModel).order_by(ScanJobModel.created_at.desc()).limit(limit)
             result = session.execute(stmt)
             jobs = result.scalars().all()
 
             if not jobs:
-                typer. echo("No jobs found")
+                typer.echo("No jobs found")
                 return
 
             typer.echo(f"\n=== Recent Jobs (showing {len(jobs)}) ===\n")
@@ -210,14 +210,14 @@ def job_list(
                     "completed": "✓",
                     "failed": "✗",
                     "cancelled": "⊘",
-                }.get(job. status, "? ")
+                }.get(job.status, "?")
 
                 typer.echo(f"{status_emoji} {job.name}")
                 typer.echo(f"  ID: {job.id}")
-                typer.echo(f"  Status: {job. status}")
+                typer.echo(f"  Status: {job.status}")
                 typer.echo(f"  Created: {job.created_at}")
-                typer.echo(f"  Tools: {', '.join(job. tools)}")
-                typer. echo()
+                typer.echo(f"  Tools: {', '.join(job.tools)}")
+                typer.echo()
 
     except Exception as e:
         typer.echo(f"Error: {e}", err=True)
@@ -226,7 +226,7 @@ def job_list(
 @job_app.command("logs")
 def job_logs(
     job_id: str = typer.Argument(..., help="Job ID to show logs for"),
-    tool:  str | None = typer.Option(None, "--tool", "-t", help="Filter by tool name"),
+    tool: str | None = typer.Option(None, "--tool", "-t", help="Filter by tool name"),
 ):
     """Show logs for a scan job."""
     from uuid import UUID
@@ -242,7 +242,7 @@ def job_logs(
 
             tool_runs = tool_repo.get_by_job(UUID(job_id))
             if not tool_runs:
-                typer. echo("No tool runs found for this job")
+                typer.echo("No tool runs found for this job")
                 return
 
             for run in tool_runs:
@@ -284,5 +284,5 @@ def main(argv: list[str] | None = None) -> int:
     except SystemExit as e:
         return e.code if e.code else 0
     except Exception as e:
-        typer. echo(f"Error: {e}", err=True)
+        typer.echo(f"Error: {e}", err=True)
         return 1
