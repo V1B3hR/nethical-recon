@@ -115,8 +115,8 @@ def job_submit(
             typer.echo(f"\nUse 'nethical job status {job.id}' to check progress")
 
     except Exception as e:
-        typer.echo(f"Error: {e}", err=True)
-        raise typer.Exit(1)
+    typer.echo(f"Error: {e}", err=True)
+    raise typer.Exit(1) from e
 
 
 @job_app.command("status")
