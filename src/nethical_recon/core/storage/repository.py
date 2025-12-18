@@ -276,5 +276,5 @@ class IOCRepository(BaseRepository[IOC, IOCModel]):
         Returns:
             List of active IOCs.
         """
-        orm_instances = self.session.query(self.orm_model).filter(self.orm_model.is_active == True).all()
+        orm_instances = self.session.query(self.orm_model).filter(self.orm_model.is_active).all()
         return [self._to_domain(orm_instance) for orm_instance in orm_instances]
