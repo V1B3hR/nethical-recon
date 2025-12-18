@@ -9,7 +9,7 @@
 
 - ✅ **PHASE A** — Foundation & Repo Professionalization (Completed: 2025-12-16)
 - ✅ **PHASE B** — Unified Data Model + Normalization (Completed: 2025-12-17)
-- ⏳ **PHASE C** — Worker Queue + Scheduler + Concurrency Policy (Not Started)
+- ✅ **PHASE C** — Worker Queue + Scheduler + Concurrency Policy (Completed: 2025-12-18)
 - ⏳ **PHASE D** — API (REST) + OpenAPI + Auth (Not Started)
 - ⏳ **PHASE E** — Observability: Logging + Metrics + Tracing (Not Started)
 - ⏳ **PHASE F** — Docker / Kubernetes / Helm (Not Started)
@@ -155,6 +155,22 @@ All objectives achieved:
 ---
 
 ### PHASE C — Worker Queue + Scheduler + Concurrency Policy (3–6 tyg.)
+**Status:** ✅ COMPLETE (Implemented 2025-12-18)
+
+All objectives achieved:
+- ✅ Celery + Redis worker queue
+- ✅ Four core tasks (run_scan_job, run_tool, normalize_results, generate_report)
+- ✅ Celery Beat scheduler for periodic scans
+- ✅ Comprehensive policy engine with RoE
+- ✅ Rate limiting (token bucket algorithm)
+- ✅ Concurrency controls (jobs, tools, per-job tools)
+- ✅ Network allowlist/denylist
+- ✅ High-risk tool approval mechanism
+- ✅ YAML configuration support
+- ✅ Worker management CLI (nethical-worker)
+- ✅ Docker Compose for local development
+- ✅ 15 comprehensive policy tests passing
+
 **Cel:** skany asynchroniczne, stabilne, skalowalne, zgodne z RoE.
 
 **C.1 Queue**
