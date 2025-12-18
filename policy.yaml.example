@@ -1,0 +1,57 @@
+# Nethical Recon - Rules of Engagement (RoE) Configuration
+# This file defines the security policies and operational limits for scan execution.
+
+# Rate Limiting Policy
+# Controls the rate at which requests are sent to targets
+rate_limit:
+  requests_per_second: 1.0  # Maximum requests per second (1-100)
+  burst_size: 5             # Maximum burst size for token bucket algorithm
+
+# Concurrency Policy
+# Controls how many jobs and tools can run simultaneously
+concurrency:
+  max_parallel_jobs: 5              # Maximum number of jobs running at once (1-50)
+  max_parallel_tools: 3             # Maximum total tools running at once (1-20)
+  max_parallel_tools_per_job: 2     # Maximum tools per job (1-10)
+
+# Network Access Policy
+# Controls which targets are allowed or denied
+network:
+  # Allowlist: Only these networks/hosts can be scanned
+  # If empty and require_explicit_approval is false, all targets are allowed
+  allowlist:
+    - "192.168.0.0/16"      # RFC 1918 private network
+    - "10.0.0.0/8"          # RFC 1918 private network
+    - "172.16.0.0/12"       # RFC 1918 private network
+    - "example.com"         # Specific domain
+
+  # Denylist: These networks/hosts are explicitly blocked
+  denylist:
+    - "127.0.0.0/8"         # Localhost
+    - "169.254.0.0/16"      # Link-local
+    - "224.0.0.0/4"         # Multicast
+
+  # If true, targets must be explicitly in allowlist
+  require_explicit_approval: true
+
+# Tool Policy
+# Controls which tools can be used and under what conditions
+tools:
+  # High-risk tools that require explicit approval via environment variable
+  high_risk_tools:
+    - "metasploit"
+    - "sqlmap"
+    - "hydra"
+    - "medusa"
+    - "patator"
+    - "thc-hydra"
+
+  # If true, high-risk tools require NETHICAL_APPROVE_<TOOLNAME>=true env var
+  require_approval_for_high_risk: true
+
+  # Tools that are completely disabled
+  disabled_tools: []
+
+# Audit and Compliance
+audit_all_actions: true          # Log all scan activities
+require_legal_consent: true      # Require legal consent before scanning

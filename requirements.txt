@@ -47,6 +47,11 @@ urllib3>=1.26.0
 rich>=13.0.0
 textual>=0.41.0
 
+# Worker Queue & Scheduler dependencies (Phase C)
+celery>=5.3.0
+redis>=5.0.0
+pyyaml>=6.0.0
+
 # Optional: For enhanced features (install as needed)
 # Note: Some features require system tools like:
 # - tcpdump, zeek (Fala 1)

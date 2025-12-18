@@ -45,7 +45,20 @@ def test_cli_app_structure():
         if hasattr(cmd, "callback") and cmd.callback:
             commands.append(cmd.callback.__name__)
 
+    # Get registered groups
+    groups = []
+    for group in app.registered_groups:
+        if hasattr(group, "typer_instance") and group.typer_instance:
+            # Get the name passed to add_typer
+            if hasattr(group, "name"):
+                groups.append(group.name)
+
     # Check for expected commands
-    expected_commands = ["version", "interactive", "scan", "job", "report"]
+    expected_commands = ["version", "interactive", "scan", "report"]
     for cmd in expected_commands:
         assert cmd in commands, f"Expected command '{cmd}' not found in CLI. Found: {commands}"
+    
+    # Check for expected groups
+    expected_groups = ["job"]
+    for grp in expected_groups:
+        assert grp in groups, f"Expected group '{grp}' not found in CLI. Found: {groups}"
