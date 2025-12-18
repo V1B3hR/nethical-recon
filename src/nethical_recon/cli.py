@@ -61,14 +61,15 @@ def job_submit(
         db = init_database()
 
         with db.session() as session:
-            target_repo = TargetRepository(session)
-            
-            # Create or find target
-            existing_target = target_repo.get_by_value(target)
-            if existing_target:
-                target_obj = existing_target
-                typer.echo(f"Using existing target: {target_obj.id}")
-            else:
+    target_repo = TargetRepository(session)
+    job_repo = ScanJobRepository(session)  # Initialize job_repo
+    
+    # Create or find target
+    existing_target = target_repo.get_by_value(target)
+    if existing_target:
+        target_obj = existing_target
+        typer.echo(f"Using existing target: {target_obj.id}")
+    else:
                 # Determine target type using proper IP validation
                 target_type = TargetType.DOMAIN  # Default to domain
                 try:
