@@ -41,8 +41,6 @@ def scan(
 
 
 # Job management commands
-
-
 @job_app.command("submit")
 def job_submit(
     target: str = typer.Argument(..., help="Target to scan"),
@@ -115,8 +113,8 @@ def job_submit(
             typer.echo(f"\nUse 'nethical job status {job.id}' to check progress")
 
     except Exception as e:
-    typer.echo(f"Error: {e}", err=True)
-    raise typer.Exit(1) from e
+        typer.echo(f"Error: {e}", err=True)
+        raise typer.Exit(1) from e
 
 
 @job_app.command("status")
@@ -177,8 +175,8 @@ def job_status(
                             typer.echo(f"      {severity}: {count}")
 
     except Exception as e:
-    typer.echo(f"Error: {e}", err=True)
-    raise typer.Exit(1) from e
+        typer.echo(f"Error: {e}", err=True)
+        raise typer.Exit(1) from e
 
 
 @job_app.command("list")
@@ -226,8 +224,8 @@ def job_list(
                 typer.echo()
 
     except Exception as e:
-    typer.echo(f"Error: {e}", err=True)
-    raise typer.Exit(1) from e
+        typer.echo(f"Error: {e}", err=True)
+        raise typer.Exit(1) from e
 
 @job_app.command("logs")
 def job_logs(
@@ -272,8 +270,8 @@ def job_logs(
                         typer.echo(f"... ({len(run.stderr) - 1000} more characters)")
 
     except Exception as e:
-    typer.echo(f"Error: {e}", err=True)
-    raise typer.Exit(1) from e
+        typer.echo(f"Error: {e}", err=True)
+        raise typer.Exit(1) from e
 
 @app.command()
 def report(job_id: str | None = typer.Argument(None, help="Job ID to generate report for")):
