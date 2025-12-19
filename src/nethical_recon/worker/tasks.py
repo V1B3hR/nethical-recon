@@ -99,7 +99,7 @@ def run_scan_job(self, job_id: str) -> dict:
 
             # Update job status
             job.status = JobStatus.RUNNING
-            job.started_at = datetime.now(timezone.utc)
+            job.started_at = datetime.now(timezone.UTC)
             job_repo.update(job)
             session.commit()
 
@@ -131,7 +131,7 @@ def run_scan_job(self, job_id: str) -> dict:
                 job = job_repo.get_by_id(job_uuid)
                 if job:
                     job.status = JobStatus.FAILED
-                    job.completed_at = datetime.now(timezone.utc)
+                    job.completed_at = datetime.now(timezone.UTC)
                     job.error_message = str(e)
                     job_repo.update(job)
                     session.commit()
@@ -184,7 +184,7 @@ def run_tool(self, tool_name: str, job_id: str, target: str) -> dict:
                 tool_version="unknown",  # Will be detected
                 command="",  # Will be set below
                 status=ToolStatus.RUNNING,
-                started_at=datetime.now(timezone.utc),
+                started_at=datetime.now(timezone.UTC),
             )
 
             # Build command based on tool
@@ -218,7 +218,7 @@ def run_tool(self, tool_name: str, job_id: str, target: str) -> dict:
                 tool_run.stderr = result.stderr
                 tool_run.exit_code = result.returncode
                 tool_run.status = ToolStatus.COMPLETED if result.returncode == 0 else ToolStatus.FAILED
-                tool_run.completed_at = datetime.now(timezone.utc)
+                tool_run.completed_at = datetime.now(timezone.UTC)
                 tool_run.duration_seconds = duration
 
                 tool_repo.update(tool_run)
@@ -240,7 +240,7 @@ def run_tool(self, tool_name: str, job_id: str, target: str) -> dict:
 
             except subprocess.TimeoutExpired:
                 tool_run.status = ToolStatus.FAILED
-                tool_run.completed_at = datetime.now(timezone.utc)
+                tool_run.completed_at = datetime.now(timezone.UTC)
                 tool_run.error_message = "Command timeout"
                 tool_repo.update(tool_run)
                 session.commit()
@@ -403,13 +403,13 @@ def _generate_markdown_report(job, tool_runs, findings) -> str:
     lines = [
         f"# Scan Report: {job.name}",
         f"\n## Summary",
-        f"- **Job ID**: {job.id}",
+         "- **Job ID**: {job.id}",
         f"- **Status**: {job.status.value}",
         f"- **Created**: {job.created_at}",
         f"- **Started**: {job.started_at}",
         f"- **Completed**: {job.completed_at}",
         f"- **Total Findings**: {len(findings)}",
-        f"\n## Tool Runs",
+         "\n## Tool Runs",
     ]
 
     for run in tool_runs:
@@ -418,7 +418,7 @@ def _generate_markdown_report(job, tool_runs, findings) -> str:
         lines.append(f"- Duration: {run.duration_seconds:.2f}s" if run.duration_seconds else "- Duration: N/A")
         lines.append(f"- Exit Code: {run.exit_code}")
 
-    lines.append(f"\n## Findings by Severity")
+    lines.append("\n## Findings by Severity")
 
     # Group findings by severity
     by_severity = {}
