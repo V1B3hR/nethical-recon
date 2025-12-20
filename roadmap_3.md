@@ -89,7 +89,7 @@ Poniżej etapy są ułożone tak, by **szybko uzyskać profesjonalny “core”*
 **A.1 Packaging & structure** ✅
 - ✅ Migracja do `pyproject.toml` (Poetry lub uv/pip-tools).
 - ✅ Struktura `src/nethical_recon/...` + entrypoint `nethical`.
-- ✅ Konfiguracja `ruff`, `black`, `mypy` (opcjonalnie), `pre-commit`.
+- ✅ Konfiguracja `black`, `mypy` (opcjonalnie), `pre-commit`.
 
 **A.2 CI/CD** ✅
 - ✅ GitHub Actions:
