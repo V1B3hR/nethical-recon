@@ -11,14 +11,14 @@ app = typer.Typer(
 )
 
 # Job management subcommand
-job_app = typer.Typer(help="Job management commands")
+job_app = typer. Typer(help="Job management commands")
 app.add_typer(job_app, name="job")
 
 
 @app.command()
 def version():
     """Show version information."""
-    from .   import __author__, __version__
+    from .  import __author__, __version__
 
     typer.echo(f"Nethical Recon v{__version__}")
     typer.echo(f"Author: {__author__}")
@@ -32,11 +32,11 @@ def interactive():
 
 @app.command()
 def scan(
-    target: str = typer. Argument(..., help="Target to scan (domain, IP, or CIDR)"),
+    target: str = typer.Argument(..., help="Target to scan (domain, IP, or CIDR)"),
     output: str | None = typer.Option(None, "--output", "-o", help="Output directory"),
 ):
     """Scan a target."""
-    typer.echo(f"Scan command - Target: {target}, Output: {output}")
+    typer. echo(f"Scan command - Target: {target}, Output: {output}")
     typer.echo("Full implementation coming in Phase B")
 
 
@@ -51,10 +51,10 @@ def job_submit(
     """Submit a new scan job to the worker queue."""
     import ipaddress
 
-    from nethical_recon.core.  models import ScanJob, Target, TargetScope, TargetType
-    from nethical_recon.core.  storage import init_database
-    from nethical_recon.core.  storage. repository import ScanJobRepository, TargetRepository
-    from nethical_recon.  worker.tasks import run_scan_job
+    from nethical_recon.core.models import ScanJob, Target, TargetScope, TargetType
+    from nethical_recon.core.storage import init_database
+    from nethical_recon.core.storage.repository import ScanJobRepository, TargetRepository
+    from nethical_recon.worker.tasks import run_scan_job
 
     try:
         # Initialize database
@@ -65,29 +65,29 @@ def job_submit(
             job_repo = ScanJobRepository(session)
 
             # Create or find target
-            existing_target = target_repo.get_by_value(target)
-            if existing_target:
+            existing_target = target_repo. get_by_value(target)
+            if existing_target: 
                 target_obj = existing_target
-                typer.echo(f"Using existing target: {target_obj.  id}")
+                typer.echo(f"Using existing target: {target_obj.id}")
             else:
                 # Determine target type using proper IP validation
-                target_type = TargetType.  DOMAIN  # Default to domain
+                target_type = TargetType.DOMAIN  # Default to domain
                 try:
                     # Validate IP address and determine type
-                    ipaddress.  ip_address(target)
+                    ipaddress.ip_address(target)
                     # Both IPv4 and IPv6 use the same IP type
-                    target_type = TargetType. IP
+                    target_type = TargetType.IP
                 except ValueError:
                     # Not a valid IP, treat as domain/hostname
-                    target_type = TargetType.  DOMAIN
+                    target_type = TargetType.DOMAIN
 
                 target_obj = Target(
                     value=target,
                     type=target_type,
                     scope=TargetScope.IN_SCOPE,
                 )
-                target_obj = target_repo.create(target_obj)
-                typer.  echo(f"Created new target:   {target_obj. id}")
+                target_obj = target_repo. create(target_obj)
+                typer.echo(f"Created new target:  {target_obj.id}")
 
             # Create scan job
             tool_list = [t.strip() for t in tools.split(",")]
@@ -105,25 +105,25 @@ def job_submit(
             typer.echo(f"  Tools: {', '.join(tool_list)}")
 
             # Submit to worker queue
-            task = run_scan_job.  delay(str(job.id))
+            task = run_scan_job.delay(str(job.id))
             typer.echo("✓ Submitted to worker queue")
             typer.echo(f"  Task ID: {task.id}")
             typer.echo(f"\nUse 'nethical job status {job.id}' to check progress")
 
-    except Exception as e: 
+    except Exception as e:
         typer.echo(f"Error: {e}", err=True)
         raise typer.Exit(1) from e
 
 
-@job_app.  command("status")
+@job_app. command("status")
 def job_status(
-    job_id:   str = typer.Argument(...  , help="Job ID to check"),
+    job_id:  str = typer.Argument(... , help="Job ID to check"),
 ):
     """Check the status of a scan job."""
     from uuid import UUID
 
-    from nethical_recon.core. storage import init_database
-    from nethical_recon.core.storage.repository import FindingRepository, ScanJobRepository, ToolRunRepository
+    from nethical_recon.core.storage import init_database
+    from nethical_recon.core.storage. repository import FindingRepository, ScanJobRepository, ToolRunRepository
 
     try:
         db = init_database()
@@ -134,41 +134,41 @@ def job_status(
             finding_repo = FindingRepository(session)
 
             job = job_repo.get_by_id(UUID(job_id))
-            if not job: 
+            if not job:
                 typer.echo(f"Job {job_id} not found", err=True)
-                raise typer.  Exit(1)
+                raise typer.Exit(1)
 
             typer.echo(f"\n=== Job Status:  {job.name} ===")
             typer.echo(f"ID: {job.id}")
             typer.echo(f"Status: {job.status. value. upper()}")
             typer.echo(f"Created: {job.created_at}")
             if job.started_at:
-                typer.  echo(f"Started: {job.started_at}")
+                typer.echo(f"Started: {job.started_at}")
             if job.completed_at:
-                typer. echo(f"Completed: {job.completed_at}")
+                typer.echo(f"Completed: {job. completed_at}")
             if job.error_message:
-                typer.echo(f"Error: {job.  error_message}")
+                typer.echo(f"Error: {job.error_message}")
 
             # Get tool runs
             tool_runs = tool_repo.get_by_job(UUID(job_id))
             if tool_runs:
-                typer. echo(f"\n=== Tool Runs ({len(tool_runs)}) ===")
+                typer.echo(f"\n=== Tool Runs ({len(tool_runs)}) ===")
                 for run in tool_runs:
-                    typer.  echo(f"\n  {run.tool_name} ({run.  tool_version})")
-                    typer. echo(f"    Status: {run.status.value}")
+                    typer.echo(f"\n  {run.tool_name} ({run.tool_version})")
+                    typer.echo(f"    Status: {run. status.value}")
                     typer.echo(f"    Exit code: {run.exit_code}")
                     if run.duration_seconds:
-                        typer. echo(f"    Duration: {run.  duration_seconds:. 2f}s")
+                        typer.echo(f"    Duration: {run.duration_seconds:. 2f}s")
 
                     # Get findings for this run
-                    findings = finding_repo.get_by_run(run. id)
+                    findings = finding_repo.get_by_run(run.id)
                     if findings: 
                         typer.echo(f"    Findings: {len(findings)}")
                         severity_counts = {}
                         for finding in findings:
-                            severity_counts[finding.severity.  value] = severity_counts.get(finding.severity. value, 0) + 1
-                        for severity, count in sorted(severity_counts.  items()):
-                            typer.echo(f"      {severity}:  {count}")
+                            severity_counts[finding.severity.value] = severity_counts.get(finding.severity.value, 0) + 1
+                        for severity, count in sorted(severity_counts.items()):
+                            typer.echo(f"      {severity}: {count}")
 
     except Exception as e:
         typer.echo(f"Error: {e}", err=True)
@@ -182,15 +182,15 @@ def job_list(
     """List recent scan jobs."""
     from sqlalchemy import select
 
-    from nethical_recon.  core.storage import init_database
-    from nethical_recon.  core.storage.models import ScanJobModel
+    from nethical_recon. core.storage import init_database
+    from nethical_recon. core.storage.models import ScanJobModel
 
     try:
         db = init_database()
 
         with db.session() as session:
             # Get all jobs (in production, add pagination)
-            stmt = select(ScanJobModel).order_by(ScanJobModel. created_at.desc()).limit(limit)
+            stmt = select(ScanJobModel).order_by(ScanJobModel.created_at.desc()).limit(limit)
             result = session.execute(stmt)
             jobs = result.scalars().all()
 
@@ -203,17 +203,17 @@ def job_list(
                 status_emoji = {
                     "pending": "⏳",
                     "running": "🔄",
-                    "completed":   "✓",
-                    "failed":  "✗",
+                    "completed": "✓",
+                    "failed": "✗",
                     "cancelled": "⊘",
-                }.get(job. status, "?   ")
+                }.get(job.status, "?")
 
-                typer.echo(f"{status_emoji} {job.name}")
+                typer.echo(f"{status_emoji} {job. name}")
                 typer.echo(f"  ID: {job.id}")
-                typer.echo(f"  Status: {job.  status}")
+                typer. echo(f"  Status: {job.status}")
                 typer.echo(f"  Created: {job.created_at}")
-                typer.echo(f"  Tools: {', '.join(job.  tools)}")
-                typer.  echo()
+                typer. echo(f"  Tools: {', '.join(job.tools)}")
+                typer.echo()
 
     except Exception as e: 
         typer.echo(f"Error: {e}", err=True)
@@ -222,39 +222,39 @@ def job_list(
 
 @job_app.command("logs")
 def job_logs(
-    job_id: str = typer.Argument(... , help="Job ID to show logs for"),
-    tool:  str | None = typer.Option(None, "--tool", "-t", help="Filter by tool name"),
+    job_id: str = typer. Argument(..., help="Job ID to show logs for"),
+    tool: str | None = typer. Option(None, "--tool", "-t", help="Filter by tool name"),
 ):
     """Show logs for a scan job."""
     from uuid import UUID
 
     from nethical_recon.core.storage import init_database
-    from nethical_recon.core.storage.repository import ToolRunRepository
+    from nethical_recon.core.storage. repository import ToolRunRepository
 
-    try: 
+    try:
         db = init_database()
 
         with db.session() as session:
             tool_repo = ToolRunRepository(session)
 
             tool_runs = tool_repo.get_by_job(UUID(job_id))
-            if not tool_runs:
-                typer.  echo("No tool runs found for this job")
+            if not tool_runs: 
+                typer.echo("No tool runs found for this job")
                 return
 
             for run in tool_runs:
                 if tool and run.tool_name != tool:
                     continue
 
-                typer.echo(f"\n=== {run.tool_name} ({run.id}) ===")
+                typer. echo(f"\n=== {run.tool_name} ({run.id}) ===")
                 typer.echo(f"Command: {run.command}")
                 typer.echo(f"Status: {run.status.value}")
 
                 if run.stdout:
                     typer.echo("\n--- STDOUT ---")
-                    typer.echo(run.stdout[:  1000])  # Limit output
+                    typer.echo(run.stdout[:1000])  # Limit output
                     if len(run.stdout) > 1000:
-                        typer.echo(f"... ({len(run.stdout) - 1000} more characters)")
+                        typer.echo(f"... ({len(run. stdout) - 1000} more characters)")
 
                 if run.stderr:
                     typer.echo("\n--- STDERR ---")
@@ -262,7 +262,7 @@ def job_logs(
                     if len(run.stderr) > 1000:
                         typer.echo(f"... ({len(run.stderr) - 1000} more characters)")
 
-    except Exception as e:
+    except Exception as e: 
         typer.echo(f"Error: {e}", err=True)
         raise typer.Exit(1) from e
 
@@ -282,5 +282,5 @@ def main(argv: list[str] | None = None) -> int:
     except SystemExit as e:
         return e.code if e.code else 0
     except Exception as e:
-        typer.  echo(f"Error: {e}", err=True)
+        typer.echo(f"Error: {e}", err=True)
         return 1
