@@ -74,10 +74,8 @@ def job_submit(
                 target_type = TargetType.DOMAIN  # Default to domain
                 try:
                     ip = ipaddress.ip_address(target)
-                    if isinstance(ip, ipaddress.IPv4Address):
-                        target_type = TargetType.IPV4
-                    elif isinstance(ip, ipaddress.IPv6Address):
-                        target_type = TargetType.IPV6
+                    # Both IPv4 and IPv6 use the same IP type
+                    target_type = TargetType.IP
                 except ValueError:
                     # Not a valid IP, treat as domain/hostname
                     target_type = TargetType.DOMAIN
