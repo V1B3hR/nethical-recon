@@ -88,6 +88,7 @@ Complete documentation available for each module:
 - [FALA 1-9 Completion Docs](/FALE/) - Detailed implementation reports
 - [Roadmap](/roadmap.md) - Project overview and status
 - [Roadmap 2.0](/roadmap_2.md) - Detailed technical specifications
+- [Contributing Guide](/CONTRIBUTING.md) - Development setup and code style guidelines
 
 ## 🏆 Project Highlights
 
