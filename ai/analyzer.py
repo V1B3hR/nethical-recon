@@ -213,7 +213,9 @@ class ThreatAnalyzer:
             recommendations.append("🦅 Activate Eagle mode for strategic overview")
 
         if critical_threats > 0:
-            recommendations.append(f"🔫 {critical_threats} critical threat(s) detected. Use marker weapons immediately.")
+            recommendations.append(
+                f"🔫 {critical_threats} critical threat(s) detected. Use marker weapons immediately."
+            )
             recommendations.append("🦅 Deploy Falcon for rapid threat response")
 
         if health_score < 70:

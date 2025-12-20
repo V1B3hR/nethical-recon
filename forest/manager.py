@@ -180,4 +180,6 @@ class ForestManager(ForestBase):
         return "\n".join(lines)
 
     def __str__(self):
-        return f"🌲 ForestManager '{self.forest_name}': {len(self.trees)} trees, {self.get_total_threat_count()} threats"
+        return (
+            f"🌲 ForestManager '{self.forest_name}': {len(self.trees)} trees, {self.get_total_threat_count()} threats"
+        )
