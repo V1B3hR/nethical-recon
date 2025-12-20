@@ -46,9 +46,7 @@ def job_submit(
     target: str = typer.Argument(..., help="Target to scan"),
     name: str = typer.Option(..., "--name", "-n", help="Job name"),
     tools: str = typer.Option("nmap", "--tools", "-t", help="Comma-separated list of tools"),
-    description: str | None = typer.Option(
-        None, "--description", "-d", help="Job description"
-    ),
+    description: str | None = typer.Option(None, "--description", "-d", help="Job description"),
 ):
     """Submit a new scan job to the worker queue."""
     import ipaddress
@@ -172,9 +170,7 @@ def job_status(
                         typer.echo(f"    Findings: {len(findings)}")
                         severity_counts = {}
                         for finding in findings:
-                            severity_counts[finding.severity.value] = (
-                                severity_counts.get(finding.severity.value, 0) + 1
-                            )
+                            severity_counts[finding.severity.value] = severity_counts.get(finding.severity.value, 0) + 1
                         for severity, count in sorted(severity_counts.items()):
                             typer.echo(f"      {severity}: {count}")
 
@@ -198,9 +194,7 @@ def job_list(
 
         with db.session() as session:
             # Get all jobs (in production, add pagination)
-            stmt = select(ScanJobModel).order_by(ScanJobModel.created_at.desc()).limit(
-                limit
-            )
+            stmt = select(ScanJobModel).order_by(ScanJobModel.created_at.desc()).limit(limit)
             result = session.execute(stmt)
             jobs = result.scalars().all()
 
