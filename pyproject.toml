@@ -110,6 +110,14 @@ exclude = '''
   | \.venv
   | build
   | dist
+  | src/nethical_recon/ai
+  | src/nethical_recon/cameras
+  | src/nethical_recon/database
+  | src/nethical_recon/forest
+  | src/nethical_recon/nanobots
+  | src/nethical_recon/sensors
+  | src/nethical_recon/ui
+  | src/nethical_recon/weapons
 )/
 '''
 

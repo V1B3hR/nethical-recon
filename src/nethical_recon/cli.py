@@ -190,7 +190,6 @@ def job_list(
         db = init_database()
 
         with db.session() as session:
-
             # Get all jobs (in production, add pagination)
             stmt = select(ScanJobModel).order_by(ScanJobModel.created_at.desc()).limit(limit)
             result = session.execute(stmt)
