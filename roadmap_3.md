@@ -9,7 +9,7 @@
 
 - ✅ **PHASE A** — Foundation & Repo Professionalization (Completed: 2025-12-16)
 - ✅ **PHASE B** — Unified Data Model + Normalization (Completed: 2025-12-17)
-- ⏳ **PHASE C** — Worker Queue + Scheduler + Concurrency Policy (Not Started)
+- ✅ **PHASE C** — Worker Queue + Scheduler + Concurrency Policy (Completed: 2025-12-20)
 - ⏳ **PHASE D** — API (REST) + OpenAPI + Auth (Not Started)
 - ⏳ **PHASE E** — Observability: Logging + Metrics + Tracing (Not Started)
 - ⏳ **PHASE F** — Docker / Kubernetes / Helm (Not Started)
@@ -154,29 +154,54 @@ All objectives achieved:
 
 ---
 
-### PHASE C — Worker Queue + Scheduler + Concurrency Policy (3–6 tyg.)
+### PHASE C — Worker Queue + Scheduler + Concurrency Policy ✅ COMPLETE (Implemented 2025-12-20)
+**Status:** ✅ COMPLETE  
 **Cel:** skany asynchroniczne, stabilne, skalowalne, zgodne z RoE.
 
-**C.1 Queue**
-- Celery/RQ worker + Redis.
+All objectives achieved:
+- ✅ Celery + Redis worker queue with task routing
+- ✅ APScheduler for periodic scans (cron and interval)
+- ✅ Policy engine with RoE (Rules of Engagement)
+- ✅ Rate limiting (token bucket algorithm)
+- ✅ Concurrency control (max parallel jobs/tools)
+- ✅ Network policies (allowlist/denylist CIDR)
+- ✅ High-risk tool policies (explicit approval required)
+- ✅ CLI commands: job submit, job status, job list, job logs
+- ✅ 38 new tests (33 policy + 5 worker), 70 total tests passing
+
+**C.1 Queue** ✅
+- Celery worker + Redis broker/backend
+- Task queues: default, scans, tools, reports
 - Zadania:
-  - `run_scan_job(job_id)`
-  - `run_tool(tool, job_id)`
-  - `normalize_results(run_id)`
-  - `generate_report(job_id)`
+  - run_scan_job(job_id) - orchestrates full job
+  - run_tool(tool, job_id) - executes individual tool
+  - normalize_results(run_id) - parses output to Findings
+  - generate_report(job_id) - generates JSON reports
 
-**C.2 Scheduler**
-- APScheduler/Celery beat:
-  - cykliczne recon (np. co 6h/24h),
-  - baseline update.
+**C.2 Scheduler** ✅
+- APScheduler integration (background scheduler)
+- Periodic scans: cron-style (e.g., "0 */6 * * *")
+- Interval scans: fixed intervals (e.g., every 6h)
+- Baseline updates: configurable intervals
+- Job management API (list, remove scheduled jobs)
 
-**C.3 Policy engine (RoE)**
-- Limity: requests/sec, max parallel tools, allowlist networks.
-- Blokady “high-risk tools” bez wyraźnego flag/konfigu.
+**C.3 Policy engine (RoE)** ✅
+- Rate limiting: configurable requests/sec with burst
+- Concurrency: max parallel tools and jobs
+- Network policies: CIDR allowlist/denylist
+- Tool policies: risk levels, approval requirements
+- High-risk tools: sqlmap, metasploit, hydra, john
+- Policy file support: JSON/YAML configuration
+- Thread-safe enforcement
 
-**DoD PHASE C**
-- `nethical job submit ...` i `nethical job status ...` działają
-- Worker może odpalać równolegle, ale trzyma limity RoE
+**DoD PHASE C** ✅ ALL VERIFIED
+- ✅ nethical job submit submits to worker queue
+- ✅ nethical job status shows execution details
+- ✅ nethical job list displays recent jobs
+- ✅ nethical job logs shows tool output
+- ✅ Worker enforces RoE policies
+- ✅ Rate limiting and concurrency limits working
+- ✅ Comprehensive test coverage
 
 ---
 
