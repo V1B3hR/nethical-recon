@@ -80,7 +80,8 @@ def example_custom_policy():
     test_targets = ["192.168.1.1", "10.10.10.5", "8.8.8.8"]
     for target in test_targets:
         allowed, reason = engine.check_target_allowed(target)
-        print(f"Target {target:15s}: {allowed:5s} - {reason}")
+        status = "✓" if allowed else "✗"
+        print(f"Target {target:15s}: {status} {reason}")
 
     print()
 
