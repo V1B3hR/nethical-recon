@@ -1,291 +1,214 @@
-"""Scheduler for periodic scans and maintenance tasks."""
+"""Scheduler for periodic and scheduled scan jobs."""
 
 from __future__ import annotations
 
+from collections.abc import Callable
 import logging
-from datetime import datetime, timezone
-from typing import Any, Callable
+from datetime import datetime
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
-from apscheduler.triggers.interval import IntervalTrigger
-
-from nethical_recon.core.models import ScanJob, Target, TargetScope
-from nethical_recon.core.storage import init_database
-from nethical_recon.core.storage.repository import ScanJobRepository, TargetRepository
-from nethical_recon.worker.tasks import run_scan_job
+from apscheduler. triggers.interval import IntervalTrigger
 
 logger = logging.getLogger(__name__)
 
 
 class ScanScheduler:
-    """Scheduler for periodic scans and maintenance."""
+    """
+    Scheduler for managing periodic and scheduled scans.
+    
+    Wraps APScheduler for scan job scheduling.
+    """
 
     def __init__(self):
         """Initialize the scheduler."""
-        self.scheduler = BackgroundScheduler(timezone="UTC")
-        self.db = init_database()
+        self.scheduler = BackgroundScheduler()
+        self.logger = logging.getLogger(__name__)
 
-    def start(self) -> None:
+    def start(self):
         """Start the scheduler."""
-        logger.info("Starting scan scheduler")
-        self.scheduler.start()
+        if not self.scheduler.running:
+            self.scheduler.start()
+            self.logger.info("Scheduler started")
 
-    def shutdown(self, wait: bool = True) -> None:
-        """Shutdown the scheduler.
-
-        Args:
-            wait: Whether to wait for running jobs to complete
+    def shutdown(self, wait: bool = True):
         """
-        logger.info("Shutting down scan scheduler")
-        self.scheduler.shutdown(wait=wait)
+        Shutdown the scheduler.
+        
+        Args:
+            wait:  Wait for jobs to complete
+        """
+        if self.scheduler.running:
+            self.scheduler.shutdown(wait=wait)
+            self.logger. info("Scheduler shutdown")
 
     def schedule_periodic_scan(
         self,
+        scan_job: Callable,
         target_value: str,
-        tools: list[str],
-        schedule: str,
+        cron_expression: str,
         name: str | None = None,
-        description: str | None = None,
+        **kwargs,
     ) -> str:
-        """Schedule a periodic scan.
-
-        Args:
-            target_value: Target to scan (IP, domain, CIDR)
-            tools: List of tools to use
-            schedule: Cron schedule string (e.g., "0 */6 * * *" for every 6 hours)
-            name: Optional name for the scheduled job
-            description: Optional description
-
-        Returns:
-            Job ID of the scheduled job
         """
-        name = name or f"Periodic scan of {target_value}"
+        Schedule a periodic scan using cron expression.
+        
+        Args:
+            scan_job:  Callable to execute
+            target_value: Target to scan
+            cron_expression:  Cron expression (e.g., '0 */6 * * *' for every 6 hours)
+            name: Optional job name
+            **kwargs: Additional arguments for scan_job
+            
+        Returns: 
+            Job ID
+            
+        Example:
+            >>> scheduler.schedule_periodic_scan(
+            ...     scan_job=run_scan,
+            ...     target_value="example.com",
+            ...     cron_expression="0 0 * * *",  # Daily at midnight
+            ...     name="Daily scan of example.com"
+            ... )
+        """
+        # Parse cron expression
+        parts = cron_expression.split()
+        if len(parts) != 5:
+            raise ValueError(
+                f"Invalid cron expression '{cron_expression}'. "
+                "Expected format: 'minute hour day month day_of_week'"
+            )
 
-        def scan_job():
-            """Execute the scan."""
-            try:
-                with self.db.session() as session:
-                    target_repo = TargetRepository(session)
-                    job_repo = ScanJobRepository(session)
+        minute, hour, day, month, day_of_week = parts
 
-                    # Get or create target
-                    target = target_repo.get_by_value(target_value)
-                    if not target:
-                        # Determine target type (simplified)
-                        from nethical_recon.core.models import TargetType
+        trigger = CronTrigger(
+            minute=minute,
+            hour=hour,
+            day=day,
+            month=month,
+            day_of_week=day_of_week,
+        )
 
-                        target = Target(
-                            value=target_value,
-                            type=TargetType.DOMAIN,  # Could be improved with better detection
-                            scope=TargetScope.IN_SCOPE,
-                        )
-                        target = target_repo.create(target)
-                        session.commit()
-
-                    # Create job
-                    job = ScanJob(
-                        target_id=target.id,
-                        name=name,
-                        description=description or f"Scheduled scan: {schedule}",
-                        tools=tools,
-                    )
-                    job = job_repo.create(job)
-                    session.commit()
-
-                    logger.info(f"Created scheduled job {job.id} for target {target_value}")
-
-                    # Submit to worker queue
-                    run_scan_job.delay(str(job.id))
-                    logger.info(f"Submitted scheduled job {job.id} to worker queue")
-
-            except Exception as e:
-                logger.error(f"Error in scheduled scan job: {e}", exc_info=True)
-
-        # Schedule using cron trigger
-        trigger = CronTrigger.from_crontab(schedule, timezone="UTC")
-        job_id = self.scheduler.add_job(
+        job = self.scheduler.add_job(
             scan_job,
             trigger=trigger,
-            id=f"periodic_scan_{target_value}_{datetime.now(timezone.utc).timestamp()}",
+            id=f"periodic_scan_{target_value}_{datetime.now(datetime.UTC).timestamp()}",
             name=name,
             replace_existing=False,
-        ).id
+            kwargs={"target": target_value, **kwargs},
+        )
 
-        logger.info(f"Scheduled periodic scan {job_id}: {target_value} with schedule {schedule}")
-        return job_id
+        self.logger.info(
+            f"Scheduled periodic scan for {target_value} with cron '{cron_expression}' (Job ID: {job.id})"
+        )
+        return job.id
 
     def schedule_interval_scan(
         self,
+        scan_job: Callable,
         target_value: str,
-        tools: list[str],
-        interval_hours: int,
+        interval_seconds: int,
         name: str | None = None,
-        description: str | None = None,
+        **kwargs,
     ) -> str:
-        """Schedule a scan at fixed intervals.
-
-        Args:
-            target_value: Target to scan
-            tools: List of tools to use
-            interval_hours: Interval in hours
-            name: Optional name for the scheduled job
-            description: Optional description
-
-        Returns:
-            Job ID of the scheduled job
         """
-        name = name or f"Interval scan of {target_value}"
+        Schedule a scan to run at fixed intervals.
+        
+        Args:
+            scan_job: Callable to execute
+            target_value:  Target to scan
+            interval_seconds: Interval in seconds
+            name: Optional job name
+            **kwargs: Additional arguments for scan_job
+            
+        Returns:
+            Job ID
+            
+        Example:
+            >>> scheduler. schedule_interval_scan(
+            ...     scan_job=run_scan,
+            ...     target_value="192.168.1.1",
+            ...     interval_seconds=3600,  # Every hour
+            ...     name="Hourly scan of 192.168.1.1"
+            ... )
+        """
+        trigger = IntervalTrigger(seconds=interval_seconds)
 
-        def scan_job():
-            """Execute the scan."""
-            try:
-                with self.db.session() as session:
-                    target_repo = TargetRepository(session)
-                    job_repo = ScanJobRepository(session)
-
-                    # Get or create target
-                    target = target_repo.get_by_value(target_value)
-                    if not target:
-                        from nethical_recon.core.models import TargetType
-
-                        target = Target(
-                            value=target_value,
-                            type=TargetType.DOMAIN,
-                            scope=TargetScope.IN_SCOPE,
-                        )
-                        target = target_repo.create(target)
-                        session.commit()
-
-                    # Create job
-                    job = ScanJob(
-                        target_id=target.id,
-                        name=name,
-                        description=description or f"Interval scan: every {interval_hours}h",
-                        tools=tools,
-                    )
-                    job = job_repo.create(job)
-                    session.commit()
-
-                    # Submit to worker queue
-                    run_scan_job.delay(str(job.id))
-                    logger.info(f"Submitted interval job {job.id} to worker queue")
-
-            except Exception as e:
-                logger.error(f"Error in interval scan job: {e}", exc_info=True)
-
-        # Schedule using interval trigger
-        trigger = IntervalTrigger(hours=interval_hours, timezone="UTC")
-        job_id = self.scheduler.add_job(
+        job = self.scheduler.add_job(
             scan_job,
             trigger=trigger,
-            id=f"interval_scan_{target_value}_{datetime.now(timezone.utc).timestamp()}",
+            id=f"interval_scan_{target_value}_{datetime.now(datetime.UTC).timestamp()}",
             name=name,
             replace_existing=False,
-        ).id
+            kwargs={"target": target_value, **kwargs},
+        )
 
-        logger.info(f"Scheduled interval scan {job_id}: {target_value} every {interval_hours}h")
-        return job_id
+        self.logger.info(
+            f"Scheduled interval scan for {target_value} every {interval_seconds}s (Job ID: {job. id})"
+        )
+        return job.id
 
-    def schedule_baseline_update(self, interval_hours: int = 24) -> str:
-        """Schedule periodic baseline updates.
-
-        Args:
-            interval_hours: Update interval in hours (default: 24)
-
-        Returns:
-            Job ID of the scheduled job
+    def schedule_one_time_scan(
+        self,
+        scan_job: Callable,
+        target_value: str,
+        run_date: datetime,
+        name: str | None = None,
+        **kwargs,
+    ) -> str:
         """
-
-        def update_baseline():
-            """Update baseline data."""
-            try:
-                logger.info("Updating baseline data")
-                # Placeholder for baseline update logic
-                # This would analyze recent scans and update baseline metrics
-                logger.info("Baseline update completed")
-            except Exception as e:
-                logger.error(f"Error updating baseline: {e}", exc_info=True)
-
-        trigger = IntervalTrigger(hours=interval_hours, timezone="UTC")
-        job_id = self.scheduler.add_job(
-            update_baseline,
-            trigger=trigger,
-            id="baseline_update",
-            name="Baseline Update",
-            replace_existing=True,
-        ).id
-
-        logger.info(f"Scheduled baseline updates every {interval_hours}h")
-        return job_id
-
-    def list_scheduled_jobs(self) -> list[dict[str, Any]]:
-        """List all scheduled jobs.
-
-        Returns:
-            List of scheduled job information
-        """
-        jobs = []
-        for job in self.scheduler.get_jobs():
-            jobs.append(
-                {
-                    "id": job.id,
-                    "name": job.name,
-                    "next_run": job.next_run_time.isoformat() if job.next_run_time else None,
-                    "trigger": str(job.trigger),
-                }
-            )
-        return jobs
-
-    def remove_scheduled_job(self, job_id: str) -> bool:
-        """Remove a scheduled job.
-
+        Schedule a one-time scan at a specific datetime.
+        
         Args:
-            job_id: ID of the job to remove
-
+            scan_job: Callable to execute
+            target_value: Target to scan
+            run_date:  When to run the scan
+            name:  Optional job name
+            **kwargs:  Additional arguments for scan_job
+            
         Returns:
-            True if job was removed, False if not found
+            Job ID
+        """
+        job = self.scheduler.add_job(
+            scan_job,
+            trigger="date",
+            run_date=run_date,
+            id=f"onetime_scan_{target_value}_{run_date.timestamp()}",
+            name=name,
+            kwargs={"target": target_value, **kwargs},
+        )
+
+        self.logger.info(f"Scheduled one-time scan for {target_value} at {run_date} (Job ID: {job.id})")
+        return job.id
+
+    def remove_job(self, job_id:  str) -> bool:
+        """
+        Remove a scheduled job.
+        
+        Args:
+            job_id: ID of job to remove
+            
+        Returns: 
+            True if removed successfully
         """
         try:
             self.scheduler.remove_job(job_id)
-            logger.info(f"Removed scheduled job {job_id}")
+            self.logger.info(f"Removed job {job_id}")
             return True
-        except Exception as e:
-            logger.error(f"Error removing job {job_id}: {e}")
+        except Exception as e: 
+            self.logger.error(f"Failed to remove job {job_id}:  {e}")
             return False
 
+    def get_jobs(self) -> list:
+        """Get all scheduled jobs."""
+        return self.scheduler.get_jobs()
 
-# Global scheduler instance
-_scheduler: ScanScheduler | None = None
+    def pause_job(self, job_id: str):
+        """Pause a scheduled job."""
+        self.scheduler.pause_job(job_id)
+        self.logger.info(f"Paused job {job_id}")
 
-
-def get_scheduler() -> ScanScheduler:
-    """Get the global scheduler instance.
-
-    Returns:
-        Scheduler instance
-    """
-    global _scheduler
-    if _scheduler is None:
-        _scheduler = ScanScheduler()
-    return _scheduler
-
-
-def start_scheduler() -> None:
-    """Start the global scheduler."""
-    scheduler = get_scheduler()
-    scheduler.start()
-    logger.info("Scheduler started")
-
-
-def shutdown_scheduler(wait: bool = True) -> None:
-    """Shutdown the global scheduler.
-
-    Args:
-        wait: Whether to wait for running jobs
-    """
-    global _scheduler
-    if _scheduler:
-        _scheduler.shutdown(wait=wait)
-        _scheduler = None
-        logger.info("Scheduler shutdown")
+    def resume_job(self, job_id: str):
+        """Resume a paused job."""
+        self.scheduler. resume_job(job_id)
+        self.logger.info(f"Resumed job {job_id}")
