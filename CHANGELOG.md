@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Created `pyproject.toml` for modern Python packaging
   - Set up `src/nethical_recon/` package structure
   - Added CLI entry point using Typer (`nethical` command)
-  - Configured code quality tools: ruff, black, mypy
+  - Configured code quality tools: black, mypy
   - Set up pre-commit hooks for automated checks
   - Created CHANGELOG.md for release discipline
   - Added GitHub Actions CI/CD workflows

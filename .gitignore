@@ -69,9 +69,6 @@ htmlcov/
 # Pre-commit
 .pre-commit-config.yaml.bak
 
-# Ruff cache
-.ruff_cache/
-
 # MyPy cache
 .mypy_cache/
 .dmypy.json

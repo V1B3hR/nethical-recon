@@ -50,21 +50,11 @@ pre-commit install
 - **check-toml**: Validates TOML files
 - **check-merge-conflict**: Detects merge conflict markers
 - **detect-private-key**: Prevents committing private keys
-- **ruff**: Fast Python linter with auto-fix
 - **black**: Code formatter
 - **bandit**: Security vulnerability scanner
 - **mypy**: Static type checker
 
 ### Other Code Quality Tools
-
-**Ruff** - Fast Python linter:
-```bash
-# Run linter
-ruff check .
-
-# Auto-fix issues
-ruff check --fix .
-```
 
 **MyPy** - Type checking:
 ```bash
@@ -118,10 +108,10 @@ pytest tests/test_specific.py
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes
-4. Ensure all code is formatted with Black
-5. Run tests and linters
-6. Commit your changes (`git commit -m 'Add amazing feature'`)
+2. Make your changes
+3. Ensure all code is formatted with Black
+4. Run tests and linters
+5. Commit your changes (`git commit -m 'Add amazing feature'`)
 7. Push to your branch (`git push origin feature/amazing-feature`)
 8. Open a Pull Request
 

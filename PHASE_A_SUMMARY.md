@@ -14,7 +14,7 @@ Phase A (Foundation & Repo Professionalization) has been successfully completed.
   - Development dependencies
   - Optional database backend dependencies
   - Entry points for CLI commands
-  - Tool configurations (ruff, black, mypy, pytest, bandit)
+  - Tool configurations (black, mypy, pytest, bandit)
 
 #### Reorganized Code Structure
 - **src/nethical_recon/**: New package structure following Python best practices
@@ -32,14 +32,6 @@ Phase A (Foundation & Repo Professionalization) has been successfully completed.
   - `nethical report`: Report generation (coming in Phase B)
 
 #### Code Quality Tools
-- **Ruff**: Fast Python linter configured for:
-  - pycodestyle (E, W)
-  - pyflakes (F)
-  - isort (I)
-  - flake8-bugbear (B)
-  - flake8-comprehensions (C4)
-  - pyupgrade (UP)
-
 - **Black**: Code formatter with 120-character line length
 
 - **MyPy**: Optional type checking (configured but lenient)
@@ -49,7 +41,6 @@ Phase A (Foundation & Repo Professionalization) has been successfully completed.
   - YAML/JSON/TOML validation
   - Large file detection
   - Private key detection
-  - Ruff linting
   - Black formatting
   - Bandit security scanning
 
@@ -59,7 +50,6 @@ Phase A (Foundation & Repo Professionalization) has been successfully completed.
 Created `.github/workflows/ci.yml` with 4 jobs:
 
 1. **Lint Job**
-   - Runs Ruff for code quality
    - Checks Black formatting
    - Runs MyPy type checking (informational)
 
@@ -112,7 +102,6 @@ Created `tests/test_smoke.py` with 5 tests:
 Added entries for:
 - Testing artifacts (.pytest_cache, htmlcov)
 - Coverage reports (.coverage)
-- Ruff cache (.ruff_cache)
 - MyPy cache (.mypy_cache)
 - Security reports (bandit-report.json, *.sarif)
 
@@ -176,9 +165,6 @@ pre-commit install
 
 # Run tests
 pytest tests/ -v
-
-# Run linting
-ruff check src/
 
 # Format code
 black src/
