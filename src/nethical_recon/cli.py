@@ -14,6 +14,14 @@ app = typer.Typer(
 job_app = typer.Typer(help="Job management commands")
 app.add_typer(job_app, name="job")
 
+# Scheduler management subcommand
+scheduler_app = typer.Typer(help="Scheduler management commands")
+app.add_typer(scheduler_app, name="scheduler")
+
+# Policy configuration subcommand
+policy_app = typer.Typer(help="Policy configuration commands")
+app.add_typer(policy_app, name="policy")
+
 
 @app.command()
 def version():
@@ -276,6 +284,199 @@ def report(job_id: str | None = typer.Argument(None, help="Job ID to generate re
     """Generate reports."""
     typer.echo(f"Report generation - Job ID: {job_id}")
     typer.echo("Full implementation coming in Phase B")
+
+
+# Scheduler commands
+@scheduler_app.command("start")
+def scheduler_start():
+    """Start the scan scheduler."""
+    from nethical_recon.scheduler import ScanScheduler
+
+    try:
+        scheduler = ScanScheduler()
+        scheduler.start()
+        typer.echo("✓ Scheduler started")
+        typer.echo("Scheduler is running in the background")
+        typer.echo("Use 'nethical scheduler stop' to stop it")
+    except Exception as e:
+        typer.echo(f"Error starting scheduler: {e}", err=True)
+        raise typer.Exit(1) from e
+
+
+@scheduler_app.command("schedule")
+def scheduler_schedule(
+    target: str = typer.Argument(..., help="Target to scan"),
+    tools: str = typer.Option("nmap", "--tools", "-t", help="Comma-separated list of tools"),
+    interval: int = typer.Option(24, "--interval", "-i", help="Interval in hours"),
+    name: str | None = typer.Option(None, "--name", "-n", help="Schedule name"),
+    cron: str | None = typer.Option(None, "--cron", "-c", help="Cron expression (alternative to interval)"),
+):
+    """Schedule a periodic scan."""
+    from nethical_recon.scheduler import ScanScheduler
+
+    try:
+        scheduler = ScanScheduler()
+        scheduler.start()
+
+        tool_list = [t.strip() for t in tools.split(",")]
+
+        if cron:
+            job_id = scheduler.schedule_cron_scan(
+                target=target,
+                tools=tool_list,
+                cron_expression=cron,
+                name=name,
+            )
+            typer.echo(f"✓ Scheduled cron scan: {job_id}")
+            typer.echo(f"  Target: {target}")
+            typer.echo(f"  Tools: {', '.join(tool_list)}")
+            typer.echo(f"  Cron: {cron}")
+        else:
+            job_id = scheduler.schedule_periodic_scan(
+                target=target,
+                tools=tool_list,
+                interval_hours=interval,
+                name=name,
+            )
+            typer.echo(f"✓ Scheduled periodic scan: {job_id}")
+            typer.echo(f"  Target: {target}")
+            typer.echo(f"  Tools: {', '.join(tool_list)}")
+            typer.echo(f"  Interval: every {interval} hours")
+
+    except Exception as e:
+        typer.echo(f"Error scheduling scan: {e}", err=True)
+        raise typer.Exit(1) from e
+
+
+@scheduler_app.command("list")
+def scheduler_list():
+    """List all scheduled scans."""
+    from nethical_recon.scheduler import ScanScheduler
+
+    try:
+        scheduler = ScanScheduler()
+        scheduler.start()
+
+        jobs = scheduler.list_jobs()
+
+        if not jobs:
+            typer.echo("No scheduled jobs")
+            return
+
+        typer.echo(f"\n=== Scheduled Jobs ({len(jobs)}) ===\n")
+        for job in jobs:
+            typer.echo(f"📅 {job['name']}")
+            typer.echo(f"  ID: {job['id']}")
+            typer.echo(f"  Next run: {job['next_run']}")
+            typer.echo(f"  Trigger: {job['trigger']}")
+            typer.echo()
+
+    except Exception as e:
+        typer.echo(f"Error listing scheduled jobs: {e}", err=True)
+        raise typer.Exit(1) from e
+
+
+@scheduler_app.command("remove")
+def scheduler_remove(
+    job_id: str = typer.Argument(..., help="Scheduled job ID to remove"),
+):
+    """Remove a scheduled scan."""
+    from nethical_recon.scheduler import ScanScheduler
+
+    try:
+        scheduler = ScanScheduler()
+        scheduler.start()
+
+        success = scheduler.remove_job(job_id)
+
+        if success:
+            typer.echo(f"✓ Removed scheduled job: {job_id}")
+        else:
+            typer.echo(f"Job not found: {job_id}", err=True)
+            raise typer.Exit(1)
+
+    except Exception as e:
+        typer.echo(f"Error removing job: {e}", err=True)
+        raise typer.Exit(1) from e
+
+
+# Policy commands
+@policy_app.command("show")
+def policy_show():
+    """Show current policy configuration."""
+    from nethical_recon.worker.policy import PolicyEngine
+
+    try:
+        engine = PolicyEngine()
+        config = engine.config
+
+        typer.echo("\n=== Rules of Engagement (RoE) Configuration ===\n")
+        typer.echo("Rate Limiting:")
+        typer.echo(f"  Max requests/sec: {config.max_requests_per_second}")
+        typer.echo(f"  Max concurrent tools: {config.max_concurrent_tools}")
+        typer.echo(f"  Max concurrent jobs: {config.max_concurrent_jobs}")
+
+        typer.echo("\nScan Limits:")
+        typer.echo(f"  Max scan duration: {config.max_scan_duration_seconds}s")
+        typer.echo(f"  Max ports to scan: {config.max_ports_to_scan}")
+        typer.echo(f"  Max threads: {config.max_threads}")
+
+        typer.echo("\nTool Restrictions:")
+        typer.echo(f"  Allowed tools: {', '.join(config.allowed_tools) if config.allowed_tools else 'All'}")
+        typer.echo(f"  High-risk tools: {', '.join(config.high_risk_tools)}")
+        typer.echo(f"  Require explicit auth for high-risk: {config.require_explicit_auth_for_high_risk}")
+
+        typer.echo("\nNetwork Restrictions:")
+        if config.allowed_networks:
+            typer.echo(f"  Allowed networks: {', '.join(config.allowed_networks)}")
+        else:
+            typer.echo("  Allowed networks: All")
+        if config.denied_networks:
+            typer.echo(f"  Denied networks: {', '.join(config.denied_networks)}")
+
+        status = engine.get_status()
+        typer.echo("\nCurrent Status:")
+        typer.echo(f"  Active tools: {status['active_tools']}/{status['max_concurrent_tools']}")
+        typer.echo(f"  Active jobs: {status['active_jobs']}/{status['max_concurrent_jobs']}")
+
+    except Exception as e:
+        typer.echo(f"Error showing policy: {e}", err=True)
+        raise typer.Exit(1) from e
+
+
+@policy_app.command("validate")
+def policy_validate(
+    target: str = typer.Argument(..., help="Target to validate"),
+    tool: str = typer.Option(..., "--tool", "-t", help="Tool to validate"),
+):
+    """Validate if a scan is allowed by policy."""
+    from nethical_recon.worker.policy import PolicyEngine
+
+    try:
+        engine = PolicyEngine()
+
+        # Check if tool can run
+        can_run = engine.can_run_tool(tool)
+        typer.echo(f"\nTool '{tool}': {'✓ ALLOWED' if can_run else '✗ DENIED'}")
+
+        # Check if network is allowed
+        is_allowed = engine.is_network_allowed(target)
+        typer.echo(f"Target '{target}': {'✓ ALLOWED' if is_allowed else '✗ DENIED'}")
+
+        # Check if job can start
+        can_start = engine.can_start_job()
+        typer.echo(f"New job: {'✓ CAN START' if can_start else '✗ DENIED (limit reached)'}")
+
+        if can_run and is_allowed and can_start:
+            typer.echo("\n✓ Scan is ALLOWED by policy")
+            return 0
+        else:
+            typer.echo("\n✗ Scan is DENIED by policy")
+            raise typer.Exit(1)
+
+    except Exception as e:
+        typer.echo(f"Error validating policy: {e}", err=True)
+        raise typer.Exit(1) from e
 
 
 def main(argv: list[str] | None = None) -> int:
