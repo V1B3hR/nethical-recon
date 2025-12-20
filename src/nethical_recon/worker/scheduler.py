@@ -8,21 +8,21 @@ from datetime import datetime
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
-from apscheduler. triggers.interval import IntervalTrigger
+from apscheduler.  triggers. interval import IntervalTrigger
 
 logger = logging.getLogger(__name__)
 
 
 class ScanScheduler:
     """
-    Scheduler for managing periodic and scheduled scans.
-    
-    Wraps APScheduler for scan job scheduling.
+    Scheduler for managing periodic and scheduled scans. 
+
+    Wraps APScheduler for scan job scheduling. 
     """
 
     def __init__(self):
         """Initialize the scheduler."""
-        self.scheduler = BackgroundScheduler()
+        self. scheduler = BackgroundScheduler()
         self.logger = logging.getLogger(__name__)
 
     def start(self):
@@ -34,13 +34,13 @@ class ScanScheduler:
     def shutdown(self, wait: bool = True):
         """
         Shutdown the scheduler.
-        
+
         Args:
-            wait:  Wait for jobs to complete
+            wait:   Wait for jobs to complete
         """
         if self.scheduler.running:
             self.scheduler.shutdown(wait=wait)
-            self.logger. info("Scheduler shutdown")
+            self.logger.  info("Scheduler shutdown")
 
     def schedule_periodic_scan(
         self,
@@ -52,19 +52,19 @@ class ScanScheduler:
     ) -> str:
         """
         Schedule a periodic scan using cron expression.
-        
+
         Args:
-            scan_job:  Callable to execute
+            scan_job:   Callable to execute
             target_value: Target to scan
-            cron_expression:  Cron expression (e.g., '0 */6 * * *' for every 6 hours)
-            name: Optional job name
+            cron_expression:   Cron expression (e.g., '0 */6 * * *' for every 6 hours)
+            name:  Optional job name
             **kwargs: Additional arguments for scan_job
-            
-        Returns: 
+
+        Returns:
             Job ID
-            
+
         Example:
-            >>> scheduler.schedule_periodic_scan(
+            >>> scheduler. schedule_periodic_scan(
             ...     scan_job=run_scan,
             ...     target_value="example.com",
             ...     cron_expression="0 0 * * *",  # Daily at midnight
@@ -95,13 +95,13 @@ class ScanScheduler:
             id=f"periodic_scan_{target_value}_{datetime.now(datetime.UTC).timestamp()}",
             name=name,
             replace_existing=False,
-            kwargs={"target": target_value, **kwargs},
+            kwargs={"target":  target_value, **kwargs},
         )
 
         self.logger.info(
             f"Scheduled periodic scan for {target_value} with cron '{cron_expression}' (Job ID: {job.id})"
         )
-        return job.id
+        return job. id
 
     def schedule_interval_scan(
         self,
@@ -113,19 +113,19 @@ class ScanScheduler:
     ) -> str:
         """
         Schedule a scan to run at fixed intervals.
-        
+
         Args:
-            scan_job: Callable to execute
-            target_value:  Target to scan
-            interval_seconds: Interval in seconds
+            scan_job:  Callable to execute
+            target_value:   Target to scan
+            interval_seconds:  Interval in seconds
             name: Optional job name
             **kwargs: Additional arguments for scan_job
-            
-        Returns:
+
+        Returns: 
             Job ID
-            
-        Example:
-            >>> scheduler. schedule_interval_scan(
+
+        Example: 
+            >>> scheduler.  schedule_interval_scan(
             ...     scan_job=run_scan,
             ...     target_value="192.168.1.1",
             ...     interval_seconds=3600,  # Every hour
@@ -137,14 +137,14 @@ class ScanScheduler:
         job = self.scheduler.add_job(
             scan_job,
             trigger=trigger,
-            id=f"interval_scan_{target_value}_{datetime.now(datetime.UTC).timestamp()}",
+            id=f"interval_scan_{target_value}_{datetime. now(datetime.UTC).timestamp()}",
             name=name,
             replace_existing=False,
             kwargs={"target": target_value, **kwargs},
         )
 
         self.logger.info(
-            f"Scheduled interval scan for {target_value} every {interval_seconds}s (Job ID: {job. id})"
+            f"Scheduled interval scan for {target_value} every {interval_seconds}s (Job ID: {job.  id})"
         )
         return job.id
 
@@ -158,14 +158,14 @@ class ScanScheduler:
     ) -> str:
         """
         Schedule a one-time scan at a specific datetime.
-        
+
         Args:
             scan_job: Callable to execute
-            target_value: Target to scan
-            run_date:  When to run the scan
-            name:  Optional job name
-            **kwargs:  Additional arguments for scan_job
-            
+            target_value:  Target to scan
+            run_date:   When to run the scan
+            name:   Optional job name
+            **kwargs:   Additional arguments for scan_job
+
         Returns:
             Job ID
         """
@@ -181,14 +181,14 @@ class ScanScheduler:
         self.logger.info(f"Scheduled one-time scan for {target_value} at {run_date} (Job ID: {job.id})")
         return job.id
 
-    def remove_job(self, job_id:  str) -> bool:
+    def remove_job(self, job_id:   str) -> bool:
         """
         Remove a scheduled job.
-        
+
         Args:
             job_id: ID of job to remove
-            
-        Returns: 
+
+        Returns:
             True if removed successfully
         """
         try:
@@ -210,5 +210,5 @@ class ScanScheduler:
 
     def resume_job(self, job_id: str):
         """Resume a paused job."""
-        self.scheduler. resume_job(job_id)
+        self.scheduler.  resume_job(job_id)
         self.logger.info(f"Resumed job {job_id}")
