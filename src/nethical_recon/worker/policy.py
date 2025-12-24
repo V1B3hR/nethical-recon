@@ -210,7 +210,7 @@ class PolicyEngine:
                     os.getenv("ROE_ALLOWED_DOMAINS", "").split(",") if os.getenv("ROE_ALLOWED_DOMAINS") else []
                 ),
                 denied_domains=(
-                    os.getenv("ROE_DENIED_NETWORKS", "").split(",") if os.getenv("ROE_DENIED_DOMAINS") else []
+                    os.getenv("ROE_DENIED_DOMAINS", "").split(",") if os.getenv("ROE_DENIED_DOMAINS") else []
                 ),
             ),
             tool=ToolPolicy(
