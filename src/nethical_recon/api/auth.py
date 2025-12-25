@@ -33,7 +33,7 @@ fake_users_db = {
         "username": "admin",
         "email": "admin@nethical.local",
         "full_name": "Admin User",
-        "hashed_password": "$2b$12$M5oZwts4WYJpL. KIXtYG2udleiwNnDY6GHXwPfr5. tezBKSBZTpRe",  # admin123
+        "hashed_password": "$2b$12$M5oZwts4WYJpL.KIXtYG2udleiwNnDY6GHXwPfr5.tezBKSBZTpRe",  # admin123
         "disabled": False,
         "scopes": ["read", "write", "admin"],
     },
@@ -64,7 +64,7 @@ fake_api_keys = {
         "created_at": datetime.now(timezone.utc),
         "expires_at": None,
         "last_used_at": None,
-    }
+    },
 }
 
 
@@ -96,7 +96,9 @@ def authenticate_user(username: str, password: str) -> UserInDB | None:
     return user
 
 
-def create_access_token(data: dict, expires_delta: timedelta | None = None) -> str:
+def create_access_token(
+    data: dict, expires_delta: timedelta | None = None
+) -> str:
     """Create a JWT access token."""
     config = APIConfig.from_env()
     to_encode = data.copy()
@@ -170,7 +172,9 @@ async def get_current_user_from_token(
 
 
 async def get_current_user_from_api_key(
-    credentials: Annotated[HTTPAuthorizationCredentials | None, Depends(bearer_scheme)]
+    credentials: Annotated[
+        HTTPAuthorizationCredentials | None, Depends(bearer_scheme)
+    ],
 ) -> User | None:
     """Get the current user from an API key."""
     if not credentials:
@@ -211,7 +215,7 @@ async def get_current_user(
 
 
 async def get_current_active_user(
-    current_user: Annotated[User, Depends(get_current_user)]
+    current_user: Annotated[User, Depends(get_current_user)],
 ) -> User:
     """Get the current active user."""
     return current_user
