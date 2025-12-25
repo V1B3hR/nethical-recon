@@ -10,7 +10,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer, OAuth2Pas
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 
-from .config import APIConfig
+from . config import APIConfig
 from .models import TokenData, User, UserInDB
 
 # Password hashing
@@ -23,15 +23,15 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token", auto_error=False)
 bearer_scheme = HTTPBearer(auto_error=False)
 
 # In-memory user database (in production, use proper database)
-# Default admin user: admin/admin123
+# Default admin user:  admin/admin123
 fake_users_db = {
     "admin": {
         "username": "admin",
         "email": "admin@nethical.local",
-        "full_name": "Admin User",
-        "hashed_password": "$2b$12$M5oZwts4WYJpL.KIXtYG2udleiwNnDY6GHXwPfr5.tezBKSBZTpRe",  # admin123
-        "disabled": False,
-        "scopes": ["read", "write", "admin"],
+        "full_name":  "Admin User",
+        "hashed_password": "$2b$12$M5oZwts4WYJpL. KIXtYG2udleiwNnDY6GHXwPfr5. tezBKSBZTpRe",  # admin123
+        "disabled":  False,
+        "scopes":  ["read", "write", "admin"],
     },
     "operator": {
         "username": "operator",
@@ -55,16 +55,16 @@ fake_users_db = {
 # Format: {api_key: {name, scopes, created_at, expires_at, last_used_at}}
 fake_api_keys = {
     "nethical_test_key_12345": {
-        "name": "Test API Key",
+        "name":  "Test API Key",
         "scopes": ["read", "write"],
-        "created_at": datetime.now(timezone.utc),
-        "expires_at": None,
+        "created_at":  datetime.now(timezone.utc),
+        "expires_at":  None,
         "last_used_at": None,
     }
 }
 
 
-def verify_password(plain_password: str, hashed_password: str) -> bool:
+def verify_password(plain_password: str, hashed_password:  str) -> bool:
     """Verify a password against a hash."""
     return pwd_context.verify(plain_password, hashed_password)
 
@@ -92,17 +92,17 @@ def authenticate_user(username: str, password: str) -> UserInDB | None:
     return user
 
 
-def create_access_token(data: dict, expires_delta: timedelta | None = None) -> str:
+def create_access_token(data: dict, expires_delta:  timedelta | None = None) -> str:
     """Create a JWT access token."""
     config = APIConfig.from_env()
     to_encode = data.copy()
-    if expires_delta:
+    if expires_delta: 
         expire = datetime.now(timezone.utc) + expires_delta
     else:
         expire = datetime.now(timezone.utc) + timedelta(
             minutes=config.access_token_expire_minutes
         )
-    to_encode.update({"exp": expire})
+    to_encode.update({"exp":  expire})
     encoded_jwt = jwt.encode(to_encode, config.secret_key, algorithm=config.algorithm)
     return encoded_jwt
 
@@ -117,7 +117,7 @@ def verify_token(token: str) -> TokenData | None:
             return None
         scopes = payload.get("scopes", [])
         return TokenData(username=username, scopes=scopes)
-    except JWTError:
+    except JWTError: 
         return None
 
 
@@ -131,7 +131,7 @@ def verify_api_key(api_key: str) -> dict | None:
         ):
             return None
         # Update last used
-        key_data["last_used_at"] = datetime.now(timezone.utc)
+        key_data["last_used_at"] = datetime.now(timezone. utc)
         return key_data
     return None
 
@@ -142,7 +142,7 @@ def generate_api_key() -> str:
 
 
 async def get_current_user_from_token(
-    token: Annotated[str | None, Depends(oauth2_scheme)],
+    token:  Annotated[str | None, Depends(oauth2_scheme)],
 ) -> User | None:
     """Get the current user from a JWT token."""
     if not token:
@@ -188,7 +188,7 @@ async def get_current_user_from_api_key(
 
 
 async def get_current_user(
-    token_user: Annotated[User | None, Depends(get_current_user_from_token)],
+    token_user:  Annotated[User | None, Depends(get_current_user_from_token)],
     api_key_user: Annotated[User | None, Depends(get_current_user_from_api_key)],
 ) -> User:
     """Get the current user from either token or API key."""
@@ -207,7 +207,7 @@ async def get_current_user(
 
 
 async def get_current_active_user(
-    current_user: Annotated[User, Depends(get_current_user)]
+    current_user:  Annotated[User, Depends(get_current_user)]
 ) -> User:
     """Get the current active user."""
     return current_user
