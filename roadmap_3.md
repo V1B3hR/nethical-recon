@@ -9,7 +9,7 @@
 
 - ✅ **PHASE A** — Foundation & Repo Professionalization (Completed: 2025-12-16)
 - ✅ **PHASE B** — Unified Data Model + Normalization (Completed: 2025-12-17)
-- ⏳ **PHASE C** — Worker Queue + Scheduler + Concurrency Policy (Not Started)
+- ✅ **PHASE C** — Worker Queue + Scheduler + Concurrency Policy (Completed: 2025-12-24)
 - ⏳ **PHASE D** — API (REST) + OpenAPI + Auth (Not Started)
 - ⏳ **PHASE E** — Observability: Logging + Metrics + Tracing (Not Started)
 - ⏳ **PHASE F** — Docker / Kubernetes / Helm (Not Started)
@@ -154,16 +154,32 @@ All objectives achieved:
 
 ---
 
-### PHASE C — Worker Queue + Scheduler + Concurrency Policy (3–6 tyg.)
+### PHASE C — Worker Queue + Scheduler + Concurrency Policy ✅ COMPLETE (Implemented 2025-12-24)
 **Cel:** skany asynchroniczne, stabilne, skalowalne, zgodne z RoE.
+**Status:** ✅ COMPLETE (Implemented 2025-12-24)
+
+All objectives achieved:
+- ✅ Celery + Redis worker queue implementation
+- ✅ 5 core tasks: run_scan_job, run_tool, normalize_results, finalize_job, generate_report
+- ✅ 2 scheduled tasks: update_baselines, cleanup_old_results
+- ✅ Celery Beat scheduler with cron-based schedules
+- ✅ Policy Engine (RoE) with network, tool, and rate limit policies
+- ✅ Nmap tool adapter with evidence generation
+- ✅ 36 comprehensive tests (29 policy + 7 worker)
+- ✅ Black formatting applied
+- ✅ Full documentation in PHASE_C_SUMMARY.md
+
 
 **C.1 Queue**
 - Celery/RQ worker + Redis.
 - Zadania:
   - `run_scan_job(job_id)`
-  - `run_tool(tool, job_id)`
-  - `normalize_results(run_id)`
+
+- ✅ `nethical job submit ...` i `nethical job status ...` działają
+- ✅ Worker może odpalać równolegle, ale trzyma limity RoE
   - `generate_report(job_id)`
+- ✅ 68 tests passing (32 model + 7 parser + 5 smoke + 29 policy + 7 worker)
+
 
 **C.2 Scheduler**
 - APScheduler/Celery beat:
