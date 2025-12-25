@@ -99,7 +99,9 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None) -> s
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
     else:
-        expire = datetime.now(timezone.utc) + timedelta(minutes=config.access_token_expire_minutes)
+        expire = datetime.now(timezone.utc) + timedelta(
+            minutes=config.access_token_expire_minutes
+        )
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, config.secret_key, algorithm=config.algorithm)
     return encoded_jwt
@@ -124,7 +126,9 @@ def verify_api_key(api_key: str) -> dict | None:
     if api_key in fake_api_keys:
         key_data = fake_api_keys[api_key]
         # Check if expired
-        if key_data["expires_at"] and key_data["expires_at"] < datetime.now(timezone.utc):
+        if key_data["expires_at"] and key_data["expires_at"] < datetime.now(
+            timezone.utc
+        ):
             return None
         # Update last used
         key_data["last_used_at"] = datetime.now(timezone.utc)
@@ -137,7 +141,9 @@ def generate_api_key() -> str:
     return f"nethical_{secrets.token_urlsafe(32)}"
 
 
-async def get_current_user_from_token(token: Annotated[str | None, Depends(oauth2_scheme)]) -> User | None:
+async def get_current_user_from_token(
+    token: Annotated[str | None, Depends(oauth2_scheme)],
+) -> User | None:
     """Get the current user from a JWT token."""
     if not token:
         return None
@@ -194,11 +200,15 @@ async def get_current_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
     if user.disabled:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Inactive user")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Inactive user"
+        )
     return user
 
 
-async def get_current_active_user(current_user: Annotated[User, Depends(get_current_user)]) -> User:
+async def get_current_active_user(
+    current_user: Annotated[User, Depends(get_current_user)]
+) -> User:
     """Get the current active user."""
     return current_user
 
@@ -206,7 +216,9 @@ async def get_current_active_user(current_user: Annotated[User, Depends(get_curr
 def require_scope(required_scope: str):
     """Dependency to require a specific scope."""
 
-    async def scope_checker(current_user: Annotated[User, Depends(get_current_active_user)]) -> User:
+    async def scope_checker(
+        current_user: Annotated[User, Depends(get_current_active_user)],
+    ) -> User:
         if required_scope not in current_user.scopes:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
