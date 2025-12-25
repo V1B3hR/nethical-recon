@@ -12,9 +12,9 @@ from fastapi.security import (
     OAuth2PasswordBearer,
 )
 from jose import JWTError, jwt
-from passlib.context import CryptContext
+from passlib. context import CryptContext
 
-from .config import APIConfig
+from . config import APIConfig
 from .models import TokenData, User, UserInDB
 
 # Password hashing
@@ -33,7 +33,7 @@ fake_users_db = {
         "username": "admin",
         "email": "admin@nethical.local",
         "full_name": "Admin User",
-        "hashed_password": "$2b$12$M5oZwts4WYJpL.KIXtYG2udleiwNnDY6GHXwPfr5.tezBKSBZTpRe",  # admin123
+        "hashed_password": "$2b$12$M5oZwts4WYJpL. KIXtYG2udleiwNnDY6GHXwPfr5.tezBKSBZTpRe",  # admin123
         "disabled": False,
         "scopes": ["read", "write", "admin"],
     },
@@ -41,22 +41,22 @@ fake_users_db = {
         "username": "operator",
         "email": "operator@nethical.local",
         "full_name": "Operator User",
-        "hashed_password": "$2b$12$M5oZwts4WYJpL.KIXtYG2udleiwNnDY6GHXwPfr5.tezBKSBZTpRe",  # admin123
-        "disabled": False,
-        "scopes": ["read", "write"],
+        "hashed_password":  "$2b$12$M5oZwts4WYJpL.KIXtYG2udleiwNnDY6GHXwPfr5.tezBKSBZTpRe",  # admin123
+        "disabled":  False,
+        "scopes":  ["read", "write"],
     },
     "viewer": {
         "username": "viewer",
         "email": "viewer@nethical.local",
         "full_name": "Viewer User",
-        "hashed_password": "$2b$12$M5oZwts4WYJpL.KIXtYG2udleiwNnDY6GHXwPfr5.tezBKSBZTpRe",  # admin123
-        "disabled": False,
-        "scopes": ["read"],
+        "hashed_password":  "$2b$12$M5oZwts4WYJpL.KIXtYG2udleiwNnDY6GHXwPfr5.tezBKSBZTpRe",  # admin123
+        "disabled":  False,
+        "scopes":  ["read"],
     },
 }
 
 # In-memory API keys (in production, use proper database)
-# Format: {api_key: {name, scopes, created_at, expires_at, last_used_at}}
+# Format: {api_key:  {name, scopes, created_at, expires_at, last_used_at}}
 fake_api_keys = {
     "nethical_test_key_12345": {
         "name": "Test API Key",
@@ -64,7 +64,7 @@ fake_api_keys = {
         "created_at": datetime.now(timezone.utc),
         "expires_at": None,
         "last_used_at": None,
-    },
+    }
 }
 
 
@@ -86,7 +86,7 @@ def get_user(username: str) -> UserInDB | None:
     return None
 
 
-def authenticate_user(username: str, password: str) -> UserInDB | None:
+def authenticate_user(username:  str, password: str) -> UserInDB | None:
     """Authenticate a user."""
     user = get_user(username)
     if not user:
@@ -96,16 +96,14 @@ def authenticate_user(username: str, password: str) -> UserInDB | None:
     return user
 
 
-def create_access_token(
-    data: dict, expires_delta: timedelta | None = None
-) -> str:
+def create_access_token(data: dict, expires_delta: timedelta | None = None) -> str:
     """Create a JWT access token."""
     config = APIConfig.from_env()
-    to_encode = data.copy()
+    to_encode = data. copy()
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
     else:
-        expire = datetime.now(timezone.utc) + timedelta(
+        expire = datetime.now(timezone. utc) + timedelta(
             minutes=config.access_token_expire_minutes
         )
     to_encode.update({"exp": expire})
@@ -117,9 +115,9 @@ def verify_token(token: str) -> TokenData | None:
     """Verify a JWT token."""
     config = APIConfig.from_env()
     try:
-        payload = jwt.decode(token, config.secret_key, algorithms=[config.algorithm])
+        payload = jwt.decode(token, config. secret_key, algorithms=[config. algorithm])
         username: str | None = payload.get("sub")
-        if username is None:
+        if username is None: 
             return None
         scopes = payload.get("scopes", [])
         return TokenData(username=username, scopes=scopes)
@@ -148,14 +146,14 @@ def generate_api_key() -> str:
 
 
 async def get_current_user_from_token(
-    token: Annotated[str | None, Depends(oauth2_scheme)],
+    token:  Annotated[str | None, Depends(oauth2_scheme)],
 ) -> User | None:
     """Get the current user from a JWT token."""
     if not token:
         return None
 
     token_data = verify_token(token)
-    if not token_data or not token_data.username:
+    if not token_data or not token_data. username:
         return None
 
     user = get_user(token_data.username)
@@ -172,7 +170,7 @@ async def get_current_user_from_token(
 
 
 async def get_current_user_from_api_key(
-    credentials: Annotated[
+    credentials:  Annotated[
         HTTPAuthorizationCredentials | None, Depends(bearer_scheme)
     ],
 ) -> User | None:
@@ -197,7 +195,7 @@ async def get_current_user_from_api_key(
 
 async def get_current_user(
     token_user: Annotated[User | None, Depends(get_current_user_from_token)],
-    api_key_user: Annotated[User | None, Depends(get_current_user_from_api_key)],
+    api_key_user:  Annotated[User | None, Depends(get_current_user_from_api_key)],
 ) -> User:
     """Get the current user from either token or API key."""
     user = token_user or api_key_user
@@ -230,7 +228,7 @@ def require_scope(required_scope: str):
         if required_scope not in current_user.scopes:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail=f"Not enough permissions. Required scope: {required_scope}",
+                detail=f"Not enough permissions.  Required scope: {required_scope}",
             )
         return current_user
 
