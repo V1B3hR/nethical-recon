@@ -180,7 +180,7 @@ async def get_current_user_from_api_key(
 
     api_key = credentials.credentials
     key_data = verify_api_key(api_key)
-    if not key_data:
+    if not key_data: 
         return None
 
     # Create a synthetic user for API key authentication
@@ -195,15 +195,15 @@ async def get_current_user_from_api_key(
 
 async def get_current_user(
     token_user: Annotated[User | None, Depends(get_current_user_from_token)],
-    api_key_user:  Annotated[User | None, Depends(get_current_user_from_api_key)],
+    api_key_user: Annotated[User | None, Depends(get_current_user_from_api_key)],
 ) -> User:
     """Get the current user from either token or API key."""
     user = token_user or api_key_user
-    if not user:
+    if not user: 
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",
-            headers={"WWW-Authenticate": "Bearer"},
+            headers={"WWW-Authenticate":  "Bearer"},
         )
     if user.disabled:
         raise HTTPException(
@@ -219,7 +219,7 @@ async def get_current_active_user(
     return current_user
 
 
-def require_scope(required_scope: str):
+def require_scope(required_scope:  str):
     """Dependency to require a specific scope."""
 
     async def scope_checker(
@@ -227,7 +227,7 @@ def require_scope(required_scope: str):
     ) -> User:
         if required_scope not in current_user.scopes:
             raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
+                status_code=status. HTTP_403_FORBIDDEN,
                 detail=f"Not enough permissions.  Required scope: {required_scope}",
             )
         return current_user
