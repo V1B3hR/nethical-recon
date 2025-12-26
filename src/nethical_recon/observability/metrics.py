@@ -153,22 +153,23 @@ error_rate = Counter(
 def track_duration(metric_name: str, labels: Optional[dict[str, str]] = None):
     """
     Decorator to track duration of a function execution.
-    
+
     Args:
         metric_name: Name of the metric to use (tool_run, job, api_request)
         labels: Labels to add to the metric
-        
+
     Example:
         @track_duration("tool_run", {"tool_name": "nmap", "status": "success"})
         def run_nmap():
             ...
     """
+
     def decorator(func: Callable) -> Callable:
         @wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
             start_time = time.time()
             status = "success"
-            
+
             try:
                 result = func(*args, **kwargs)
                 return result
@@ -177,7 +178,7 @@ def track_duration(metric_name: str, labels: Optional[dict[str, str]] = None):
                 raise
             finally:
                 duration = time.time() - start_time
-                
+
                 # Select appropriate metric
                 if metric_name == "tool_run":
                     tool_run_duration.labels(**labels or {}).observe(duration)
@@ -185,8 +186,9 @@ def track_duration(metric_name: str, labels: Optional[dict[str, str]] = None):
                     job_duration.labels(status=status).observe(duration)
                 elif metric_name == "api_request":
                     api_request_duration.labels(**labels or {}).observe(duration)
-        
+
         return wrapper
+
     return decorator
 
 
@@ -194,7 +196,7 @@ def track_duration(metric_name: str, labels: Optional[dict[str, str]] = None):
 def track_tool_run(tool_name: str) -> Generator[dict[str, Any], None, None]:
     """
     Context manager to track tool run metrics.
-    
+
     Example:
         with track_tool_run("nmap") as metrics:
             run_nmap()
@@ -202,7 +204,7 @@ def track_tool_run(tool_name: str) -> Generator[dict[str, Any], None, None]:
     """
     start_time = time.time()
     metrics_data = {"status": "success", "error_type": None}
-    
+
     try:
         yield metrics_data
     except Exception as e:
@@ -213,7 +215,7 @@ def track_tool_run(tool_name: str) -> Generator[dict[str, Any], None, None]:
     finally:
         duration = time.time() - start_time
         status = metrics_data["status"]
-        
+
         tool_run_duration.labels(tool_name=tool_name, status=status).observe(duration)
         tool_run_total.labels(tool_name=tool_name, status=status).inc()
 
@@ -221,7 +223,7 @@ def track_tool_run(tool_name: str) -> Generator[dict[str, Any], None, None]:
 def track_findings(findings_count: int, severity: str, tool_name: str, job_id: Optional[str] = None) -> None:
     """
     Track findings metrics.
-    
+
     Args:
         findings_count: Number of findings
         severity: Severity level (info, low, medium, high, critical)
@@ -229,7 +231,7 @@ def track_findings(findings_count: int, severity: str, tool_name: str, job_id: O
         job_id: Optional job ID
     """
     findings_total.labels(severity=severity, tool_name=tool_name).inc(findings_count)
-    
+
     if job_id:
         findings_per_job.labels(job_id=job_id).observe(findings_count)
 
@@ -237,7 +239,7 @@ def track_findings(findings_count: int, severity: str, tool_name: str, job_id: O
 def track_errors(component: str, error_type: str) -> None:
     """
     Track error occurrences.
-    
+
     Args:
         component: Component where error occurred (e.g., "worker", "api", "parser")
         error_type: Type of error (e.g., "TimeoutError", "ValidationError")
@@ -248,14 +250,14 @@ def track_errors(component: str, error_type: str) -> None:
 def increment_counter(counter_name: str, labels: Optional[dict[str, str]] = None, value: float = 1) -> None:
     """
     Increment a counter metric.
-    
+
     Args:
         counter_name: Name of the counter (job_total, tool_run_total, etc.)
         labels: Labels for the counter
         value: Value to increment by (default: 1)
     """
     labels = labels or {}
-    
+
     if counter_name == "job_total":
         job_total.labels(**labels).inc(value)
     elif counter_name == "tool_run_total":
@@ -267,14 +269,14 @@ def increment_counter(counter_name: str, labels: Optional[dict[str, str]] = None
 def observe_value(metric_name: str, value: float, labels: Optional[dict[str, str]] = None) -> None:
     """
     Observe a value in a histogram or summary metric.
-    
+
     Args:
         metric_name: Name of the metric
         value: Value to observe
         labels: Labels for the metric
     """
     labels = labels or {}
-    
+
     if metric_name == "tool_run_duration":
         tool_run_duration.labels(**labels).observe(value)
     elif metric_name == "job_duration":
@@ -288,7 +290,7 @@ def observe_value(metric_name: str, value: float, labels: Optional[dict[str, str
 def update_queue_depth(queue_name: str, depth: int) -> None:
     """
     Update queue depth gauge.
-    
+
     Args:
         queue_name: Name of the queue (e.g., "celery", "default")
         depth: Current queue depth
@@ -299,7 +301,7 @@ def update_queue_depth(queue_name: str, depth: int) -> None:
 def update_active_workers(count: int) -> None:
     """
     Update active workers gauge.
-    
+
     Args:
         count: Number of active workers
     """
@@ -309,7 +311,7 @@ def update_active_workers(count: int) -> None:
 def get_metrics() -> bytes:
     """
     Get current metrics in Prometheus format.
-    
+
     Returns:
         Metrics in Prometheus text format
     """

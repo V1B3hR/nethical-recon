@@ -47,7 +47,7 @@ def run_scan_job(self, job_id: str) -> dict[str, Any]:
     # Create logger with correlation IDs
     job_logger = get_logger(__name__, job_id=job_id)
     job_logger.info("scan job started")
-    
+
     job_uuid = UUID(job_id)
     db = init_database()
 
