@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import logging
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
@@ -27,10 +26,11 @@ from nethical_recon.core.storage.repository import (
     TargetRepository,
     ToolRunRepository,
 )
+from nethical_recon.observability import get_logger, track_tool_run, track_findings, increment_counter
 from nethical_recon.worker.celery_app import celery_app
 from nethical_recon.worker.policy import get_policy_engine
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 @celery_app.task(bind=True, name="nethical_recon.worker.tasks.run_scan_job")
@@ -44,7 +44,10 @@ def run_scan_job(self, job_id: str) -> dict[str, Any]:
     Returns:
         Dictionary with job results
     """
-    logger.info(f"Starting scan job {job_id}")
+    # Create logger with correlation IDs
+    job_logger = get_logger(__name__, job_id=job_id)
+    job_logger.info("scan job started")
+    
     job_uuid = UUID(job_id)
     db = init_database()
 

@@ -1,10 +1,11 @@
 """FastAPI application factory."""
 
+import time
 from datetime import datetime, timezone
 
-from fastapi import FastAPI, status
+from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 
 from .config import APIConfig
 from .models import HealthResponse
@@ -34,6 +35,52 @@ def create_app(config: APIConfig | None = None) -> FastAPI:
             allow_methods=config.cors_allow_methods or ["*"],
             allow_headers=config.cors_allow_headers or ["*"],
         )
+
+    # Metrics middleware
+    @app.middleware("http")
+    async def metrics_middleware(request: Request, call_next):
+        """Middleware to track API request metrics."""
+        from nethical_recon.observability import get_logger, increment_counter, observe_value
+
+        start_time = time.time()
+        
+        # Get logger with request context
+        logger = get_logger(__name__, path=request.url.path, method=request.method)
+        logger.debug("api request received")
+        
+        try:
+            response = await call_next(request)
+            
+            # Track metrics
+            duration = time.time() - start_time
+            observe_value(
+                "api_request_duration",
+                duration,
+                {"method": request.method, "endpoint": request.url.path}
+            )
+            increment_counter(
+                "api_requests_total",
+                {"method": request.method, "endpoint": request.url.path, "status_code": str(response.status_code)}
+            )
+            
+            logger.info("api request completed", status_code=response.status_code, duration=duration)
+            return response
+        except Exception as e:
+            logger.error("api request failed", error=str(e), exc_info=True)
+            increment_counter(
+                "api_requests_total",
+                {"method": request.method, "endpoint": request.url.path, "status_code": "500"}
+            )
+            raise
+
+    # Metrics endpoint
+    @app.get("/metrics", tags=["observability"])
+    async def metrics():
+        """Prometheus metrics endpoint."""
+        from nethical_recon.observability.metrics import get_metrics
+        
+        metrics_data = get_metrics()
+        return Response(content=metrics_data, media_type="text/plain")
 
     # Health check endpoint
     @app.get("/health", response_model=HealthResponse, tags=["health"])
