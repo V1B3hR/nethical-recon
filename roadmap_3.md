@@ -10,7 +10,7 @@
 - ✅ **PHASE A** — Foundation & Repo Professionalization (Completed: 2025-12-16)
 - ✅ **PHASE B** — Unified Data Model + Normalization (Completed: 2025-12-17)
 - ✅ **PHASE C** — Worker Queue + Scheduler + Concurrency Policy (Completed: 2025-12-24)
-- ⏳ **PHASE D** — API (REST) + OpenAPI + Auth (Not Started)
+- ✅ **PHASE D** — API (REST) + OpenAPI + Auth (Completed: 2025-12-25)
 - ⏳ **PHASE E** — Observability: Logging + Metrics + Tracing (Not Started)
 - ⏳ **PHASE F** — Docker / Kubernetes / Helm (Not Started)
 - ⏳ **PHASE G** — Secrets Management (Not Started)
@@ -196,8 +196,25 @@ All objectives achieved:
 
 ---
 
-### PHASE D — API (REST) + OpenAPI + Auth (4–8 tyg.)
+### PHASE D — API (REST) + OpenAPI + Auth ✅ COMPLETE (Implemented 2025-12-25)
 **Cel:** profesjonalna rozszerzalność i integracja z innymi systemami.
+**Status:** ✅ COMPLETE (Implemented 2025-12-25)
+
+All objectives achieved:
+- ✅ FastAPI REST API with comprehensive endpoints
+- ✅ 20+ endpoints: /targets, /jobs, /runs, /findings, /reports
+- ✅ Filtering, pagination, and sorting on all list endpoints
+- ✅ JWT token authentication (OAuth2)
+- ✅ API key authentication (Bearer tokens)
+- ✅ Role-based access control (viewer/operator/admin)
+- ✅ Scope-based authorization (read, write, admin)
+- ✅ OpenAPI auto-generated documentation
+- ✅ Swagger UI at /api/v1/docs
+- ✅ ReDoc at /api/v1/redoc
+- ✅ CLI integration: `nethical api serve`
+- ✅ 27 comprehensive tests (all passing)
+- ✅ Full documentation in PHASE_D_SUMMARY.md
+
 
 **D.1 REST API**
 - FastAPI:
@@ -214,8 +231,8 @@ All objectives achieved:
 - “Integration cookbook” (SIEM, ticketing, pipelines)
 
 **DoD PHASE D**
-- Można odpalić job przez API i odebrać wyniki
-- OpenAPI kompletne, działa w CI jako “contract”
+- ✅ Można odpalić job przez API i odebrać wyniki
+- ✅ OpenAPI kompletne, działa w CI jako “contract”
 
 ---
 

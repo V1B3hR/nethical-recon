@@ -14,6 +14,10 @@ app = typer.Typer(
 job_app = typer.Typer(help="Job management commands")
 app.add_typer(job_app, name="job")
 
+# API server subcommand
+api_app = typer.Typer(help="API server commands")
+app.add_typer(api_app, name="api")
+
 
 @app.command()
 def version():
@@ -276,6 +280,52 @@ def report(job_id: str | None = typer.Argument(None, help="Job ID to generate re
     """Generate reports."""
     typer.echo(f"Report generation - Job ID: {job_id}")
     typer.echo("Full implementation coming in Phase B")
+
+
+# API server commands
+@api_app.command("serve")
+def api_serve(
+    host: str = typer.Option("0.0.0.0", "--host", "-h", help="Host to bind to"),
+    port: int = typer.Option(8000, "--port", "-p", help="Port to bind to"),
+    reload: bool = typer.Option(False, "--reload", "-r", help="Enable auto-reload"),
+    workers: int = typer.Option(4, "--workers", "-w", help="Number of workers"),
+):
+    """Start the REST API server."""
+    import uvicorn
+
+    from nethical_recon.api import create_app
+    from nethical_recon.api.config import APIConfig
+
+    config = APIConfig(
+        host=host,
+        port=port,
+        reload=reload,
+        workers=workers,
+    )
+
+    typer.echo(f"Starting Nethical Recon API server on http://{host}:{port}")
+    typer.echo(f"API documentation: http://{host}:{port}{config.api_prefix}/docs")
+    typer.echo(f"ReDoc documentation: http://{host}:{port}{config.api_prefix}/redoc")
+    typer.echo("")
+    typer.echo("Default credentials:")
+    typer.echo("  Admin: admin / admin123 (scopes: read, write, admin)")
+    typer.echo("  Operator: operator / admin123 (scopes: read, write)")
+    typer.echo("  Viewer: viewer / admin123 (scopes: read)")
+    typer.echo("")
+    typer.echo("Default API key:")
+    typer.echo("  nethical_test_key_12345 (scopes: read, write)")
+    typer.echo("")
+
+    app_instance = create_app(config)
+
+    # Run with uvicorn
+    uvicorn.run(
+        app_instance,
+        host=host,
+        port=port,
+        reload=reload,
+        workers=1 if reload else workers,
+    )
 
 
 def main(argv: list[str] | None = None) -> int:
