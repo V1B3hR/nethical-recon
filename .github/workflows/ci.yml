@@ -83,6 +83,8 @@ jobs:
   secret-leak-test:
     name: Test Secret Leakage Prevention
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       
