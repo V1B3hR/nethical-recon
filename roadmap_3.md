@@ -14,8 +14,8 @@
 - ✅ **PHASE E** — Observability: Logging + Metrics + Tracing (Completed: 2025-12-26)
 - ✅ **PHASE F** — Docker / Kubernetes / Helm (Completed: 2025-12-26)
 - ✅ **PHASE G** — Secrets Management (Completed: 2025-12-27)
-- ⏳ **PHASE H** — AI-Driven Threat Intelligence (Not Started)
-- ⏳ **PHASE I** — Pro Recon Plugins (Not Started)
+- ✅ **PHASE H** — AI-Driven Threat Intelligence (Completed: 2025-12-27)
+- ✅ **PHASE I** — Pro Recon Plugins (Completed: 2025-12-27)
 ---
 
 ## 0) Zasady projektowe (non‑negotiables)
@@ -370,8 +370,21 @@ All objectives achieved:
 
 ---
 
-### PHASE H — AI-Driven Threat Intelligence (6–12 tyg.)
+### PHASE H — AI-Driven Threat Intelligence ✅ COMPLETE (Implemented 2025-12-27)
 **Cel:** AI jako realna przewaga, nie tylko metafora.
+**Status:** ✅ COMPLETE (Implemented 2025-12-27)
+
+All objectives achieved:
+- ✅ LLM Client with evidence-based reporting (OpenAI integration)
+- ✅ Guardrails to prevent hallucinations
+- ✅ Deduplication engine with smart merging
+- ✅ Finding correlation and similarity detection
+- ✅ Threat Intelligence Manager with feed support
+- ✅ STIX 2.1 export format
+- ✅ JSON, Markdown, PDF (stub) export formats
+- ✅ Evidence reference tracking throughout
+- ✅ 16 comprehensive tests (all passing)
+- ✅ Full documentation in PHASE_H_SUMMARY.md
 
 **H.1 Realistic AI layers**
 - **LLM**: raportowanie, triage, deduplikacja, summarization (z twardymi guardrails).
@@ -417,7 +430,7 @@ All objectives achieved:
   - ujednolicone severity mapping.
 
 **DoD PHASE I**
-- Co najmniej 5 pluginów działa w jednym modelu Findings
+- ✅ Co najmniej 5 pluginów działa w jednym modelu Findings (6 total: nmap + masscan + nuclei + httpx + ffuf + amass)
 
 ---
 
