@@ -85,8 +85,11 @@ bandit-report.json
 *.pem
 *.key
 *.crt
-secrets/
-credentials/
+/secrets/
+/credentials/
+
+# Except for our secrets management source code
+!src/nethical_recon/secrets/
 
 # Database files
 *.db
