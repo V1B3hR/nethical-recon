@@ -1,7 +1,8 @@
 """API configuration."""
 
-import os
 from dataclasses import dataclass
+
+from nethical_recon.secrets import get_secrets_manager
 
 
 @dataclass
@@ -37,19 +38,21 @@ class APIConfig:
 
     @classmethod
     def from_env(cls) -> "APIConfig":
-        """Load configuration from environment variables."""
+        """Load configuration from environment variables using secrets manager."""
+        secrets = get_secrets_manager()
+
         return cls(
-            host=os.getenv("API_HOST", "0.0.0.0"),
-            port=int(os.getenv("API_PORT", "8000")),
-            reload=os.getenv("API_RELOAD", "false").lower() == "true",
-            workers=int(os.getenv("API_WORKERS", "4")),
-            secret_key=os.getenv("API_SECRET_KEY", "CHANGE_THIS_IN_PRODUCTION"),
-            algorithm=os.getenv("API_ALGORITHM", "HS256"),
-            access_token_expire_minutes=int(os.getenv("API_ACCESS_TOKEN_EXPIRE_MINUTES", "30")),
-            api_prefix=os.getenv("API_PREFIX", "/api/v1"),
-            title=os.getenv("API_TITLE", "Nethical Recon API"),
-            version=os.getenv("API_VERSION", "1.0.0"),
-            cors_origins=os.getenv("API_CORS_ORIGINS", "").split(",") if os.getenv("API_CORS_ORIGINS") else None,
-            default_page_size=int(os.getenv("API_DEFAULT_PAGE_SIZE", "50")),
-            max_page_size=int(os.getenv("API_MAX_PAGE_SIZE", "1000")),
+            host=secrets.get("API_HOST", "0.0.0.0"),
+            port=int(secrets.get("API_PORT", "8000")),
+            reload=secrets.get("API_RELOAD", "false").lower() == "true",
+            workers=int(secrets.get("API_WORKERS", "4")),
+            secret_key=secrets.get("API_SECRET_KEY", "CHANGE_THIS_IN_PRODUCTION"),
+            algorithm=secrets.get("API_ALGORITHM", "HS256"),
+            access_token_expire_minutes=int(secrets.get("API_ACCESS_TOKEN_EXPIRE_MINUTES", "30")),
+            api_prefix=secrets.get("API_PREFIX", "/api/v1"),
+            title=secrets.get("API_TITLE", "Nethical Recon API"),
+            version=secrets.get("API_VERSION", "1.0.0"),
+            cors_origins=secrets.get("API_CORS_ORIGINS", "").split(",") if secrets.get("API_CORS_ORIGINS") else None,
+            default_page_size=int(secrets.get("API_DEFAULT_PAGE_SIZE", "50")),
+            max_page_size=int(secrets.get("API_MAX_PAGE_SIZE", "1000")),
         )

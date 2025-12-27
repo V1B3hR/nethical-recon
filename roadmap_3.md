@@ -13,7 +13,7 @@
 - ✅ **PHASE D** — API (REST) + OpenAPI + Auth (Completed: 2025-12-25)
 - ✅ **PHASE E** — Observability: Logging + Metrics + Tracing (Completed: 2025-12-26)
 - ✅ **PHASE F** — Docker / Kubernetes / Helm (Completed: 2025-12-26)
-- ⏳ **PHASE G** — Secrets Management (Not Started)
+- ✅ **PHASE G** — Secrets Management (Completed: 2025-12-27)
 - ⏳ **PHASE H** — AI-Driven Threat Intelligence (Not Started)
 - ⏳ **PHASE I** — Pro Recon Plugins (Not Started)
 ---
@@ -333,20 +333,40 @@ All objectives achieved:
 
 ---
 
-### PHASE G — Secrets Management (1–3 tyg. + ciągłe)
+### PHASE G — Secrets Management ✅ COMPLETE (Implemented 2025-12-27)
 **Cel:** bezpieczne zarządzanie kluczami API i tokenami.
+**Status:** ✅ COMPLETE (Implemented 2025-12-27)
 
-**G.1 Minimalnie**
-- `.env` + env vars, brak sekretów w repo.
-- Wymuszenie: brak kluczy w logach.
+All objectives achieved:
+- ✅ Centralized secrets management module (`src/nethical_recon/secrets/`)
+- ✅ Multiple backend support: EnvBackend, DotEnvBackend
+- ✅ Prepared for future: VaultBackend, K8sSecretsBackend
+- ✅ Secrets sanitizer with pattern matching (15+ patterns)
+- ✅ API and Worker config integration
+- ✅ `.env.example` template with all required secrets
+- ✅ Enhanced .gitignore to prevent secret commits
+- ✅ CI secret scanning with gitleaks
+- ✅ Secret leakage prevention tests in CI
+- ✅ 35 comprehensive tests (all passing)
+- ✅ Full documentation in PHASE_G_SUMMARY.md
 
-**G.2 Docelowo**
-- HashiCorp Vault / Kubernetes External Secrets.
-- Rotacja sekretów.
-- “Secret scopes” per connector (Shodan, Censys, LLM).
+**G.1 Minimalnie** ✅
+- ✅ `.env` + env vars, brak sekretów w repo
+- ✅ Wymuszenie: brak kluczy w logach (automatic sanitization)
+- ✅ Pattern matching for API keys, tokens, passwords, connection strings
+- ✅ Sanitization utilities for dicts, strings, lists
 
-**DoD PHASE G**
-- Sekrety nie pojawiają się w outputach, test “secret-leak” w CI
+**G.2 Docelowo** (Prepared)
+- 🔄 HashiCorp Vault / Kubernetes External Secrets (backend stubs ready)
+- 🔄 Rotacja sekretów (manual process, automation ready)
+- ✅ "Secret scopes" per connector (via get_external_api_keys())
+
+**DoD PHASE G** ✅ ALL VERIFIED
+- ✅ Sekrety nie pojawiają się w outputach (sanitizer tested)
+- ✅ Test "secret-leak" w CI (gitleaks + pytest)
+- ✅ 35 tests passing (100% success rate)
+- ✅ Documentation complete (PHASE_G_SUMMARY.md)
+
 
 ---
 

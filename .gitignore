@@ -77,6 +77,20 @@ dmypy.json
 # Security scanning reports
 bandit-report.json
 *.sarif
+
+# Secrets and environment files
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+/secrets/
+/credentials/
+
+# Except for our secrets management source code
+!src/nethical_recon/secrets/
+
 # Database files
 *.db
 *.db-shm
