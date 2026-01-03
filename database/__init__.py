@@ -1,45 +1,11 @@
-"""
-Database Module for Nethical Recon
-Multi-backend database support for stain storage
+"""Database Module"""
 
-🗂️ FALA 6: STAIN DATABASE
-"Permanent storage for marked threats across multiple backends"
-"""
-
-from .base_store import BaseStore, StoreBackend
-from .connection_pool import ConnectionPool, PooledStore
-from .db2_store import Db2Store
-from .elasticsearch_store import ElasticsearchStore
-from .mongodb_store import MongoDBStore
-from .mssql_store import MSSQLStore
-from .mysql_store import MySQLStore
-from .oracle_store import OracleStore
-from .postgres_store import PostgreSQLStore
-from .redis_cache import RedisCache
-from .snowflake_store import SnowflakeStore
-from .sqlite_store import SQLiteStore
-from .store_factory import StoreFactory, create_store
+from .pooling import ConnectionPool
+from .query_optimization import QueryOptimizer
+from .backup_restore import BackupManager
 
 __all__ = [
-    # Base classes
-    "BaseStore",
-    "StoreBackend",
-    # Store implementations
-    "SQLiteStore",
-    "PostgreSQLStore",
-    "MySQLStore",
-    "MSSQLStore",
-    "OracleStore",
-    "Db2Store",
-    "SnowflakeStore",
-    "MongoDBStore",
-    "RedisCache",
-    "ElasticsearchStore",
-    # Factory and utilities
-    "StoreFactory",
-    "create_store",
     "ConnectionPool",
-    "PooledStore",
+    "QueryOptimizer",
+    "BackupManager",
 ]
-
-__version__ = "1.0.0"

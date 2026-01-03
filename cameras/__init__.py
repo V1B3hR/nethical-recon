@@ -20,6 +20,9 @@ from .manager import CameraManager
 from .shodan_eye import ShodanEye
 from .ssl_scanner import SSLScanner
 from .waf_detector import WAFDetector
+from .rate_limiter import APIRateLimiter, RateLimitConfig
+from .key_rotation import APIKeyRotator, APIKey
+from .enrichment import EnrichmentPipeline, EnrichmentProvider
 
 __all__ = [
     "BaseCamera",
@@ -33,4 +36,10 @@ __all__ = [
     "SSLScanner",
     "DNSEnumerator",
     "WAFDetector",
+    "APIRateLimiter",
+    "RateLimitConfig",
+    "APIKeyRotator",
+    "APIKey",
+    "EnrichmentPipeline",
+    "EnrichmentProvider",
 ]

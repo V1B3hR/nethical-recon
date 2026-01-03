@@ -32,6 +32,11 @@ from .rules.engine import Rule, RuleCondition, RuleOperator, RulesEngine
 from .rules.hybrid_mode import DecisionMode, HybridDecisionMaker
 from .swarm import NanobotSwarm
 
+# New features
+from .ml_prediction import MLThreatPredictor, ThreatPredictionModel, ThreatFeatures
+from .adaptive_behavior import AdaptiveBehavior, BehaviorProfile
+from .swarm_coordination import SwarmCoordinator, SwarmRole
+
 __all__ = [
     # Base
     "BaseNanobot",
@@ -61,6 +66,14 @@ __all__ = [
     # Learning
     "BaselineLearner",
     "SimpleMLAnomalyDetector",
+    # New features
+    "MLThreatPredictor",
+    "ThreatPredictionModel",
+    "ThreatFeatures",
+    "AdaptiveBehavior",
+    "BehaviorProfile",
+    "SwarmCoordinator",
+    "SwarmRole",
 ]
 
 
