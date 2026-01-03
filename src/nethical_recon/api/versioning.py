@@ -9,19 +9,20 @@ from enum import Enum
 
 class APIVersion(Enum):
     """Supported API versions"""
+
     V1 = "v1"
     V2 = "v2"
 
 
 class VersionManager:
     """Manages API versioning"""
-    
+
     def __init__(self):
         self.logger = logging.getLogger("nethical.api.version")
         self._initialize_logger()
         self.current_version = APIVersion.V2
         self.supported_versions = [APIVersion.V1, APIVersion.V2]
-    
+
     def _initialize_logger(self):
         if not self.logger.handlers:
             handler = logging.StreamHandler()
@@ -29,7 +30,7 @@ class VersionManager:
             handler.setFormatter(formatter)
             self.logger.addHandler(handler)
             self.logger.setLevel(logging.INFO)
-    
+
     def is_supported(self, version: str) -> bool:
         """Check if version is supported"""
         try:
@@ -37,11 +38,11 @@ class VersionManager:
             return ver in self.supported_versions
         except ValueError:
             return False
-    
+
     def get_version_info(self) -> dict[str, Any]:
         """Get version information"""
         return {
-            'current': self.current_version.value,
-            'supported': [v.value for v in self.supported_versions],
-            'deprecated': ['v0']
+            "current": self.current_version.value,
+            "supported": [v.value for v in self.supported_versions],
+            "deprecated": ["v0"],
         }
