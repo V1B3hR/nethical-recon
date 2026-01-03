@@ -7,8 +7,8 @@ import logging
 from typing import Any
 import json
 
-from ..trees import Tree
-from ..base import ForestBase
+from .trees import Tree
+from .base import ForestBase
 
 
 class GraphExporter:
