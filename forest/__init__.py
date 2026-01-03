@@ -40,6 +40,11 @@ from .threats import (
 # Import tree components
 from .trees import Branch, BranchType, Crown, ForestMap, Leaf, LeafType, Tree, Trunk
 
+# Import new features
+from .graph_export import GraphExporter
+from .websocket_updates import ForestWebSocketManager, ForestWebSocketBridge, ForestEvent
+from .snapshot import ForestSnapshot, ForestDiff, ForestSnapshotManager
+
 __all__ = [
     # Base classes
     "ForestBase",
@@ -68,4 +73,12 @@ __all__ = [
     "Parasite",
     "Bat",
     "ThreatDetector",
+    # New features
+    "GraphExporter",
+    "ForestWebSocketManager",
+    "ForestWebSocketBridge",
+    "ForestEvent",
+    "ForestSnapshot",
+    "ForestDiff",
+    "ForestSnapshotManager",
 ]
