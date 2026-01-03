@@ -10,6 +10,7 @@ from typing import Any
 
 class CloudProvider(Enum):
     """Supported cloud providers"""
+
     AWS = "aws"
     AZURE = "azure"
     GCP = "gcp"
@@ -18,6 +19,7 @@ class CloudProvider(Enum):
 @dataclass
 class TerraformConfig:
     """Terraform configuration"""
+
     provider: CloudProvider
     region: str
     project_name: str
@@ -29,7 +31,7 @@ class TerraformConfig:
 class TerraformGenerator:
     """
     Generates Terraform Infrastructure-as-Code configurations
-    
+
     Features:
     - Multi-cloud support (AWS, Azure, GCP)
     - Database provisioning
@@ -37,11 +39,11 @@ class TerraformGenerator:
     - Networking
     - Monitoring integration
     """
-    
+
     def __init__(self, config: TerraformConfig):
         """Initialize Terraform generator"""
         self.config = config
-    
+
     def generate_provider_config(self) -> str:
         """Generate Terraform provider configuration"""
         if self.config.provider == CloudProvider.AWS:
@@ -52,7 +54,7 @@ class TerraformGenerator:
             return self._generate_gcp_provider()
         else:
             raise ValueError(f"Unsupported provider: {self.config.provider}")
-    
+
     def _generate_aws_provider(self) -> str:
         """Generate AWS provider configuration"""
         return f"""
@@ -78,7 +80,7 @@ provider "aws" {{
   }}
 }}
 """
-    
+
     def _generate_azure_provider(self) -> str:
         """Generate Azure provider configuration"""
         return f"""
@@ -98,7 +100,7 @@ provider "azurerm" {{
   subscription_id = var.azure_subscription_id
 }}
 """
-    
+
     def _generate_gcp_provider(self) -> str:
         """Generate GCP provider configuration"""
         return f"""
@@ -117,7 +119,7 @@ provider "google" {{
   region  = "{self.config.region}"
 }}
 """
-    
+
     def generate_database(self) -> str:
         """Generate database infrastructure"""
         if self.config.provider == CloudProvider.AWS:
@@ -127,7 +129,7 @@ provider "google" {{
         elif self.config.provider == CloudProvider.GCP:
             return self._generate_gcp_cloudsql()
         return ""
-    
+
     def _generate_aws_rds(self) -> str:
         """Generate AWS RDS PostgreSQL"""
         backup_config = ""
@@ -136,7 +138,7 @@ provider "google" {{
   backup_retention_period = 7
   backup_window          = "03:00-04:00"
 """
-        
+
         return f"""
 resource "aws_db_instance" "nethical_recon" {{
   identifier     = "{self.config.project_name}-{self.config.environment}"
@@ -176,7 +178,7 @@ resource "aws_security_group" "database" {{
   }}
 }}
 """
-    
+
     def _generate_azure_database(self) -> str:
         """Generate Azure Database for PostgreSQL"""
         return f"""
@@ -196,7 +198,7 @@ resource "azurerm_postgresql_flexible_server" "nethical_recon" {{
   geo_redundant_backup_enabled = true
 }}
 """
-    
+
     def _generate_gcp_cloudsql(self) -> str:
         """Generate GCP Cloud SQL PostgreSQL"""
         return f"""
@@ -221,7 +223,7 @@ resource "google_sql_database_instance" "nethical_recon" {{
   }}
 }}
 """
-    
+
     def generate_storage(self) -> str:
         """Generate cloud storage bucket"""
         if self.config.provider == CloudProvider.AWS:
@@ -231,7 +233,7 @@ resource "google_sql_database_instance" "nethical_recon" {{
         elif self.config.provider == CloudProvider.GCP:
             return self._generate_gcs_bucket()
         return ""
-    
+
     def _generate_s3_bucket(self) -> str:
         """Generate AWS S3 bucket"""
         return f"""
@@ -266,7 +268,7 @@ resource "aws_s3_bucket_public_access_block" "nethical_recon" {{
   restrict_public_buckets = true
 }}
 """
-    
+
     def _generate_azure_storage(self) -> str:
         """Generate Azure Storage Account"""
         return f"""
@@ -287,7 +289,7 @@ resource "azurerm_storage_container" "data" {{
   container_access_type = "private"
 }}
 """
-    
+
     def _generate_gcs_bucket(self) -> str:
         """Generate GCP Cloud Storage bucket"""
         return f"""
@@ -306,11 +308,11 @@ resource "google_storage_bucket" "nethical_recon" {{
   }}
 }}
 """
-    
+
     def export_all(self) -> dict[str, str]:
         """Export all Terraform configurations"""
         return {
             "provider.tf": self.generate_provider_config(),
             "database.tf": self.generate_database(),
-            "storage.tf": self.generate_storage()
+            "storage.tf": self.generate_storage(),
         }

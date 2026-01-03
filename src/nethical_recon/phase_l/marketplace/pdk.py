@@ -10,6 +10,7 @@ from typing import Any
 @dataclass
 class PluginTemplate:
     """Plugin code template"""
+
     template_type: str
     code: str
     description: str
@@ -18,38 +19,32 @@ class PluginTemplate:
 class PluginDevelopmentKit:
     """
     Plugin Development Kit for creating custom modules
-    
+
     Features:
     - Code templates
     - Development guidelines
     - Testing utilities
     - Documentation generator
     """
-    
+
     def __init__(self):
         """Initialize PDK"""
         self._templates = self._load_templates()
-    
+
     def _load_templates(self) -> dict[str, PluginTemplate]:
         """Load plugin templates"""
         return {
             "scanner": PluginTemplate(
-                template_type="scanner",
-                code=self._scanner_template(),
-                description="Template for scanner plugins"
+                template_type="scanner", code=self._scanner_template(), description="Template for scanner plugins"
             ),
             "analyzer": PluginTemplate(
-                template_type="analyzer",
-                code=self._analyzer_template(),
-                description="Template for analyzer plugins"
+                template_type="analyzer", code=self._analyzer_template(), description="Template for analyzer plugins"
             ),
             "reporter": PluginTemplate(
-                template_type="reporter",
-                code=self._reporter_template(),
-                description="Template for reporter plugins"
+                template_type="reporter", code=self._reporter_template(), description="Template for reporter plugins"
             ),
         }
-    
+
     def _scanner_template(self) -> str:
         """Generate scanner plugin template"""
         return '''"""
@@ -118,7 +113,7 @@ def create_plugin(config: Dict[str, Any]) -> CustomScanner:
     """Create plugin instance"""
     return CustomScanner(config)
 '''
-    
+
     def _analyzer_template(self) -> str:
         """Generate analyzer plugin template"""
         return '''"""
@@ -177,7 +172,7 @@ def create_plugin(config: Dict[str, Any]) -> CustomAnalyzer:
     """Create plugin instance"""
     return CustomAnalyzer(config)
 '''
-    
+
     def _reporter_template(self) -> str:
         """Generate reporter plugin template"""
         return '''"""
@@ -230,42 +225,40 @@ def create_plugin(config: Dict[str, Any]) -> CustomReporter:
     """Create plugin instance"""
     return CustomReporter(config)
 '''
-    
+
     def get_template(self, template_type: str) -> PluginTemplate | None:
         """Get plugin template by type"""
         return self._templates.get(template_type)
-    
+
     def list_templates(self) -> list[str]:
         """List available templates"""
         return list(self._templates.keys())
-    
-    def generate_plugin_scaffold(
-        self, plugin_name: str, template_type: str
-    ) -> dict[str, str]:
+
+    def generate_plugin_scaffold(self, plugin_name: str, template_type: str) -> dict[str, str]:
         """
         Generate plugin scaffold files
-        
+
         Args:
             plugin_name: Name of the plugin
             template_type: Type of plugin template
-            
+
         Returns:
             Dictionary of filename -> content
         """
         template = self._templates.get(template_type)
         if not template:
             raise ValueError(f"Template {template_type} not found")
-        
+
         files = {
             f"{plugin_name}.py": template.code,
             "README.md": self._generate_readme(plugin_name, template_type),
             "requirements.txt": "# Add your dependencies here\n",
             "test_{}.py".format(plugin_name): self._generate_test_template(plugin_name),
-            "plugin.yaml": self._generate_plugin_manifest(plugin_name, template_type)
+            "plugin.yaml": self._generate_plugin_manifest(plugin_name, template_type),
         }
-        
+
         return files
-    
+
     def _generate_readme(self, plugin_name: str, template_type: str) -> str:
         """Generate README for plugin"""
         return f"""# {plugin_name}
@@ -306,7 +299,7 @@ pytest test_{plugin_name}.py
 
 MIT
 """
-    
+
     def _generate_test_template(self, plugin_name: str) -> str:
         """Generate test template"""
         return f"""import pytest
@@ -327,7 +320,7 @@ def test_plugin_functionality():
     # TODO: Add your tests
     pass
 """
-    
+
     def _generate_plugin_manifest(self, plugin_name: str, template_type: str) -> str:
         """Generate plugin manifest (YAML)"""
         return f"""name: {plugin_name}
@@ -347,38 +340,34 @@ permissions:
   - findings.read
   - findings.write
 """
-    
+
     def validate_plugin(self, plugin_code: str) -> dict[str, Any]:
         """
         Validate plugin code
-        
+
         Args:
             plugin_code: Plugin source code
-            
+
         Returns:
             Validation result
         """
         issues = []
         warnings = []
-        
+
         # Check for required components
         if "def create_plugin" not in plugin_code:
             issues.append("Missing create_plugin entry point")
-        
+
         if "PLUGIN_NAME" not in plugin_code:
             warnings.append("Missing PLUGIN_NAME metadata")
-        
+
         if "PLUGIN_VERSION" not in plugin_code:
             warnings.append("Missing PLUGIN_VERSION metadata")
-        
+
         # Check for security issues
         dangerous_imports = ["os.system", "subprocess", "eval", "exec"]
         for dangerous in dangerous_imports:
             if dangerous in plugin_code:
                 warnings.append(f"Potentially dangerous: {dangerous}")
-        
-        return {
-            "valid": len(issues) == 0,
-            "issues": issues,
-            "warnings": warnings
-        }
+
+        return {"valid": len(issues) == 0, "issues": issues, "warnings": warnings}
