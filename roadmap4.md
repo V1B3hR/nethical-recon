@@ -42,7 +42,9 @@ Database (85% → 100%)
 Connection Pooling Optimization
 Query Performance Optimization
 Backup & Restore
+
 PHASE K — Backend API Hardening (4-6 tygodni) 🔒
+
 WebSocket Support (real-time updates)
 Rate Limiting Middleware (slowapi + Redis)
 API Versioning (/api/v1, /api/v2)
@@ -51,27 +53,34 @@ OpenAPI Documentation Enhancements
 Health Check Improvements (liveness/readiness probes)
 Request/Response Compression
 CORS Hardening
+
 PHASE L — Advanced Features (8-12 tygodni) 🚀
+
 L.1 AI-Enhanced Threat Correlation
 Attack Chain Detection (Cyber Kill Chain)
 MITRE ATT&CK Mapping
 Threat Actor Attribution
+
 L.2 Collaborative Features
 Multi-User Workspaces
 Role-Based Permissions (RBAC)
 Comments & Annotations on Findings
 Export to Jira/GitHub Issues
+
 L.3 Cloud-Native Deployment
 Kubernetes Enhancements (Service Mesh, HPA)
 Terraform Infrastructure-as-Code
 Cloud Storage Integration (S3/GCS/Azure)
+
 L.4 Compliance & Reporting
 Executive PDF Reports
 Compliance Mappings (OWASP/NIST/ISO 27001)
 Trend Analysis (attack surface changes)
+
 L.5 Marketplace for Custom Modules
 Plugin Marketplace API
 Plugin Development Kit (PDK)
+
 Verified Plugin System
 🎯 Key Features
 ✅ Konkretne implementacje - każda funkcja ma przykład kodu
