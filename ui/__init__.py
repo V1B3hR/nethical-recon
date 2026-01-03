@@ -1,10 +1,14 @@
-"""
-🎯 Nethical Hunter Command Center UI
-FALA 7: TABLET MYŚLIWEGO - Main Command Dashboard
+"""UI/Dashboard Module"""
 
-This module provides the UI components for the hunter's tablet -
-the central command center for all hunting operations.
-"""
+from .base import BaseUI
+from .dashboard import Dashboard
+from .websocket_live import DashboardWebSocketManager
+from .themes import ThemeManager, ThemeType
 
-__version__ = "3.0.0"
-__all__ = ["dashboard", "panels", "screens", "widgets"]
+__all__ = [
+    "BaseUI",
+    "Dashboard",
+    "DashboardWebSocketManager",
+    "ThemeManager",
+    "ThemeType",
+]
