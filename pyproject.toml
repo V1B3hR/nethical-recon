@@ -79,7 +79,7 @@ Repository = "https://github.com/V1B3hR/nethical-recon"
 Issues = "https://github.com/V1B3hR/nethical-recon/issues"
 
 [tool.setuptools]
-packages = ["nethical_recon"]
+packages.find = {where = ["src"], include = ["nethical_recon*"]}
 package-dir = {"" = "src"}
 
 [tool.setuptools.package-data]
