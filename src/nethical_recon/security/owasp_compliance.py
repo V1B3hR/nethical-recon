@@ -202,7 +202,9 @@ class OWASPChecker:
             details="RBAC implemented" if passed else "Access control not properly implemented",
         )
 
-    def check_logging(self, has_logging: bool, secure_logging: bool = False, audit_trail: bool = False) -> ComplianceCheck:
+    def check_logging(
+        self, has_logging: bool, secure_logging: bool = False, audit_trail: bool = False
+    ) -> ComplianceCheck:
         """Check V7: Error Handling and Logging (ASVS 7.1.1).
 
         Args:
