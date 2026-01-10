@@ -1,6 +1,8 @@
 """API routers."""
 
+from .attack_surface import router as attack_surface_router
 from .auth import router as auth_router
+from .enrichment import router as enrichment_router
 from .findings import router as findings_router
 from .jobs import router as jobs_router
 from .reports import router as reports_router
@@ -14,4 +16,6 @@ __all__ = [
     "runs_router",
     "findings_router",
     "reports_router",
+    "attack_surface_router",
+    "enrichment_router",
 ]
