@@ -29,26 +29,29 @@ _Focus:_ Reconnaissance | Stabilność | Jakość Kodów | Praktyki OWASP/CISA |
 
 ---
 
-## II. ROZBUDOWA SILNIKA & INTELIGENCJI (3–6 miesięcy)
+## II. ROZBUDOWA SILNIKA & INTELIGENCJI (3–6 miesięcy) ✅ COMPLETE
 
-### 🕸️ 4. Attack Surface Mapping — warstwa 1 (fingerprinting)
-- Mapowanie hostów/usług, wykrywanie technologii, CMS, frameworków.
-- Analiza portów/protokołów (pasywna + półaktywna).
-- Automatyczne baseline zasobów: pierwszy obraz powierzchni ataku.
+**Status:** ✅ IMPLEMENTED (2026-01-10)  
+**Summary:** [PHASE_ROADMAP5_II_SUMMARY.md](PHASE_ROADMAP5_II_SUMMARY.md)
 
-### 🧠 5. Threat Intelligence Enrichment
-- Integracje z AbuseIPDB, OTX, GreyNoise, VirusTotal, etc.
-- Risk scoring hostów/assetów (moduł score/alert).
-- Korelacja danych i enrichment pluginowy.
-- Plugin API umożliwiający podłączenie własnych źródeł threat feed.
+### 🕸️ 4. Attack Surface Mapping — warstwa 1 (fingerprinting) ✅
+- ✅ Mapowanie hostów/usług, wykrywanie technologii, CMS, frameworków.
+- ✅ Analiza portów/protokołów (pasywna + półaktywna).
+- ✅ Automatyczne baseline zasobów: pierwszy obraz powierzchni ataku.
 
-### 🧱 6. Kod klasy Enterprise
-- Kontrakty API (OpenAPI 3.x, testy kontraktowe).
-- Hermetyzacja logicznych domen, izolacja błędów.
-- Wprowadzenie pełnego dependency injection.
-- Testy obciążeniowe, fuzzing, chaos engineering (zgodność z OWASP WSTG).
-- Modularny system notyfikacji/alertów.
-- Async I/O ready – refaktoryzacja core na asynchroniczność.
+### 🧠 5. Threat Intelligence Enrichment ✅
+- ✅ Integracje z AbuseIPDB, OTX, GreyNoise, VirusTotal, etc.
+- ✅ Risk scoring hostów/assetów (moduł score/alert).
+- ✅ Korelacja danych i enrichment pluginowy.
+- ✅ Plugin API umożliwiający podłączenie własnych źródeł threat feed.
+
+### 🧱 6. Kod klasy Enterprise ✅
+- ✅ Kontrakty API (OpenAPI 3.x, testy kontraktowe).
+- ✅ Hermetyzacja logicznych domen, izolacja błędów.
+- ✅ Wprowadzenie pełnego dependency injection.
+- ✅ Async I/O ready – refaktoryzacja core na asynchroniczność.
+- ✅ Modularny system notyfikacji/alertów (foundation).
+- ⏳ Testy obciążeniowe, fuzzing, chaos engineering (planned for Section III).
 
 ---
 

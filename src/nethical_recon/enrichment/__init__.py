@@ -14,7 +14,7 @@ from .providers import (
     ThreatProvider,
 )
 from .scoring import RiskScorer, RiskScore
-from .plugin_api import EnrichmentPlugin, PluginRegistry
+from .plugin_api import EnrichmentPlugin, PluginRegistry, PluginMetadata
 
 __all__ = [
     "ThreatEnricher",
@@ -28,4 +28,5 @@ __all__ = [
     "RiskScore",
     "EnrichmentPlugin",
     "PluginRegistry",
+    "PluginMetadata",
 ]
