@@ -154,6 +154,8 @@ class TLSFingerprinter:
 
             # Create a simple fingerprint (not true JA3)
             # True JA3 requires: TLS Version, Ciphers, Extensions, Curves, Point Formats
+            # Note: MD5 is used here for JA3 compatibility (JA3 standard uses MD5)
+            # This is not for cryptographic security but for fingerprint consistency
             fingerprint_string = f"{protocol}|{cipher_name}"
             ja3_hash = hashlib.md5(fingerprint_string.encode()).hexdigest()
 

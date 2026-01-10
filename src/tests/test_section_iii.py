@@ -10,6 +10,7 @@ from nethical_recon.active_recon import (
     ScanProfile,
     TLSFingerprinter,
 )
+from nethical_recon.active_recon.tls_fingerprinter import TLSInfo
 
 
 class TestActiveRecon:
@@ -67,8 +68,6 @@ class TestActiveRecon:
 
     def test_tls_vulnerability_checking(self):
         """Test TLS vulnerability detection."""
-        from nethical_recon.active_recon.tls_fingerprinter import TLSInfo
-        
         fingerprinter = TLSFingerprinter()
         
         # Test with old SSL protocol
