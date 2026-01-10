@@ -20,7 +20,7 @@ WORKDIR /build
 # Copy dependency files
 COPY pyproject.toml ./
 COPY requirements.txt ./
-COPY README.md ./
+COPY docs/README.md ./
 COPY src/ ./src/
 
 # Build wheels
@@ -62,7 +62,6 @@ RUN pip install --upgrade pip && \
 
 # Copy application code
 COPY --chown=nethical:nethical src/ ./src/
-COPY --chown=nethical:nethical alembic/ ./alembic/
 COPY --chown=nethical:nethical alembic.ini ./
 
 # Switch to non-root user

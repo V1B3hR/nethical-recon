@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "nethical-recon"
 version = "0.1.0"
 description = "Advanced Cybersecurity Reconnaissance & Threat Hunting Platform"
-readme = "README.md"
+readme = "docs/README.md"
 requires-python = ">=3.11"
 license = {text = "MIT"}
 authors = [
@@ -113,7 +113,7 @@ warn_unused_configs = true
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["src/tests"]
 python_files = ["test_*.py", "*_test.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
@@ -125,7 +125,7 @@ addopts = [
 ]
 
 [tool.bandit]
-exclude_dirs = ["tests", "examples"]
+exclude_dirs = ["src/tests", "src/examples"]
 skips = ["B101", "B601"]
 
 [tool.isort]
