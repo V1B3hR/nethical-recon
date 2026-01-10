@@ -55,30 +55,33 @@ _Focus:_ Reconnaissance | Stabilność | Jakość Kodów | Praktyki OWASP/CISA |
 
 ---
 
-## III. ARCHITEKTURA OPERACYJNA (6–12 miesięcy)
+## III. ARCHITEKTURA OPERACYJNA (6–12 miesięcy) ✅ COMPLETE
 
-### 🛰️ 7. Aktywny Recon (warstwa 2)
-- Aktywne skanowanie portów (Nmap/Python/Rust High-Performance).
-- Banner grabbing, advanced protocol probing.
-- TLS fingerprinting (JA3/JA4), identyfikacja wersji i mapping do CVE.
-- Obsługa pluginów drono-sensorów i live asset mapping.
+**Status:** ✅ IMPLEMENTED (2026-01-10)  
+**Summary:** [PHASE_ROADMAP5_III_SUMMARY.md](PHASE_ROADMAP5_III_SUMMARY.md)
 
-### 🗺️ 8. Attack Surface Mapping — warstwa 2
-- Generowanie i wizualizacja grafu zależności (host→usługa→technologia→podatność).
-- Wykrywanie, alertowanie i różnicowanie zmian (delta/baseline).
-- Exposed assets detection oraz trending assets.
-- Alerty live na nowe incydenty i “delta monitoring”.
+### 🛰️ 7. Aktywny Recon (warstwa 2) ✅
+- ✅ Aktywne skanowanie portów (Nmap/Python/Rust High-Performance).
+- ✅ Banner grabbing, advanced protocol probing.
+- ✅ TLS fingerprinting (JA3/JA4), identyfikacja wersji i mapping do CVE.
+- ✅ Obsługa pluginów drono-sensorów i live asset mapping (foundation).
 
-### 🛡️ 9. OWASP i audyt bezpieczeństwa — poziom zaawansowany
-- OWASP WSTG (Web Security Testing Guide) – wybrane testy bezpieczeństwa.
-- Automatyczne checklisty audytowe, generatory raportów zgodności (PCI DSS, GDPR, etc).
-- Moduł testów bezpieczeństwa API (OWASP API Top 10), security logging.
-- Monitoring i SIEM-ready logging; webhooki, syslog, integracja alertów.
+### 🗺️ 8. Attack Surface Mapping — warstwa 2 ✅
+- ✅ Generowanie i wizualizacja grafu zależności (host→usługa→technologia→podatność).
+- ✅ Wykrywanie, alertowanie i różnicowanie zmian (delta/baseline).
+- ✅ Exposed assets detection oraz trending assets.
+- ✅ Alerty live na nowe incydenty i "delta monitoring".
 
-### 💬 Dodatki ENTERPRISE
-- System alertowania: e‑mail, webhook, ServiceNow/JIRA integration.
-- Wstępna multi-tenancy (workspace separation).
-- Early-stage plugin marketplace (własne pluginy, rozliczanie, review system).
+### 🛡️ 9. OWASP i audyt bezpieczeństwa — poziom zaawansowany ✅
+- ✅ OWASP WSTG (Web Security Testing Guide) – wybrane testy bezpieczeństwa.
+- ✅ Automatyczne checklisty audytowe, generatory raportów zgodności (PCI DSS, GDPR, etc).
+- ✅ Moduł testów bezpieczeństwa API (OWASP API Top 10), security logging.
+- ✅ Monitoring i SIEM-ready logging; webhooki, syslog, integracja alertów (foundation).
+
+### 💬 Dodatki ENTERPRISE ✅
+- ✅ System alertowania: e‑mail, webhook, ServiceNow/JIRA integration (foundation).
+- ✅ Wstępna multi-tenancy (workspace separation) (foundation).
+- ✅ Early-stage plugin marketplace (własne pluginy, rozliczanie, review system) (foundation).
 
 ---
 
