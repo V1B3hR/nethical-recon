@@ -202,7 +202,12 @@ class TestOWASPChecker:
     def test_run_basic_checks(self):
         checker = OWASPChecker()
         report = checker.run_basic_checks(
-            has_input_validation=True, has_authentication=True, has_logging=True, has_rbac=True, uses_tls=True, validates_urls=True
+            has_input_validation=True,
+            has_authentication=True,
+            has_logging=True,
+            has_rbac=True,
+            uses_tls=True,
+            validates_urls=True,
         )
 
         assert report.total_checks == 6
