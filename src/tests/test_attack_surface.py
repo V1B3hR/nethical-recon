@@ -122,9 +122,7 @@ class TestAttackSurfaceMapper:
                     asset_id="web_1",
                     asset_type="web_application",
                     host="example.com",
-                    technologies=[
-                        {"name": "nginx", "category": "web_server", "version": "1.21.0", "confidence": 0.9}
-                    ],
+                    technologies=[{"name": "nginx", "category": "web_server", "version": "1.21.0", "confidence": 0.9}],
                 )
             ],
         )

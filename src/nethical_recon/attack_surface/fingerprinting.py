@@ -134,7 +134,9 @@ class TechnologyFingerprinter:
             ),
         ]
 
-    def fingerprint(self, url: str, headers: dict[str, str] | None = None, body: str | None = None) -> list[DetectionResult]:
+    def fingerprint(
+        self, url: str, headers: dict[str, str] | None = None, body: str | None = None
+    ) -> list[DetectionResult]:
         """
         Fingerprint technologies from URL, headers, and body.
 

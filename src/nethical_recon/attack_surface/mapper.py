@@ -118,9 +118,7 @@ class AttackSurfaceMapper:
         self.logger.info(f"Mapped {len(assets)} assets for {target}")
         return snapshot
 
-    def compare_snapshots(
-        self, baseline: AttackSurfaceSnapshot, current: AttackSurfaceSnapshot
-    ) -> dict[str, Any]:
+    def compare_snapshots(self, baseline: AttackSurfaceSnapshot, current: AttackSurfaceSnapshot) -> dict[str, Any]:
         """
         Compare two attack surface snapshots to detect changes.
 

@@ -128,9 +128,7 @@ class BaselineManager:
                 )
         return None
 
-    def detect_changes(
-        self, baseline_name: str, current_snapshot: AttackSurfaceSnapshot
-    ) -> dict[str, Any]:
+    def detect_changes(self, baseline_name: str, current_snapshot: AttackSurfaceSnapshot) -> dict[str, Any]:
         """
         Detect changes between baseline and current snapshot.
 

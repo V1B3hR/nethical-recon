@@ -36,9 +36,7 @@ class EnrichRequest(BaseModel):
 class BatchEnrichRequest(BaseModel):
     """Request to enrich multiple indicators."""
 
-    indicators: list[dict[str, str]] = Field(
-        ..., description="List of {indicator, indicator_type} dicts"
-    )
+    indicators: list[dict[str, str]] = Field(..., description="List of {indicator, indicator_type} dicts")
 
 
 class EnrichmentResponse(BaseModel):
