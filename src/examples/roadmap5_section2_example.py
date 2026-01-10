@@ -199,9 +199,7 @@ def example_risk_scoring():
         "host": "db.example.com",
         "port": 3306,  # MySQL - high risk port
         "services": [{"service": "mysql"}],
-        "technologies": [
-            {"name": "MySQL", "category": "database", "version": None}
-        ],
+        "technologies": [{"name": "MySQL", "category": "database", "version": None}],
     }
 
     enrichment_data = {
