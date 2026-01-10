@@ -10,6 +10,7 @@ from fastapi.responses import JSONResponse, Response
 from .config import APIConfig
 from .models import HealthResponse
 from .routers import (
+    active_recon_router,
     attack_surface_router,
     auth_router,
     enrichment_router,
@@ -17,7 +18,9 @@ from .routers import (
     jobs_router,
     reports_router,
     runs_router,
+    security_testing_router,
     targets_router,
+    visualization_router,
 )
 
 
@@ -141,6 +144,9 @@ def create_app(config: APIConfig | None = None) -> FastAPI:
     app.include_router(reports_router, prefix=config.api_prefix)
     app.include_router(attack_surface_router, prefix=config.api_prefix)
     app.include_router(enrichment_router, prefix=config.api_prefix)
+    app.include_router(active_recon_router, prefix=config.api_prefix)
+    app.include_router(visualization_router, prefix=config.api_prefix)
+    app.include_router(security_testing_router, prefix=config.api_prefix)
 
     # Exception handlers
     @app.exception_handler(ValueError)
