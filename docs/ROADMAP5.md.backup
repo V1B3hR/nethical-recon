@@ -85,30 +85,27 @@ _Focus:_ Reconnaissance | Stabilność | Jakość Kodów | Praktyki OWASP/CISA |
 
 ---
 
-## IV. PLATFORMIZACJA & UI/UX (12–18 miesięcy) ✅ COMPLETE
+## IV. PLATFORMIZACJA & UI/UX (12–18 miesięcy)
 
-**Status:** ✅ IMPLEMENTED (2026-01-14)  
-**Summary:** [PHASE_ROADMAP5_IV_SUMMARY.md](PHASE_ROADMAP5_IV_SUMMARY.md)
+### 📊 10. Dashboard / GUI
+- Webowe UI (Tauri+Rust, React/Next.js, D3.js grafy).
+- Wizualizacja grafowa assetów, timeline reconu.
+- Live monitoring assetów, findings, jobs, alertów.
+- Moduł raportów (PDF/HTML, client-ready reporting).
 
-### 📊 10. Dashboard / GUI ✅
-- ✅ Webowe UI (FastAPI endpoints, D3.js-ready data structures).
-- ✅ Wizualizacja grafowa assetów, timeline reconu.
-- ✅ Live monitoring assetów, findings, jobs, alertów (WebSocket/SSE ready).
-- ✅ Moduł raportów (PDF/HTML, client-ready reporting).
+### 🤖 11. System agentów i automatyzacji
+- Harmonogramy rozpoznania (playbooki, orchestrator, job dependencies).
+- Automatyczne playbooki (“pełny recon domeny”, “alert escalation”, “incident response”).
+- Pełna integracja SIEM/SOAR (Elastic, Splunk, Azure Sentinel, webhooki).
 
-### 🤖 11. System agentów i automatyzacji ✅
-- ✅ Harmonogramy rozpoznania (playbooki, orchestrator, job dependencies).
-- ✅ Automatyczne playbooki ("pełny recon domeny", "alert escalation", "incident response").
-- ✅ Pełna integracja SIEM/SOAR (Elastic, Splunk, Azure Sentinel, webhooki, syslog).
+### 🧬 12. Nethical Integration Layer
+- Wspólne API pod integracje z innymi narzędziami Nethical.
+- Centralne API scoringu i decision engine.
+- Możliwość organizowania ekosystemu narzędzi (plugin registry, extension API).
 
-### 🧬 12. Nethical Integration Layer ✅
-- ✅ Wspólne API pod integracje z innymi narzędziami Nethical.
-- ✅ Centralne API scoringu i decision engine.
-- ✅ Możliwość organizowania ekosystemu narzędzi (plugin registry, extension API).
-
-### 🔌 13. Extension & Marketplace ✅
-- ✅ Publiczny marketplace na pluginy custom (zatwierdzanie, review, versioning).
-- ✅ Extension API dla społeczności z przykładowymi rozszerzeniami.
+### 🔌 13. Extension & Marketplace
+- Publiczny marketplace na pluginy custom (zatwierdzanie, review, versioning).
+- Extension API dla społeczności.
 
 ---
 
