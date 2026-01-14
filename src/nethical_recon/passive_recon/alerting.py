@@ -7,6 +7,17 @@ from enum import Enum
 from typing import Any, Optional
 
 
+class AlertType(Enum):
+    """Alert types."""
+    
+    GENERAL = "general"
+    VULNERABILITY = "vulnerability"
+    KEV = "kev"  # CISA Known Exploited Vulnerability
+    THREAT_INTEL = "threat_intel"
+    EXPOSURE = "exposure"
+    CONFIGURATION = "configuration"
+
+
 class AlertSeverity(Enum):
     """Alert severity levels."""
 
@@ -33,7 +44,23 @@ class Alert:
     title: str
     message: str
     severity: AlertSeverity
+    alert_type: AlertType = AlertType.GENERAL
     metadata: Optional[dict[str, Any]] = None
+
+
+@dataclass
+class KEVAlert(Alert):
+    """CISA KEV-specific alert."""
+    
+    cve_id: str = ""
+    required_action: str = ""
+    due_date: Optional[str] = None
+    
+    def __post_init__(self):
+        """Set defaults for KEV alerts."""
+        self.alert_type = AlertType.KEV
+        if self.severity == AlertSeverity.INFO:
+            self.severity = AlertSeverity.HIGH  # KEV alerts are at least HIGH
 
 
 class AlertManager:
@@ -140,6 +167,35 @@ class AlertManager:
         except Exception:
             # Silent failure for alerting
             pass
+
+    def send_kev_alert(self, cve_id: str, kev_metadata: dict[str, Any]):
+        """
+        Send KEV-specific alert.
+        
+        Args:
+            cve_id: CVE identifier
+            kev_metadata: KEV metadata from CISA catalog
+        """
+        alert = KEVAlert(
+            title=f"🚨 CISA KEV Detected: {cve_id}",
+            message=f"CISA Known Exploited Vulnerability detected in your environment.\n\n"
+                   f"CVE: {cve_id}\n"
+                   f"Vulnerability: {kev_metadata.get('vulnerability_name', 'N/A')}\n"
+                   f"Vendor/Product: {kev_metadata.get('vendor_project', 'N/A')} / {kev_metadata.get('product', 'N/A')}\n"
+                   f"Required Action: {kev_metadata.get('required_action', 'See CISA guidance')}\n"
+                   f"Due Date: {kev_metadata.get('due_date', 'Immediate action required')}",
+            severity=AlertSeverity.CRITICAL,
+            cve_id=cve_id,
+            required_action=kev_metadata.get('required_action', ''),
+            due_date=kev_metadata.get('due_date'),
+            metadata={
+                "cve_id": cve_id,
+                "kev_metadata": kev_metadata,
+                "source": "CISA KEV Catalog",
+            }
+        )
+        
+        self.send_alert(alert)
 
     def _get_severity_color(self, severity: AlertSeverity) -> str:
         """Get color for severity level (Slack format).
