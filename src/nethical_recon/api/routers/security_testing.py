@@ -142,8 +142,7 @@ async def generate_compliance_report(
     Supports OWASP WSTG, PCI DSS, GDPR, and other frameworks.
     """
     logger.info(
-        f"Compliance report requested for {request.target} ({request.framework}) "
-        f"by user {current_user['username']}"
+        f"Compliance report requested for {request.target} ({request.framework}) " f"by user {current_user['username']}"
     )
 
     try:
@@ -163,8 +162,7 @@ async def generate_compliance_report(
         if not framework:
             raise HTTPException(
                 status_code=400,
-                detail=f"Unknown framework: {request.framework}. "
-                f"Supported: {', '.join(framework_map.keys())}",
+                detail=f"Unknown framework: {request.framework}. " f"Supported: {', '.join(framework_map.keys())}",
             )
 
         # Generate appropriate report based on framework

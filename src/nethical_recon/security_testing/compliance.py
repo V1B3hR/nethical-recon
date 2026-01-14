@@ -50,9 +50,7 @@ class ComplianceReporter:
         """Initialize compliance reporter."""
         self.reports: list[ComplianceReport] = []
 
-    def generate_owasp_report(
-        self, target: str, test_results: list[Any]
-    ) -> ComplianceReport:
+    def generate_owasp_report(self, target: str, test_results: list[Any]) -> ComplianceReport:
         """Generate OWASP compliance report.
 
         Args:

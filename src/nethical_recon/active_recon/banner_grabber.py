@@ -89,9 +89,7 @@ class BannerGrabber:
 
         return result
 
-    def grab_multiple(
-        self, host: str, ports: list[int], auto_detect_ssl: bool = True
-    ) -> list[BannerResult]:
+    def grab_multiple(self, host: str, ports: list[int], auto_detect_ssl: bool = True) -> list[BannerResult]:
         """Grab banners from multiple ports.
 
         Args:

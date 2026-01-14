@@ -229,8 +229,4 @@ class DeltaMonitor:
         Returns:
             List of high/critical severity changes
         """
-        return [
-            c
-            for c in self.changes
-            if c.severity in [AlertSeverity.HIGH, AlertSeverity.CRITICAL]
-        ]
+        return [c for c in self.changes if c.severity in [AlertSeverity.HIGH, AlertSeverity.CRITICAL]]

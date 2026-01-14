@@ -96,10 +96,10 @@ class ExposedAssetDetector:
         # Check for unencrypted services
         if asset.service:
             service_lower = asset.service.lower()
-            if any(
-                unencrypted in service_lower
-                for unencrypted in ["ftp", "telnet", "http"]
-            ) and asset.port not in [443, 8443]:
+            if any(unencrypted in service_lower for unencrypted in ["ftp", "telnet", "http"]) and asset.port not in [
+                443,
+                8443,
+            ]:
                 if exposure_level == ExposureLevel.LOW:
                     exposure_level = ExposureLevel.MEDIUM
                 reasons.append(f"Unencrypted service: {asset.service}")
@@ -107,8 +107,7 @@ class ExposedAssetDetector:
 
         # Check for database services exposed
         if asset.service and any(
-            db in asset.service.lower()
-            for db in ["mysql", "postgres", "mongodb", "redis", "elastic"]
+            db in asset.service.lower() for db in ["mysql", "postgres", "mongodb", "redis", "elastic"]
         ):
             if exposure_level.value in ["low", "medium"]:
                 exposure_level = ExposureLevel.HIGH

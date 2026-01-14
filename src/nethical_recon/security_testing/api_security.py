@@ -55,9 +55,7 @@ class APISecurityTester:
 
         try:
             # Test without authentication
-            response = self.session.request(
-                endpoint.method, endpoint.url, timeout=self.timeout, verify=False
-            )
+            response = self.session.request(endpoint.method, endpoint.url, timeout=self.timeout, verify=False)
 
             if endpoint.auth_required:
                 if response.status_code == 200:
@@ -112,9 +110,7 @@ class APISecurityTester:
         try:
             status_codes = []
             for _ in range(requests_count):
-                response = self.session.request(
-                    endpoint.method, endpoint.url, timeout=self.timeout, verify=False
-                )
+                response = self.session.request(endpoint.method, endpoint.url, timeout=self.timeout, verify=False)
                 status_codes.append(response.status_code)
 
             # Check if rate limiting was triggered
