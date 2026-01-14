@@ -299,9 +299,7 @@ class ExampleThreatIntelExtension:
             "author": "Nethical Team",
             "type": "integration",
             "capabilities": ["ip_reputation", "domain_threats", "cve_lookup", "finding_enrichment"],
-            "config_schema": {
-                "api_key": {"type": "string", "required": True, "description": "Threat intel API key"}
-            },
+            "config_schema": {"api_key": {"type": "string", "required": True, "description": "Threat intel API key"}},
         }
 
 

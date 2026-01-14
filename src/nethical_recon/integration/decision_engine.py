@@ -192,10 +192,10 @@ class DecisionEngine:
     def should_auto_escalate(self, risk_score: RiskScore) -> bool:
         """Decide if incident should be auto-escalated"""
         # Auto-escalate critical with high confidence
-        return (
-            risk_score.risk_level == RiskLevel.CRITICAL
-            and risk_score.confidence in [ConfidenceLevel.CONFIRMED, ConfidenceLevel.HIGH]
-        )
+        return risk_score.risk_level == RiskLevel.CRITICAL and risk_score.confidence in [
+            ConfidenceLevel.CONFIRMED,
+            ConfidenceLevel.HIGH,
+        ]
 
     def should_block(self, risk_score: RiskScore, threat_context: Optional[ThreatContext] = None) -> bool:
         """Decide if asset/IP should be blocked"""

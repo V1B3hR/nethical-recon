@@ -378,14 +378,16 @@ Based on the findings, the following compliance gaps were identified:
     def _to_dict(self) -> Dict[str, Any]:
         """Convert report to dictionary"""
         return {
-            "metadata": {
-                "title": self.metadata.title,
-                "type": self.metadata.report_type.value,
-                "generated_at": self.metadata.generated_at.isoformat(),
-                "generated_by": self.metadata.generated_by,
-            }
-            if self.metadata
-            else {},
+            "metadata": (
+                {
+                    "title": self.metadata.title,
+                    "type": self.metadata.report_type.value,
+                    "generated_at": self.metadata.generated_at.isoformat(),
+                    "generated_by": self.metadata.generated_by,
+                }
+                if self.metadata
+                else {}
+            ),
             "sections": [{"title": s.title, "content": s.content} for s in self.sections],
             "findings": [
                 {

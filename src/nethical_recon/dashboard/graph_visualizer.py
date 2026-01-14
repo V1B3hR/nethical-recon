@@ -159,9 +159,7 @@ class GraphVisualizer:
         self.add_edge(edge)
         return node.id
 
-    def add_finding(
-        self, finding_id: UUID, title: str, severity: str, parent_node_id: str
-    ):
+    def add_finding(self, finding_id: UUID, title: str, severity: str, parent_node_id: str):
         """Add finding node and link to parent"""
         # Size based on severity
         size_map = {"critical": 18, "high": 15, "medium": 12, "low": 10, "info": 8}
