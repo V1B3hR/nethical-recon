@@ -213,8 +213,7 @@ class KillChainAnalyzer:
 
         # Reconnaissance indicators
         if any(
-            keyword in event_type
-            for keyword in ["scan", "probe", "enumeration", "whois", "dns_query", "discovery"]
+            keyword in event_type for keyword in ["scan", "probe", "enumeration", "whois", "dns_query", "discovery"]
         ):
             return KillChainPhase.RECONNAISSANCE
 

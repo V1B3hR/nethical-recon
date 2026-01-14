@@ -294,9 +294,7 @@ class LateralMovementDetector:
 
         # Check for rapid authentication from same user
         recent_same_user = [
-            e
-            for e in self._recent_authentications
-            if e.get("username") == username and e != auth_event
+            e for e in self._recent_authentications if e.get("username") == username and e != auth_event
         ]
 
         if len(recent_same_user) > 3:

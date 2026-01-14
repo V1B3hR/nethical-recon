@@ -127,9 +127,7 @@ class OrganizationRiskMapper:
         # Calculate overall metrics
         risk_map.overall_risk_score = self._calculate_overall_risk(zones)
         risk_map.high_risk_assets = sum(1 for asset in assets if self._get_asset_risk(asset) >= 70)
-        risk_map.critical_vulnerabilities = sum(
-            1 for vuln in vulnerabilities if vuln.get("severity") == "critical"
-        )
+        risk_map.critical_vulnerabilities = sum(1 for vuln in vulnerabilities if vuln.get("severity") == "critical")
         risk_map.attack_surface_score = self._calculate_attack_surface_score(assets)
 
         # Generate recommendations
@@ -145,9 +143,7 @@ class OrganizationRiskMapper:
 
         return risk_map
 
-    def _create_risk_zones(
-        self, assets: list[dict[str, Any]], vulnerabilities: list[dict[str, Any]]
-    ) -> list[RiskZone]:
+    def _create_risk_zones(self, assets: list[dict[str, Any]], vulnerabilities: list[dict[str, Any]]) -> list[RiskZone]:
         """Create risk zones by grouping assets"""
         zones = []
 
@@ -339,7 +335,9 @@ class OrganizationRiskMapper:
         # Zone-specific recommendations
         high_risk_zones = [z for z in risk_map.zones if z.risk_level in ["high", "critical"]]
         if high_risk_zones:
-            recommendations.append(f"Focus on {len(high_risk_zones)} high-risk zones: {', '.join(z.name for z in high_risk_zones[:3])}")
+            recommendations.append(
+                f"Focus on {len(high_risk_zones)} high-risk zones: {', '.join(z.name for z in high_risk_zones[:3])}"
+            )
 
         return recommendations
 

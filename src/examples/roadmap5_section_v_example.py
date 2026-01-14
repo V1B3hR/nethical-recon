@@ -56,9 +56,7 @@ def example_anomaly_detection():
         # ... more historical data
     ]
 
-    baseline = service.create_baseline(
-        entity_id="host-web-01", entity_type="host", historical_data=historical_data
-    )
+    baseline = service.create_baseline(entity_id="host-web-01", entity_type="host", historical_data=historical_data)
 
     print(f"\nBaseline created for host-web-01")
     print(f"  Confidence: {baseline.confidence_level:.2f}")
@@ -191,9 +189,7 @@ def example_asset_inventory():
     print("=" * 80)
 
     # Initialize integration
-    integration = AssetInventoryIntegration(
-        config={"cmdb_type": "custom", "match_threshold": 0.7}
-    )
+    integration = AssetInventoryIntegration(config={"cmdb_type": "custom", "match_threshold": 0.7})
 
     # Load assets from CMDB
     asset_count = integration.load_assets_from_cmdb()
@@ -224,9 +220,7 @@ def example_asset_inventory():
                 print(f"    - {disc}")
 
     # Calculate business impact
-    impact_score = integration.calculate_business_impact_score(
-        asset_identifier="192.168.1.10", finding_severity="high"
-    )
+    impact_score = integration.calculate_business_impact_score(asset_identifier="192.168.1.10", finding_severity="high")
     print(f"\n  Business impact score: {impact_score:.1f}/100")
 
 
@@ -379,9 +373,7 @@ def example_digital_twin():
     print("=" * 80)
 
     # Initialize digital twin
-    twin = DigitalTwin(
-        config={"organization_name": "Example Corporation", "enable_simulation": True}
-    )
+    twin = DigitalTwin(config={"organization_name": "Example Corporation", "enable_simulation": True})
 
     # Sample infrastructure
     assets = [
@@ -412,9 +404,7 @@ def example_digital_twin():
 
     # Simulate infrastructure change
     print("\n  Simulating infrastructure change...")
-    change_impact = twin.simulate_change_impact(
-        {"asset_id": "app-server", "change_type": "remove"}
-    )
+    change_impact = twin.simulate_change_impact({"asset_id": "app-server", "change_type": "remove"})
 
     print(f"    Changed asset: {change_impact['changed_asset']}")
     print(f"    Directly affected: {change_impact['directly_affected']}")

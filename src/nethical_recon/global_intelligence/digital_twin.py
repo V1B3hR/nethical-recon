@@ -131,8 +131,7 @@ class DigitalTwin:
         self._last_sync = datetime.utcnow()
 
         self.logger.info(
-            f"Digital twin created: {len(self._assets)} assets, "
-            f"{len(self._relationships)} relationships"
+            f"Digital twin created: {len(self._assets)} assets, " f"{len(self._relationships)} relationships"
         )
 
         return self._twin_id
@@ -173,9 +172,7 @@ class DigitalTwin:
 
         return updates_count
 
-    def simulate_attack_path(
-        self, entry_point: str, target: str
-    ) -> dict[str, Any]:
+    def simulate_attack_path(self, entry_point: str, target: str) -> dict[str, Any]:
         """
         Simulate attack path from entry point to target
 
@@ -224,9 +221,7 @@ class DigitalTwin:
 
         return result
 
-    def simulate_change_impact(
-        self, change_description: dict[str, Any]
-    ) -> dict[str, Any]:
+    def simulate_change_impact(self, change_description: dict[str, Any]) -> dict[str, Any]:
         """
         Simulate impact of infrastructure change
 

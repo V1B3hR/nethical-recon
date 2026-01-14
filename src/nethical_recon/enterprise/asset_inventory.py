@@ -194,8 +194,7 @@ class AssetInventoryIntegration:
 
             if enriched.discrepancies:
                 self.logger.warning(
-                    f"Discrepancies detected for asset {cmdb_asset.name}: "
-                    f"{len(enriched.discrepancies)} differences"
+                    f"Discrepancies detected for asset {cmdb_asset.name}: " f"{len(enriched.discrepancies)} differences"
                 )
         else:
             # No match found - potential shadow IT
@@ -373,7 +372,9 @@ class AssetInventoryIntegration:
         cmdb_os = cmdb_asset.operating_system.lower()
 
         if recon_os and cmdb_os and recon_os not in cmdb_os and cmdb_os not in recon_os:
-            discrepancies.append(f"OS mismatch: CMDB={cmdb_asset.operating_system}, Recon={recon_data.get('operating_system')}")
+            discrepancies.append(
+                f"OS mismatch: CMDB={cmdb_asset.operating_system}, Recon={recon_data.get('operating_system')}"
+            )
 
         # Check for services not in CMDB
         recon_services = set(recon_data.get("services", []))

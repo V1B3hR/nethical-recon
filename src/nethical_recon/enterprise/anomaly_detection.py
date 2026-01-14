@@ -162,9 +162,7 @@ class AnomalyDetectionService:
 
         return baseline
 
-    def detect_anomalies(
-        self, entity_id: str, current_observations: list[dict[str, Any]]
-    ) -> list[AnomalyEvent]:
+    def detect_anomalies(self, entity_id: str, current_observations: list[dict[str, Any]]) -> list[AnomalyEvent]:
         """
         Detect anomalies in current observations against baseline
 
@@ -259,9 +257,7 @@ class AnomalyDetectionService:
                 )
 
                 anomalies.append(anomaly)
-                self.logger.debug(
-                    f"Statistical anomaly: {feature_name}={current_value:.2f}, Z-score={z_score:.2f}"
-                )
+                self.logger.debug(f"Statistical anomaly: {feature_name}={current_value:.2f}, Z-score={z_score:.2f}")
 
         return anomalies
 

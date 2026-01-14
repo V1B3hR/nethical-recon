@@ -187,8 +187,7 @@ class OrganizationScanner:
 
             duration = (result.end_time - result.start_time).total_seconds()
             self.logger.info(
-                f"Organization scan completed in {duration:.1f}s. "
-                f"Discovered {len(result.discovered_assets)} assets"
+                f"Organization scan completed in {duration:.1f}s. " f"Discovered {len(result.discovered_assets)} assets"
             )
 
         except Exception as e:
