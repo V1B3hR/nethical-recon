@@ -89,9 +89,7 @@ class CISAAttackSurfaceMonitor:
             return CISAAttackSurfaceArea.INTERNET_FACING_ASSETS
 
         # Check for remote access services
-        if any(
-            service in asset_type_lower for service in ["vpn", "rdp", "ssh", "remote desktop", "remote access"]
-        ):
+        if any(service in asset_type_lower for service in ["vpn", "rdp", "ssh", "remote desktop", "remote access"]):
             return CISAAttackSurfaceArea.REMOTE_ACCESS_SERVICES
 
         # Check for email infrastructure
@@ -151,9 +149,7 @@ class CISAAttackSurfaceMonitor:
 
         logger.debug(f"Updated metrics for {area.value}: {total} total, {exposed} exposed, {vulnerable} vulnerable")
 
-    def _generate_recommendations(
-        self, area: CISAAttackSurfaceArea, metrics: AttackSurfaceMetrics
-    ) -> list[str]:
+    def _generate_recommendations(self, area: CISAAttackSurfaceArea, metrics: AttackSurfaceMetrics) -> list[str]:
         """Generate recommendations for attack surface area."""
         recommendations = []
 

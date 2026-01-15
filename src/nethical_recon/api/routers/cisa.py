@@ -61,7 +61,9 @@ class KEVStatusResponse(BaseModel):
 class PolicyModeRequest(BaseModel):
     """Request to apply CISA policy mode."""
 
-    mode: str = Field(..., description="Policy mode: critical_infrastructure, federal_agency, enterprise, small_business")
+    mode: str = Field(
+        ..., description="Policy mode: critical_infrastructure, federal_agency, enterprise, small_business"
+    )
 
 
 class ComplianceReportRequest(BaseModel):

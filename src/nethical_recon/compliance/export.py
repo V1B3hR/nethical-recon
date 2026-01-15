@@ -190,9 +190,7 @@ class ComplianceExporter:
                     "name": "vulnerability-management",
                     "key": "VM",
                     "description": "Vulnerability management and KEV compliance",
-                    "references": [
-                        {"name": "CISA KEV Catalog", "path": "https://www.cisa.gov/kev"}
-                    ],
+                    "references": [{"name": "CISA KEV Catalog", "path": "https://www.cisa.gov/kev"}],
                     "satisfies": compliance_data.get("controls", []),
                 }
             ],

@@ -45,14 +45,14 @@ class RiskScorer:
     - Vulnerability presence (including CISA KEV)
     - Configuration issues
     - Exposure level
-    
+
     KEV Enrichment: Vulnerabilities in CISA KEV catalog receive +30 risk score boost
     """
 
     def __init__(self, kev_client: Optional[Any] = None):
         """
         Initialize risk scorer.
-        
+
         Args:
             kev_client: Optional CISA KEV client for vulnerability enrichment
         """
@@ -149,33 +149,33 @@ class RiskScorer:
     def _score_vulnerabilities(self, asset: dict[str, Any]) -> Optional[RiskFactor]:
         """
         Score based on vulnerabilities including CISA KEV enrichment.
-        
+
         KEV vulnerabilities receive +30 risk score boost.
         """
         vulnerabilities = asset.get("vulnerabilities", [])
         cves = asset.get("cve_ids", [])
-        
+
         if not vulnerabilities and not cves:
             return None
-            
+
         score = 0.0
         evidence = []
         kev_count = 0
-        
+
         # Check for CVEs
         all_cves = []
         for vuln in vulnerabilities:
             if "cve_id" in vuln:
                 all_cves.append(vuln["cve_id"])
         all_cves.extend(cves)
-        
+
         # Base vulnerability scoring
         base_vuln_score = min(len(vulnerabilities) * 15, 60)
         score += base_vuln_score
-        
+
         if vulnerabilities:
             evidence.append(f"{len(vulnerabilities)} vulnerabilities found")
-        
+
         # KEV enrichment
         if self.kev_client and all_cves:
             for cve_id in all_cves:
@@ -184,13 +184,11 @@ class RiskScorer:
                     kev_count += 1
                     kev_metadata = self.kev_client.get_kev_metadata(cve_id)
                     if kev_metadata:
-                        evidence.append(
-                            f"KEV: {cve_id} - {kev_metadata.get('required_action', 'Action required')}"
-                        )
-        
+                        evidence.append(f"KEV: {cve_id} - {kev_metadata.get('required_action', 'Action required')}")
+
         if kev_count > 0:
             evidence.append(f"⚠️ {kev_count} CISA KEV vulnerabilities detected")
-        
+
         if score > 0:
             return RiskFactor(
                 name="Vulnerabilities",
@@ -200,7 +198,7 @@ class RiskScorer:
                 description=f"Vulnerability assessment including KEV ({kev_count} KEV found)",
                 evidence=evidence,
             )
-        
+
         return None
 
     def _score_exposure(self, asset: dict[str, Any]) -> Optional[RiskFactor]:
@@ -298,7 +296,7 @@ class RiskScorer:
                     )
                 else:
                     recommendations.append("Patch vulnerabilities according to severity and organizational SLA")
-                    
+
             if factor.category == "threat_intel" and factor.score > 50:
                 recommendations.append("Investigate threat intelligence alerts and consider blocking/isolating asset")
 
@@ -312,29 +310,29 @@ class RiskScorer:
             recommendations.append("Continue monitoring asset for changes")
 
         return recommendations
-    
+
     def enrich_vulnerability_with_kev(self, vulnerability: dict[str, Any]) -> dict[str, Any]:
         """
         Enrich vulnerability data with CISA KEV information.
-        
+
         Args:
             vulnerability: Vulnerability data with cve_id
-            
+
         Returns:
             Enriched vulnerability data with is_kev flag and kev_metadata
         """
         if not self.kev_client:
             return vulnerability
-            
+
         cve_id = vulnerability.get("cve_id")
         if not cve_id:
             return vulnerability
-            
+
         # Add KEV status
         vulnerability["is_kev"] = self.kev_client.is_kev(cve_id)
-        
+
         # Add KEV metadata if applicable
         if vulnerability["is_kev"]:
             vulnerability["kev_metadata"] = self.kev_client.get_kev_metadata(cve_id)
-            
+
         return vulnerability

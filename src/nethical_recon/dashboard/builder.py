@@ -343,14 +343,16 @@ class DashboardBuilder:
                     "widget_id": str(w.widget_id),
                     "widget_type": w.widget_type.value,
                     "title": w.title,
-                    "position": {
-                        "x": w.position.x,
-                        "y": w.position.y,
-                        "width": w.position.width,
-                        "height": w.position.height,
-                    }
-                    if w.position
-                    else None,
+                    "position": (
+                        {
+                            "x": w.position.x,
+                            "y": w.position.y,
+                            "width": w.position.width,
+                            "height": w.position.height,
+                        }
+                        if w.position
+                        else None
+                    ),
                     "data_source": w.data_source,
                     "refresh_interval": w.refresh_interval,
                     "config": w.config,

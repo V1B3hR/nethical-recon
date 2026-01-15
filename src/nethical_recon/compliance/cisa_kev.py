@@ -112,8 +112,7 @@ class CISAKEVClient:
 
             elapsed = time.time() - start_time
             logger.info(
-                f"KEV catalog updated successfully. "
-                f"Loaded {len(self._cache)} vulnerabilities in {elapsed:.2f}s"
+                f"KEV catalog updated successfully. " f"Loaded {len(self._cache)} vulnerabilities in {elapsed:.2f}s"
             )
 
             return True

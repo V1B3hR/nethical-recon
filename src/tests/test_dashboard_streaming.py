@@ -70,9 +70,7 @@ class TestDashboardBuilder:
         builder = DashboardBuilder()
 
         dashboard = builder.create_dashboard(name="Original Name")
-        updated = builder.update_dashboard(
-            dashboard.dashboard_id, name="Updated Name", is_public=True
-        )
+        updated = builder.update_dashboard(dashboard.dashboard_id, name="Updated Name", is_public=True)
 
         assert updated is not None
         assert updated.name == "Updated Name"

@@ -85,9 +85,7 @@ class CISAComplianceReporter:
         )
 
         # Generate executive summary
-        report.executive_summary = self._generate_executive_summary(
-            kev_vulnerabilities, active_alerts, compliance_data
-        )
+        report.executive_summary = self._generate_executive_summary(kev_vulnerabilities, active_alerts, compliance_data)
 
         # Generate KEV section
         report.kev_section = self._generate_kev_section(kev_vulnerabilities)

@@ -125,9 +125,7 @@ class KEVRemediationPlaybook:
 
         return execution
 
-    async def _create_ticket(
-        self, cve_id: str, kev_metadata: dict[str, Any], affected_assets: list[str]
-    ) -> str:
+    async def _create_ticket(self, cve_id: str, kev_metadata: dict[str, Any], affected_assets: list[str]) -> str:
         """Create high-priority remediation ticket."""
         # Simulate ticket creation
         ticket = {
