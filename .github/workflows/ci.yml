@@ -100,7 +100,7 @@ jobs:
           
       - name: Run secret leakage tests
         run: |
-          python -m pytest tests/test_secrets.py::TestSecretLeakagePrevention -v
+          python -m pytest src/tests/test_secrets.py::TestSecretLeakagePrevention -v
 
   test:
     name: Run Tests
