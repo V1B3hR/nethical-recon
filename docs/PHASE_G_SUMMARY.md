@@ -145,10 +145,10 @@ The sanitizer uses regex patterns to detect various secret formats:
 
 ```bash
 # Run all secrets tests
-pytest tests/test_secrets.py -v
+pytest src/tests/test_secrets.py -v
 
 # Run only leakage prevention tests
-pytest tests/test_secrets.py::TestSecretLeakagePrevention -v
+pytest src/tests/test_secrets.py::TestSecretLeakagePrevention -v
 ```
 
 ## Usage Guide
@@ -320,5 +320,5 @@ All criteria from roadmap_3.md have been met:
 
 - `.env.example` - Environment variables template
 - `src/nethical_recon/secrets/` - Core implementation
-- `tests/test_secrets.py` - Test suite
+- `src/tests/test_secrets.py` - Test suite
 - `.github/workflows/ci.yml` - CI integration
