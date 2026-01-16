@@ -68,9 +68,9 @@ class APIConfig:
             api_prefix=secrets_mgr.get("API_PREFIX", "/api/v1"),
             title=secrets_mgr.get("API_TITLE", "Nethical Recon API"),
             version=secrets_mgr.get("API_VERSION", "1.0.0"),
-            cors_origins=secrets_mgr.get("API_CORS_ORIGINS", "").split(",")
-            if secrets_mgr.get("API_CORS_ORIGINS")
-            else None,
+            cors_origins=(
+                secrets_mgr.get("API_CORS_ORIGINS", "").split(",") if secrets_mgr.get("API_CORS_ORIGINS") else None
+            ),
             default_page_size=int(secrets_mgr.get("API_DEFAULT_PAGE_SIZE", "50")),
             max_page_size=int(secrets_mgr.get("API_MAX_PAGE_SIZE", "1000")),
         )

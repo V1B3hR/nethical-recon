@@ -178,9 +178,7 @@ class DNSWatcher(BaseSensor):
         try:
             from scapy.all import DNS, DNSQR, IP, sniff
         except ImportError:
-            self.logger.error(
-                "Neither tcpdump nor scapy available. Install scapy with: pip install scapy"
-            )
+            self.logger.error("Neither tcpdump nor scapy available. Install scapy with: pip install scapy")
             return []
 
         queries = []
