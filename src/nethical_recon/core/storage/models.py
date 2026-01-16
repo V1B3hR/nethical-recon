@@ -194,3 +194,38 @@ class IOCModel(Base):
     first_seen: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     last_seen: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+
+
+class UserModel(Base):
+    """SQLAlchemy model for User authentication."""
+
+    __tablename__ = "users"
+
+    id: Mapped[Uuid] = mapped_column(Uuid, primary_key=True, default=uuid4)
+    username: Mapped[str] = mapped_column(String(255), unique=True, nullable=False, index=True)
+    email: Mapped[str] = mapped_column(String(255), unique=True, nullable=False, index=True)
+    hashed_password: Mapped[str] = mapped_column(String(255), nullable=False)
+    full_name: Mapped[str | None] = mapped_column(String(255))
+    disabled: Mapped[bool] = mapped_column(Boolean, default=False)
+    scopes: Mapped[list] = mapped_column(JSON, default=list)
+    mfa_secret: Mapped[str | None] = mapped_column(String(255))
+    mfa_enabled: Mapped[bool] = mapped_column(Boolean, default=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    last_login: Mapped[datetime | None] = mapped_column(DateTime)
+
+
+class APIKeyModel(Base):
+    """SQLAlchemy model for API Keys."""
+
+    __tablename__ = "api_keys"
+
+    id: Mapped[Uuid] = mapped_column(Uuid, primary_key=True, default=uuid4)
+    key_hash: Mapped[str] = mapped_column(String(255), unique=True, nullable=False, index=True)
+    name: Mapped[str] = mapped_column(String(255), nullable=False)
+    user_id: Mapped[Uuid] = mapped_column(Uuid, ForeignKey("users.id"), nullable=False)
+    scopes: Mapped[list] = mapped_column(JSON, default=list)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    expires_at: Mapped[datetime | None] = mapped_column(DateTime)
+    last_used_at: Mapped[datetime | None] = mapped_column(DateTime)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)

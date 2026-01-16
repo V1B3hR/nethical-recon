@@ -19,6 +19,7 @@ from .ioc import IOC, IOCType
 from .scan_job import JobStatus, ScanJob
 from .target import Target, TargetScope, TargetType
 from .tool_run import ToolRun, ToolStatus
+from .user import APIKey, User
 
 __all__ = [
     # Target
@@ -44,4 +45,7 @@ __all__ = [
     # IOC
     "IOC",
     "IOCType",
+    # User
+    "User",
+    "APIKey",
 ]
