@@ -3,6 +3,7 @@
 import functools
 import logging
 import os
+import time
 from typing import Any, Callable
 
 import requests
@@ -165,7 +166,6 @@ def retry_on_failure(
             # Code that might fail transiently
             pass
     """
-    import time
 
     def decorator(func: Callable) -> Callable:
         @functools.wraps(func)

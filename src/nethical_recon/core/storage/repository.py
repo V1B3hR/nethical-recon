@@ -2,13 +2,15 @@
 
 from __future__ import annotations
 
+import ast
 from typing import Generic, TypeVar
 from uuid import UUID
 
 from sqlalchemy.orm import Session
 
-from ..models import IOC, Asset, Evidence, Finding, ScanJob, Target, ToolRun, User, APIKey
+from ..models import IOC, APIKey, Asset, Evidence, Finding, ScanJob, Target, ToolRun, User
 from .models import (
+    APIKeyModel,
     AssetModel,
     EvidenceModel,
     FindingModel,
@@ -17,7 +19,6 @@ from .models import (
     TargetModel,
     ToolRunModel,
     UserModel,
-    APIKeyModel,
 )
 
 DomainModel = TypeVar("DomainModel")
@@ -318,7 +319,7 @@ class UserRepository(BaseRepository[User, UserModel]):
         Returns:
             List of active users.
         """
-        orm_instances = self.session.query(self.orm_model).filter(self.orm_model.disabled == False).all()
+        orm_instances = self.session.query(self.orm_model).filter(self.orm_model.disabled is False).all()
         return [self._to_domain(orm_instance) for orm_instance in orm_instances]
 
 
@@ -363,7 +364,7 @@ class APIKeyRepository(BaseRepository[APIKey, APIKeyModel]):
         """
         orm_instances = (
             self.session.query(self.orm_model)
-            .filter(self.orm_model.user_id == user_id, self.orm_model.is_active == True)
+            .filter(self.orm_model.user_id == user_id, self.orm_model.is_active is True)
             .all()
         )
         return [self._to_domain(orm_instance) for orm_instance in orm_instances]

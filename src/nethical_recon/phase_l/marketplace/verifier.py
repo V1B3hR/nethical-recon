@@ -3,6 +3,7 @@ Plugin Verifier
 Security verification and validation for marketplace plugins
 """
 
+import ast
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
@@ -107,8 +108,6 @@ class PluginVerifier:
 
     def _check_dangerous_imports(self, code: str) -> list[SecurityCheck]:
         """Check for dangerous imports using AST analysis."""
-        import ast
-
         checks = []
 
         try:
@@ -180,8 +179,6 @@ class PluginVerifier:
 
     def _check_code_injection(self, code: str) -> list[SecurityCheck]:
         """Check for code injection vulnerabilities using AST analysis."""
-        import ast
-
         checks = []
 
         try:

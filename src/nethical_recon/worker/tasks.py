@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
@@ -26,7 +27,7 @@ from nethical_recon.core.storage.repository import (
     TargetRepository,
     ToolRunRepository,
 )
-from nethical_recon.observability import get_logger, track_tool_run, track_findings, increment_counter
+from nethical_recon.observability import get_logger, increment_counter, track_findings, track_tool_run
 from nethical_recon.worker.celery_app import celery_app
 from nethical_recon.worker.policy import get_policy_engine
 
@@ -417,10 +418,18 @@ def update_baselines(self, retention_days: int = 30) -> dict[str, Any]:
 
                     # Get all findings related to this target (via tool runs)
                     all_findings = finding_repo.get_all()
+                    # Use more precise matching: exact match or as a complete word/token
+                    # This avoids false positives from substring matches
                     recent_findings = [
                         f
                         for f in all_findings
-                        if f.discovered_at >= cutoff and f.affected_asset and target.value in f.affected_asset
+                        if f.discovered_at >= cutoff
+                        and f.affected_asset
+                        and (
+                            f.affected_asset == target.value  # Exact match
+                            or f.affected_asset.startswith(target.value + ":")  # With port/path
+                            or f.affected_asset.endswith(":" + target.value)  # As port
+                        )
                     ]
 
                     if recent_findings:
@@ -486,8 +495,6 @@ def cleanup_old_results(self, retention_days: int = 30) -> dict[str, Any]:
     Returns:
         Dictionary with cleanup results
     """
-    import os
-
     logger.info(f"Starting cleanup of results older than {retention_days} days")
     db = init_database()
     cutoff_date = datetime.now(timezone.utc) - timedelta(days=retention_days)
