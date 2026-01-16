@@ -118,7 +118,28 @@ class DNSWatcher(BaseSensor):
 
     def _capture_dns_queries(self, duration: int = 60) -> list:
         """
-        Capture DNS queries for specified duration
+        Capture DNS queries for specified duration.
+
+        Tries tcpdump first, falls back to scapy if tcpdump is not available.
+
+        Args:
+            duration: Capture duration in seconds
+
+        Returns:
+            List of DNS queries
+        """
+        try:
+            return self._capture_with_tcpdump(duration)
+        except FileNotFoundError:
+            self.logger.warning("tcpdump not available, using scapy fallback")
+            return self._capture_with_scapy(duration)
+        except Exception as e:
+            self.logger.error(f"Error capturing DNS queries: {e}")
+            return []
+
+    def _capture_with_tcpdump(self, duration: int) -> list:
+        """
+        Capture DNS queries using tcpdump.
 
         Args:
             duration: Capture duration in seconds
@@ -128,27 +149,66 @@ class DNSWatcher(BaseSensor):
         """
         queries = []
 
+        # Use tcpdump to capture DNS traffic
+        result = subprocess.run(
+            ["timeout", str(duration), "tcpdump", "-i", self.interface, "-n", "udp", "port", "53", "-l"],
+            capture_output=True,
+            text=True,
+            timeout=duration + 5,
+        )
+
+        # Parse output
+        for line in result.stdout.split("\n"):
+            query = self._parse_dns_query(line)
+            if query:
+                queries.append(query)
+
+        return queries
+
+    def _capture_with_scapy(self, duration: int) -> list:
+        """
+        Capture DNS queries using scapy as fallback.
+
+        Args:
+            duration: Capture duration in seconds
+
+        Returns:
+            List of DNS queries
+        """
         try:
-            # Use tcpdump to capture DNS traffic
-            result = subprocess.run(
-                ["timeout", str(duration), "tcpdump", "-i", self.interface, "-n", "udp", "port", "53", "-l"],
-                capture_output=True,
-                text=True,
-                timeout=duration + 5,
+            from scapy.all import DNS, DNSQR, IP, sniff
+        except ImportError:
+            self.logger.error(
+                "Neither tcpdump nor scapy available. Install scapy with: pip install scapy"
             )
+            return []
 
-            # Parse output
-            for line in result.stdout.split("\n"):
-                query = self._parse_dns_query(line)
-                if query:
-                    queries.append(query)
+        queries = []
 
-        except subprocess.TimeoutExpired:
-            pass  # Expected for timeout command
-        except FileNotFoundError:
-            self.logger.warning("tcpdump not available for DNS monitoring")
+        def packet_handler(pkt):
+            """Handle captured DNS packet."""
+            try:
+                if pkt.haslayer(DNS) and pkt.haslayer(DNSQR):
+                    query_name = pkt[DNSQR].qname.decode("utf-8", errors="ignore").rstrip(".")
+                    source_ip = pkt[IP].src if pkt.haslayer(IP) else "unknown"
+
+                    queries.append(
+                        {"source": source_ip, "domain": query_name, "raw": f"DNS query: {query_name} from {source_ip}"}
+                    )
+            except Exception as e:
+                self.logger.debug(f"Error parsing DNS packet: {e}")
+
+        try:
+            # Capture packets with timeout
+            sniff(
+                iface=self.interface if self.interface != "any" else None,
+                filter="udp port 53",
+                prn=packet_handler,
+                timeout=duration,
+                store=False,
+            )
         except Exception as e:
-            self.logger.error(f"Error capturing DNS queries: {e}")
+            self.logger.error(f"Error in scapy capture: {e}")
 
         return queries
 

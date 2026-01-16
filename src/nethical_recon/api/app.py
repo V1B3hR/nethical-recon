@@ -1,6 +1,8 @@
 """FastAPI application factory."""
 
+import asyncio
 import time
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 
 from fastapi import FastAPI, Request, status
@@ -22,6 +24,9 @@ from .routers import (
     targets_router,
     visualization_router,
 )
+
+# Thread pool for blocking operations in health checks
+_health_check_executor = ThreadPoolExecutor(max_workers=4)
 
 
 def create_app(config: APIConfig | None = None) -> FastAPI:
@@ -92,33 +97,54 @@ def create_app(config: APIConfig | None = None) -> FastAPI:
     # Health check endpoint
     @app.get("/health", response_model=HealthResponse, tags=["health"])
     async def health_check():
-        """Health check endpoint."""
+        """Health check endpoint with timeouts to prevent blocking."""
         from nethical_recon.core.storage import get_database
 
-        # Check database connection
+        # Check database connection with timeout
         db_status = "healthy"
         try:
-            db = get_database()
-            with db.session():
-                pass
-        except Exception:
+
+            async def check_db():
+                """Check database connection in async context."""
+                db = get_database()
+                with db.session():
+                    pass
+                return "healthy"
+
+            db_status = await asyncio.wait_for(check_db(), timeout=3.0)
+        except asyncio.TimeoutError:
+            db_status = "timeout"
+        except Exception as e:
             db_status = "unhealthy"
 
-        # Check worker connection (simplified check)
+        # Check worker connection with timeout
         worker_status = "unknown"
         try:
-            from celery import Celery
 
-            from nethical_recon.worker.config import WorkerConfig
+            async def check_worker():
+                """Check worker/Celery connection in async context."""
+                from celery import Celery
 
-            worker_config = WorkerConfig.from_env()
-            celery_app = Celery(broker=worker_config.broker_url, backend=worker_config.result_backend)
-            # Simple ping to check if broker is reachable
-            celery_app.control.inspect().stats()
-            worker_status = "healthy"
-        except Exception:
+                from nethical_recon.worker.config import WorkerConfig
+
+                worker_config = WorkerConfig.from_env()
+                celery_app = Celery(broker=worker_config.broker_url, backend=worker_config.result_backend)
+
+                # Run blocking Celery inspect in thread pool
+                loop = asyncio.get_event_loop()
+                stats = await loop.run_in_executor(
+                    _health_check_executor, lambda: celery_app.control.inspect(timeout=2.0).stats()
+                )
+
+                return "healthy" if stats else "unhealthy"
+
+            worker_status = await asyncio.wait_for(check_worker(), timeout=3.0)
+        except asyncio.TimeoutError:
+            worker_status = "timeout"
+        except Exception as e:
             worker_status = "unhealthy"
 
+        # Determine overall status
         overall_status = "healthy" if db_status == "healthy" and worker_status == "healthy" else "degraded"
 
         return HealthResponse(
