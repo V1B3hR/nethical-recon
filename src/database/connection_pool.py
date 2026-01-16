@@ -3,12 +3,22 @@ Connection Pool Manager
 Manages database connection pooling for improved performance
 """
 
+import logging
 import threading
+import time
 from queue import Empty, Queue
 from typing import Any
 
 from .base_store import BaseStore
 from .store_factory import StoreFactory
+
+logger = logging.getLogger(__name__)
+
+
+class ConnectionPoolExhausted(Exception):
+    """Exception raised when connection pool is exhausted."""
+
+    pass
 
 
 class ConnectionPool:
@@ -55,33 +65,56 @@ class ConnectionPool:
                 return store
             return None
         except Exception as e:
-            print(f"Error creating connection: {e}")
+            logger.error(f"Error creating connection: {e}")
             return None
 
-    def get_connection(self, timeout: float = 5.0) -> BaseStore | None:
+    def get_connection(self, timeout: float = 5.0, retries: int = 3, retry_delay: float = 1.0) -> BaseStore:
         """
-        Get a connection from the pool
+        Get a connection from the pool with retry logic.
 
         Args:
             timeout: Maximum time to wait for a connection (seconds)
+            retries: Number of retry attempts (default: 3)
+            retry_delay: Base delay between retries in seconds (default: 1.0)
 
         Returns:
-            Database store connection or None if timeout
-        """
-        try:
-            # Try to get existing connection
-            return self._pool.get(timeout=timeout)
-        except Empty:
-            # Pool is empty, try to create new connection if under max
-            with self._lock:
-                if self._current_size < self.max_connections:
-                    connection = self._create_connection()
-                    if connection:
-                        return connection
+            Database store connection
 
-            # Still no connection available
-            print("Connection pool exhausted")
-            return None
+        Raises:
+            ConnectionPoolExhausted: If no connection available after retries
+        """
+        for attempt in range(retries):
+            try:
+                # Try to get existing connection
+                return self._pool.get(timeout=timeout)
+            except Empty:
+                # Pool is empty, try to create new connection if under max
+                with self._lock:
+                    if self._current_size < self.max_connections:
+                        connection = self._create_connection()
+                        if connection:
+                            return connection
+
+                # Still no connection available, retry with exponential backoff
+                if attempt < retries - 1:
+                    wait_time = retry_delay * (2**attempt)
+                    logger.warning(
+                        f"Pool exhausted, retry {attempt + 1}/{retries} after {wait_time:.1f}s "
+                        f"(pool size: {self._current_size}/{self.max_connections})"
+                    )
+                    time.sleep(wait_time)
+                else:
+                    logger.error(
+                        f"Pool exhausted after {retries} retries "
+                        f"(pool size: {self._current_size}/{self.max_connections})"
+                    )
+                    raise ConnectionPoolExhausted(
+                        f"No connections available after {retries} retries. "
+                        f"Pool size: {self._current_size}/{self.max_connections}"
+                    )
+
+        # Should not reach here, but just in case
+        raise ConnectionPoolExhausted("Failed to acquire connection")
 
     def return_connection(self, connection: BaseStore):
         """

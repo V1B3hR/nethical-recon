@@ -3,6 +3,7 @@ Plugin Verifier
 Security verification and validation for marketplace plugins
 """
 
+import ast
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
@@ -106,36 +107,70 @@ class PluginVerifier:
         return result
 
     def _check_dangerous_imports(self, code: str) -> list[SecurityCheck]:
-        """Check for dangerous imports"""
-        dangerous = {
-            "os.system": "Execution of system commands",
-            "subprocess": "Process execution",
-            "eval": "Dynamic code evaluation",
-            "exec": "Dynamic code execution",
-            "__import__": "Dynamic module import",
-            "compile": "Code compilation",
-        }
-
+        """Check for dangerous imports using AST analysis."""
         checks = []
-        for pattern, description in dangerous.items():
-            if pattern in code:
+
+        try:
+            tree = ast.parse(code)
+        except SyntaxError as e:
+            return [
+                SecurityCheck(
+                    check_name="syntax_error",
+                    passed=False,
+                    severity="critical",
+                    message=f"Syntax error in plugin code: {e}",
+                    details={"error": str(e)},
+                )
+            ]
+
+        dangerous_found = set()
+        dangerous_imports = {"os", "subprocess", "sys", "shutil"}
+        dangerous_builtins = {"eval", "exec", "__import__", "compile"}
+
+        # Walk the AST to find dangerous patterns
+        for node in ast.walk(tree):
+            # Check for dangerous imports
+            if isinstance(node, ast.Import):
+                for alias in node.names:
+                    if alias.name in dangerous_imports:
+                        dangerous_found.add(f"import {alias.name}")
+
+            elif isinstance(node, ast.ImportFrom):
+                if node.module in dangerous_imports:
+                    dangerous_found.add(f"from {node.module} import ...")
+
+            # Check for dangerous function calls
+            elif isinstance(node, ast.Call):
+                # Direct calls to eval, exec, etc.
+                if isinstance(node.func, ast.Name):
+                    if node.func.id in dangerous_builtins:
+                        dangerous_found.add(f"{node.func.id}()")
+
+                # Attribute calls like os.system, subprocess.call
+                elif isinstance(node.func, ast.Attribute):
+                    attr = node.func.attr
+                    if attr in {"system", "popen", "call", "run", "Popen"}:
+                        dangerous_found.add(f"*.{attr}()")
+
+        # Generate security checks based on findings
+        if dangerous_found:
+            for pattern in dangerous_found:
                 checks.append(
                     SecurityCheck(
-                        check_name="dangerous_imports",
+                        check_name="dangerous_code",
                         passed=False,
                         severity="critical",
-                        message=f"Found dangerous pattern: {pattern}",
-                        details={"pattern": pattern, "description": description},
+                        message=f"Dangerous pattern detected: {pattern}",
+                        details={"pattern": pattern},
                     )
                 )
-
-        if not checks:
+        else:
             checks.append(
                 SecurityCheck(
                     check_name="dangerous_imports",
                     passed=True,
                     severity="info",
-                    message="No dangerous imports found",
+                    message="No dangerous imports or patterns found",
                     details={},
                 )
             )
@@ -143,27 +178,42 @@ class PluginVerifier:
         return checks
 
     def _check_code_injection(self, code: str) -> list[SecurityCheck]:
-        """Check for code injection vulnerabilities"""
-        injection_patterns = [
-            ("eval(", "eval() function"),
-            ("exec(", "exec() function"),
-            ("compile(", "compile() function"),
-        ]
-
+        """Check for code injection vulnerabilities using AST analysis."""
         checks = []
-        for pattern, description in injection_patterns:
-            if pattern in code:
+
+        try:
+            tree = ast.parse(code)
+        except SyntaxError:
+            # Already handled in _check_dangerous_imports
+            return []
+
+        injection_found = set()
+
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Call):
+                # Check for eval/exec/compile calls
+                if isinstance(node.func, ast.Name):
+                    if node.func.id in {"eval", "exec", "compile"}:
+                        injection_found.add(node.func.id)
+
+                # Check for dynamic attribute access that might be used for injection
+                elif isinstance(node.func, ast.Attribute):
+                    if node.func.attr in {"__import__", "getattr", "setattr"}:
+                        injection_found.add(node.func.attr)
+
+        # Generate security checks
+        if injection_found:
+            for func_name in injection_found:
                 checks.append(
                     SecurityCheck(
                         check_name="code_injection",
                         passed=False,
                         severity="critical",
-                        message=f"Potential code injection: {description}",
-                        details={"pattern": pattern},
+                        message=f"Potential code injection: {func_name}() function",
+                        details={"function": func_name},
                     )
                 )
-
-        if not checks:
+        else:
             checks.append(
                 SecurityCheck(
                     check_name="code_injection",

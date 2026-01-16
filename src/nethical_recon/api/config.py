@@ -1,8 +1,12 @@
 """API configuration."""
 
+import logging
+import secrets as python_secrets
 from dataclasses import dataclass
 
 from nethical_recon.secrets import get_secrets_manager
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -39,20 +43,34 @@ class APIConfig:
     @classmethod
     def from_env(cls) -> "APIConfig":
         """Load configuration from environment variables using secrets manager."""
-        secrets = get_secrets_manager()
+        secrets_mgr = get_secrets_manager()
+
+        # Auto-generate API secret if not set or using default
+        api_secret = secrets_mgr.get("API_SECRET_KEY")
+
+        if not api_secret or api_secret == "CHANGE_THIS_IN_PRODUCTION":
+            # Generate a strong 256-bit secret key
+            api_secret = python_secrets.token_urlsafe(32)
+            secrets_mgr.set("API_SECRET_KEY", api_secret)
+            logger.warning(
+                f"Generated new API secret key: {api_secret[:10]}... "
+                "(Store this securely - it will be used for JWT signing)"
+            )
 
         return cls(
-            host=secrets.get("API_HOST", "0.0.0.0"),
-            port=int(secrets.get("API_PORT", "8000")),
-            reload=secrets.get("API_RELOAD", "false").lower() == "true",
-            workers=int(secrets.get("API_WORKERS", "4")),
-            secret_key=secrets.get("API_SECRET_KEY", "CHANGE_THIS_IN_PRODUCTION"),
-            algorithm=secrets.get("API_ALGORITHM", "HS256"),
-            access_token_expire_minutes=int(secrets.get("API_ACCESS_TOKEN_EXPIRE_MINUTES", "30")),
-            api_prefix=secrets.get("API_PREFIX", "/api/v1"),
-            title=secrets.get("API_TITLE", "Nethical Recon API"),
-            version=secrets.get("API_VERSION", "1.0.0"),
-            cors_origins=secrets.get("API_CORS_ORIGINS", "").split(",") if secrets.get("API_CORS_ORIGINS") else None,
-            default_page_size=int(secrets.get("API_DEFAULT_PAGE_SIZE", "50")),
-            max_page_size=int(secrets.get("API_MAX_PAGE_SIZE", "1000")),
+            host=secrets_mgr.get("API_HOST", "0.0.0.0"),
+            port=int(secrets_mgr.get("API_PORT", "8000")),
+            reload=secrets_mgr.get("API_RELOAD", "false").lower() == "true",
+            workers=int(secrets_mgr.get("API_WORKERS", "4")),
+            secret_key=api_secret,
+            algorithm=secrets_mgr.get("API_ALGORITHM", "HS256"),
+            access_token_expire_minutes=int(secrets_mgr.get("API_ACCESS_TOKEN_EXPIRE_MINUTES", "30")),
+            api_prefix=secrets_mgr.get("API_PREFIX", "/api/v1"),
+            title=secrets_mgr.get("API_TITLE", "Nethical Recon API"),
+            version=secrets_mgr.get("API_VERSION", "1.0.0"),
+            cors_origins=(
+                secrets_mgr.get("API_CORS_ORIGINS", "").split(",") if secrets_mgr.get("API_CORS_ORIGINS") else None
+            ),
+            default_page_size=int(secrets_mgr.get("API_DEFAULT_PAGE_SIZE", "50")),
+            max_page_size=int(secrets_mgr.get("API_MAX_PAGE_SIZE", "1000")),
         )

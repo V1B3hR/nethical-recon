@@ -47,6 +47,14 @@ urllib3>=1.26.0
 rich>=13.0.0
 textual>=0.41.0
 
+# MFA/2FA Support (Security Hardening)
+pyotp>=2.9.0
+qrcode>=7.4.2
+Pillow>=10.0.0
+
+# DNS Monitoring Fallback
+scapy>=2.5.0
+
 # Optional: For enhanced features (install as needed)
 # Note: Some features require system tools like:
 # - tcpdump, zeek (Fala 1)

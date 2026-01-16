@@ -2,13 +2,15 @@
 
 from __future__ import annotations
 
+import ast
 from typing import Generic, TypeVar
 from uuid import UUID
 
 from sqlalchemy.orm import Session
 
-from ..models import IOC, Asset, Evidence, Finding, ScanJob, Target, ToolRun
+from ..models import IOC, APIKey, Asset, Evidence, Finding, ScanJob, Target, ToolRun, User
 from .models import (
+    APIKeyModel,
     AssetModel,
     EvidenceModel,
     FindingModel,
@@ -16,6 +18,7 @@ from .models import (
     ScanJobModel,
     TargetModel,
     ToolRunModel,
+    UserModel,
 )
 
 DomainModel = TypeVar("DomainModel")
@@ -277,4 +280,91 @@ class IOCRepository(BaseRepository[IOC, IOCModel]):
             List of active IOCs.
         """
         orm_instances = self.session.query(self.orm_model).filter(self.orm_model.is_active).all()
+        return [self._to_domain(orm_instance) for orm_instance in orm_instances]
+
+
+class UserRepository(BaseRepository[User, UserModel]):
+    """Repository for User entities."""
+
+    def __init__(self, session: Session):
+        super().__init__(session, UserModel, User)
+
+    def get_by_username(self, username: str) -> User | None:
+        """Get user by username.
+
+        Args:
+            username: Username.
+
+        Returns:
+            User or None.
+        """
+        orm_instance = self.session.query(self.orm_model).filter(self.orm_model.username == username).first()
+        return self._to_domain(orm_instance) if orm_instance else None
+
+    def get_by_email(self, email: str) -> User | None:
+        """Get user by email.
+
+        Args:
+            email: Email address.
+
+        Returns:
+            User or None.
+        """
+        orm_instance = self.session.query(self.orm_model).filter(self.orm_model.email == email).first()
+        return self._to_domain(orm_instance) if orm_instance else None
+
+    def get_active_users(self) -> list[User]:
+        """Get all active users.
+
+        Returns:
+            List of active users.
+        """
+        orm_instances = self.session.query(self.orm_model).filter(self.orm_model.disabled is False).all()
+        return [self._to_domain(orm_instance) for orm_instance in orm_instances]
+
+
+class APIKeyRepository(BaseRepository[APIKey, APIKeyModel]):
+    """Repository for APIKey entities."""
+
+    def __init__(self, session: Session):
+        super().__init__(session, APIKeyModel, APIKey)
+
+    def get_by_key_hash(self, key_hash: str) -> APIKey | None:
+        """Get API key by hash.
+
+        Args:
+            key_hash: Hashed API key.
+
+        Returns:
+            APIKey or None.
+        """
+        orm_instance = self.session.query(self.orm_model).filter(self.orm_model.key_hash == key_hash).first()
+        return self._to_domain(orm_instance) if orm_instance else None
+
+    def get_by_user(self, user_id: UUID) -> list[APIKey]:
+        """Get API keys by user ID.
+
+        Args:
+            user_id: User ID.
+
+        Returns:
+            List of API keys.
+        """
+        orm_instances = self.session.query(self.orm_model).filter(self.orm_model.user_id == user_id).all()
+        return [self._to_domain(orm_instance) for orm_instance in orm_instances]
+
+    def get_active_keys(self, user_id: UUID) -> list[APIKey]:
+        """Get active API keys by user ID.
+
+        Args:
+            user_id: User ID.
+
+        Returns:
+            List of active API keys.
+        """
+        orm_instances = (
+            self.session.query(self.orm_model)
+            .filter(self.orm_model.user_id == user_id, self.orm_model.is_active is True)
+            .all()
+        )
         return [self._to_domain(orm_instance) for orm_instance in orm_instances]

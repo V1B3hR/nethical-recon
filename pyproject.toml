@@ -52,6 +52,11 @@ dependencies = [
     "feedparser>=6.0.10",  # RSS feed parsing for CISA alerts
     "jinja2>=3.1.2",  # Report templating
     "lxml>=4.9.3",  # XML parsing for SCAP/OVAL
+    # Security Hardening
+    "pyotp>=2.9.0",  # MFA/2FA support
+    "qrcode>=7.4.2",  # QR code generation
+    "Pillow>=10.0.0",  # Image processing
+    "scapy>=2.5.0",  # Network monitoring fallback
 ]
 
 [project.optional-dependencies]

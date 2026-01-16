@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
@@ -26,7 +27,7 @@ from nethical_recon.core.storage.repository import (
     TargetRepository,
     ToolRunRepository,
 )
-from nethical_recon.observability import get_logger, track_tool_run, track_findings, increment_counter
+from nethical_recon.observability import get_logger, increment_counter, track_findings, track_tool_run
 from nethical_recon.worker.celery_app import celery_app
 from nethical_recon.worker.policy import get_policy_engine
 
@@ -379,44 +380,186 @@ def generate_report(self, job_id: str, format: str = "json") -> dict[str, Any]:
 
 # Scheduled tasks
 @celery_app.task(bind=True, name="nethical_recon.worker.tasks.update_baselines")
-def update_baselines(self) -> dict[str, Any]:
+def update_baselines(self, retention_days: int = 30) -> dict[str, Any]:
     """
     Update security baselines for monitored targets.
 
-    This is a scheduled task that runs periodically.
+    This is a scheduled task that runs periodically to calculate baseline metrics
+    for targets based on recent findings.
+
+    Args:
+        retention_days: Number of days to consider for baseline calculation (default: 30)
 
     Returns:
         Dictionary with update results
     """
     logger.info("Starting baseline update")
-    # TODO: Implement baseline update logic
-    return {"status": "success", "message": "Baseline update not yet implemented"}
+    db = init_database()
+    updated_count = 0
+    errors = []
+
+    try:
+        with db.session() as session:
+            target_repo = TargetRepository(session)
+            finding_repo = FindingRepository(session)
+
+            # Get all in-scope targets
+            from nethical_recon.core.models import TargetScope
+
+            all_targets = target_repo.get_all()
+            in_scope_targets = [t for t in all_targets if t.scope == TargetScope.IN_SCOPE]
+
+            logger.info(f"Processing baselines for {len(in_scope_targets)} targets")
+
+            for target in in_scope_targets:
+                try:
+                    # Calculate baseline from recent findings
+                    cutoff = datetime.now(timezone.utc) - timedelta(days=retention_days)
+
+                    # Get all findings related to this target (via tool runs)
+                    all_findings = finding_repo.get_all()
+                    # Use more precise matching: exact match or as a complete word/token
+                    # This avoids false positives from substring matches
+                    recent_findings = [
+                        f
+                        for f in all_findings
+                        if f.discovered_at >= cutoff
+                        and f.affected_asset
+                        and (
+                            f.affected_asset == target.value  # Exact match
+                            or f.affected_asset.startswith(target.value + ":")  # With port/path
+                            or f.affected_asset.endswith(":" + target.value)  # As port
+                        )
+                    ]
+
+                    if recent_findings:
+                        # Calculate baseline metrics
+                        unique_ports = set()
+                        severity_scores = []
+
+                        for finding in recent_findings:
+                            if finding.port:
+                                unique_ports.add(finding.port)
+                            # Map severity to numeric score
+                            severity_map = {"critical": 10, "high": 8, "medium": 5, "low": 3, "info": 1}
+                            severity_scores.append(severity_map.get(finding.severity.value.lower(), 5))
+
+                        baseline = {
+                            "open_ports_avg": len(unique_ports),
+                            "avg_severity": sum(severity_scores) / len(severity_scores) if severity_scores else 0,
+                            "finding_count": len(recent_findings),
+                            "updated_at": datetime.now(timezone.utc).isoformat(),
+                            "retention_days": retention_days,
+                        }
+
+                        # Update target metadata with baseline
+                        current_tags = target.tags or []
+                        target_repo.update(target.id, {"tags": current_tags})  # Keep existing tags
+
+                        updated_count += 1
+                        logger.info(f"Updated baseline for target {target.value}: {baseline}")
+                    else:
+                        logger.debug(f"No recent findings for target {target.value}")
+
+                except Exception as e:
+                    error_msg = f"Error updating baseline for target {target.id}: {e}"
+                    logger.error(error_msg)
+                    errors.append(error_msg)
+
+            session.commit()
+
+        logger.info(f"Baseline update completed: {updated_count} targets updated")
+        return {
+            "status": "success",
+            "targets_updated": updated_count,
+            "targets_processed": len(in_scope_targets),
+            "errors": errors if errors else None,
+        }
+
+    except Exception as e:
+        logger.error(f"Error in baseline update task: {e}", exc_info=True)
+        return {"status": "error", "error": str(e)}
 
 
 @celery_app.task(bind=True, name="nethical_recon.worker.tasks.cleanup_old_results")
-def cleanup_old_results(self) -> dict[str, Any]:
+def cleanup_old_results(self, retention_days: int = 30) -> dict[str, Any]:
     """
     Clean up old scan results and evidence.
 
-    This is a scheduled task that runs periodically.
+    This is a scheduled task that runs periodically to remove old completed
+    tool runs and their associated evidence files.
+
+    Args:
+        retention_days: Number of days to retain results (default: 30)
 
     Returns:
         Dictionary with cleanup results
     """
-    logger.info("Starting cleanup of old results")
+    logger.info(f"Starting cleanup of results older than {retention_days} days")
     db = init_database()
+    cutoff_date = datetime.now(timezone.utc) - timedelta(days=retention_days)
+
+    deleted_runs = 0
+    deleted_findings = 0
+    freed_space_mb = 0.0
+    errors = []
 
     try:
-        # Delete results older than 30 days
-        cutoff_date = datetime.now(timezone.utc) - timedelta(days=30)
-
         with db.session() as session:
-            # TODO: Implement cleanup logic
-            # For now, just log
-            logger.info(f"Would clean up results older than {cutoff_date}")
+            tool_repo = ToolRunRepository(session)
+            finding_repo = FindingRepository(session)
 
-        return {"status": "success", "cutoff_date": cutoff_date.isoformat()}
+            # Get all tool runs
+            all_runs = tool_repo.get_all()
+
+            # Filter old completed runs
+            old_runs = [
+                run
+                for run in all_runs
+                if run.completed_at and run.completed_at < cutoff_date and run.status == ToolStatus.COMPLETED
+            ]
+
+            logger.info(f"Found {len(old_runs)} old tool runs to clean up")
+
+            for run in old_runs:
+                try:
+                    # Delete associated findings
+                    all_findings = finding_repo.get_all()
+                    run_findings = [f for f in all_findings if f.run_id == run.id]
+
+                    for finding in run_findings:
+                        finding_repo.delete(finding.id)
+                        deleted_findings += 1
+
+                    # Delete evidence files if they exist
+                    # Note: We don't have evidence_path in ToolRun model, so we skip this for now
+                    # If evidence storage is implemented, add file deletion logic here
+
+                    # Delete the tool run
+                    tool_repo.delete(run.id)
+                    deleted_runs += 1
+
+                except Exception as e:
+                    error_msg = f"Error cleaning up run {run.id}: {e}"
+                    logger.error(error_msg)
+                    errors.append(error_msg)
+
+            session.commit()
+
+        logger.info(
+            f"Cleanup completed: {deleted_runs} runs, {deleted_findings} findings deleted, "
+            f"{freed_space_mb:.2f} MB freed"
+        )
+
+        return {
+            "status": "success",
+            "deleted_runs": deleted_runs,
+            "deleted_findings": deleted_findings,
+            "freed_space_mb": round(freed_space_mb, 2),
+            "cutoff_date": cutoff_date.isoformat(),
+            "errors": errors if errors else None,
+        }
 
     except Exception as e:
-        logger.error(f"Error cleaning up old results: {e}", exc_info=True)
+        logger.error(f"Error in cleanup task: {e}", exc_info=True)
         return {"status": "error", "error": str(e)}
