@@ -89,8 +89,7 @@ class MySQLStore(BaseStore):
         """Initialize MySQL schema"""
         try:
             # Create stains table with JSON support (MySQL 5.7+)
-            self.cursor.execute(
-                """
+            self.cursor.execute("""
                 CREATE TABLE IF NOT EXISTS stains (
                     tag_id VARCHAR(255) PRIMARY KEY,
                     marker_type VARCHAR(100) NOT NULL,
@@ -116,8 +115,7 @@ class MySQLStore(BaseStore):
                     INDEX idx_status (status),
                     INDEX idx_timestamp (timestamp_first_seen)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-            """
-            )
+            """)
 
             self.connection.commit()
             return True

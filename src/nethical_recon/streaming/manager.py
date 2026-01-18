@@ -12,7 +12,6 @@ from typing import Any, Callable, Optional
 
 from .events import BaseEvent
 
-
 logger = logging.getLogger(__name__)
 
 

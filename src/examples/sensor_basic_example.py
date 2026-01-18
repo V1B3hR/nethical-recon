@@ -18,14 +18,12 @@ from sensors.system import HeartbeatMonitor, ResourceMonitor
 
 def print_banner():
     """Print example banner"""
-    print(
-        """
+    print("""
 ╔══════════════════════════════════════════════════════════╗
 ║         Nethical Recon - Sensor Example                 ║
 ║         Fala 1: Czujniki Ruchu i Wibracji              ║
 ╚══════════════════════════════════════════════════════════╝
-    """
-    )
+    """)
 
 
 def main():

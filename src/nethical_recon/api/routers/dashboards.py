@@ -14,7 +14,6 @@ from pydantic import BaseModel, Field
 
 from nethical_recon.dashboard.builder import DashboardBuilder, WidgetType, WidgetPosition
 
-
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/v1/dashboards", tags=["dashboards"])

@@ -62,8 +62,7 @@ class TestDotEnvBackend:
     def test_load_env_file(self, tmp_path):
         """Test loading secrets from .env file."""
         env_file = tmp_path / ".env"
-        env_file.write_text(
-            """
+        env_file.write_text("""
 # Comment line
 API_KEY=test_api_key_123
 SECRET=test_secret
@@ -71,8 +70,7 @@ SECRET=test_secret
 # Another comment
 DATABASE_URL="postgresql://user:pass@localhost/db"
 QUOTED_VALUE='single_quoted'
-"""
-        )
+""")
 
         backend = DotEnvBackend(env_file)
         assert backend.get("API_KEY") == "test_api_key_123"

@@ -192,8 +192,7 @@ by checking the referenced evidence IDs."""
             prompt_parts.append(f"- Content: {content}")
 
         prompt_parts.append("\n## Task")
-        prompt_parts.append(
-            """Generate a structured threat intelligence report including:
+        prompt_parts.append("""Generate a structured threat intelligence report including:
 1. Executive Summary (2-3 sentences)
 2. Key Findings (bullet points, each referencing evidence IDs)
 3. Risk Assessment (based on severity and confidence)
@@ -207,8 +206,7 @@ KEY_FINDINGS:
 RISK: <assessment>
 RECOMMENDATIONS:
 - <recommendation>
-CONFIDENCE: <score>"""
-        )
+CONFIDENCE: <score>""")
 
         return "\n".join(prompt_parts)
 

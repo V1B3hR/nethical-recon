@@ -63,8 +63,7 @@ class SQLiteStore(BaseStore):
         """Initialize SQLite schema"""
         try:
             # Create stains table
-            self.cursor.execute(
-                """
+            self.cursor.execute("""
                 CREATE TABLE IF NOT EXISTS stains (
                     tag_id TEXT PRIMARY KEY,
                     marker_type TEXT NOT NULL,
@@ -85,35 +84,24 @@ class SQLiteStore(BaseStore):
                     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
                 )
-            """
-            )
+            """)
 
             # Create indexes for common queries
-            self.cursor.execute(
-                """
+            self.cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_marker_type ON stains(marker_type)
-            """
-            )
-            self.cursor.execute(
-                """
+            """)
+            self.cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_color ON stains(color)
-            """
-            )
-            self.cursor.execute(
-                """
+            """)
+            self.cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_threat_score ON stains(threat_score)
-            """
-            )
-            self.cursor.execute(
-                """
+            """)
+            self.cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_status ON stains(status)
-            """
-            )
-            self.cursor.execute(
-                """
+            """)
+            self.cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_timestamp ON stains(timestamp_first_seen)
-            """
-            )
+            """)
 
             self.connection.commit()
             return True

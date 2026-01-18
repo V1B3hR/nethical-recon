@@ -89,8 +89,7 @@ class PostgreSQLStore(BaseStore):
         """Initialize PostgreSQL schema"""
         try:
             # Create stains table with JSONB for efficient JSON storage
-            self.cursor.execute(
-                """
+            self.cursor.execute("""
                 CREATE TABLE IF NOT EXISTS stains (
                     tag_id TEXT PRIMARY KEY,
                     marker_type TEXT NOT NULL,
@@ -111,54 +110,39 @@ class PostgreSQLStore(BaseStore):
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
-            """
-            )
+            """)
 
             # Create indexes for common queries
-            self.cursor.execute(
-                """
+            self.cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_marker_type ON stains(marker_type)
-            """
-            )
-            self.cursor.execute(
-                """
+            """)
+            self.cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_color ON stains(color)
-            """
-            )
-            self.cursor.execute(
-                """
+            """)
+            self.cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_threat_score ON stains(threat_score)
-            """
-            )
-            self.cursor.execute(
-                """
+            """)
+            self.cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_status ON stains(status)
-            """
-            )
-            self.cursor.execute(
-                """
+            """)
+            self.cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_timestamp ON stains(timestamp_first_seen)
-            """
-            )
+            """)
 
             # Create GIN index for JSONB columns (fast JSON queries)
-            self.cursor.execute(
-                """
+            self.cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_target_gin ON stains USING GIN (target_data)
-            """
-            )
+            """)
 
             # Create full-text search index
-            self.cursor.execute(
-                """
+            self.cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_text_search 
                 ON stains USING GIN (to_tsvector('english', 
                     COALESCE(tag_id, '') || ' ' || 
                     COALESCE(marker_type, '') || ' ' || 
                     COALESCE(hunter_notes, '')
                 ))
-            """
-            )
+            """)
 
             self.connection.commit()
             return True
