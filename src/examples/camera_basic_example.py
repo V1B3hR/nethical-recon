@@ -19,16 +19,14 @@ from cameras import CameraManager, DNSEnumerator, ShodanEye, SSLScanner, WAFDete
 
 def print_banner():
     """Print example banner"""
-    print(
-        """
+    print("""
 ╔══════════════════════════════════════════════════════════╗
 ║                                                          ║
 ║              🌙 NETHICAL CAMERAS - FALA 2 🌙              ║
 ║              IR Night Vision Reconnaissance              ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝
-    """
-    )
+    """)
 
 
 def example_dns_enumeration():

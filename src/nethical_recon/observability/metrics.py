@@ -23,7 +23,6 @@ from prometheus_client import (
     generate_latest,
 )
 
-
 # Create a custom registry to avoid conflicts
 metrics_registry = CollectorRegistry()
 

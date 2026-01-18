@@ -13,7 +13,6 @@ from pydantic import BaseModel, Field
 from nethical_recon.streaming import EventStreamManager
 from nethical_recon.streaming.manager import StreamBackend
 
-
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/v1/streaming", tags=["streaming"])

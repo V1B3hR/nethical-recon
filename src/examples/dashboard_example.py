@@ -256,8 +256,7 @@ def interactive_demo():
 
 def main():
     """Main entry point"""
-    print(
-        """
+    print("""
 ╔═══════════════════════════════════════════════════════════════════════════╗
 ║  🎯 NETHICAL HUNTER v3.0 - COMMAND CENTER DEMO                            ║
 ║  FALA 7: TABLET MYŚLIWEGO                                                 ║
@@ -275,8 +274,7 @@ Features:
   • Weapon targeting system
   • Stain database reporting
   • Fast, readable, category-organized interface
-"""
-    )
+""")
 
     # Check if running in interactive mode
     if len(sys.argv) > 1 and sys.argv[1] == "--interactive":

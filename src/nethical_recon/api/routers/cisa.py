@@ -24,7 +24,6 @@ from nethical_recon.compliance.cisa_mapping import CISACategoryMapper
 from nethical_recon.compliance.cisa_attack_surface import CISAAttackSurfaceMonitor
 from nethical_recon.plugins import CISABODChecker
 
-
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/v1/cisa", tags=["cisa"])
