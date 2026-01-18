@@ -374,11 +374,15 @@ For security issues, see [SECURITY.md](../../SECURITY.md).
 
 ### Compliance Guidance
 
-See our compliance documentation:
+Compliance documentation is planned for Roadmap 6.0 Phase II:
 
-- [Compliance Guide](../docs/compliance/)
-- [GDPR Compliance Checklist](../docs/compliance/gdpr.md)
-- [Data Protection Guidelines](../docs/compliance/data-protection.md)
+- Compliance Guide (to be created in Phase II)
+- GDPR Compliance Checklist (to be created in Phase II)
+- Data Protection Guidelines (to be created in Phase II)
+
+For now, refer to official sources:
+- GDPR: https://gdpr.eu/
+- CCPA: https://oag.ca.gov/privacy/ccpa
 
 ## Disclaimer
 
