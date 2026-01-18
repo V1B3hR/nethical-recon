@@ -1,11 +1,11 @@
 # Terms of Use
 
-**Effective Date**: January 2026  
+**Effective Date**: January 2026
 **Version**: 6.0
 
 ## Acceptance of Terms
 
-By downloading, installing, accessing, or using Nethical Recon (the "Software"), you ("User", "you", or "your") agree to be bound by these Terms of Use ("Terms"). 
+By downloading, installing, accessing, or using Nethical Recon (the "Software"), you ("User", "you", or "your") agree to be bound by these Terms of Use ("Terms").
 
 **IF YOU DO NOT AGREE TO THESE TERMS, DO NOT USE THIS SOFTWARE.**
 
@@ -23,30 +23,30 @@ By using this Software, you agree to comply with all terms of the Apache 2.0 lic
 
 You may use Nethical Recon for the following purposes:
 
-✅ **Security Assessments** with proper written authorization from system owners  
-✅ **Vulnerability Research** on your own systems and infrastructure  
-✅ **Educational Purposes** in controlled, isolated laboratory environments  
-✅ **Penetration Testing** with explicit written consent from target organization  
-✅ **Security Monitoring** of infrastructure you own or are authorized to monitor  
-✅ **Bug Bounty Programs** where you are an authorized participant  
-✅ **Red Team Operations** under formal rules of engagement  
-✅ **Compliance Testing** (PCI-DSS, SOC 2, etc.) with proper authorization  
-✅ **Research and Development** of security tools and methodologies  
+✅ **Security Assessments** with proper written authorization from system owners
+✅ **Vulnerability Research** on your own systems and infrastructure
+✅ **Educational Purposes** in controlled, isolated laboratory environments
+✅ **Penetration Testing** with explicit written consent from target organization
+✅ **Security Monitoring** of infrastructure you own or are authorized to monitor
+✅ **Bug Bounty Programs** where you are an authorized participant
+✅ **Red Team Operations** under formal rules of engagement
+✅ **Compliance Testing** (PCI-DSS, SOC 2, etc.) with proper authorization
+✅ **Research and Development** of security tools and methodologies
 
 ### Prohibited Uses
 
 You may **NOT** use Nethical Recon for:
 
-❌ **Unauthorized Access** to systems, networks, applications, or data you do not own  
-❌ **Malicious Hacking** or cracking activities  
-❌ **Data Theft** or exfiltration of sensitive information  
-❌ **Service Disruption** or denial of service attacks  
-❌ **Bypassing Security Controls** without explicit authorization  
-❌ **Illegal Activities** under applicable local, state, national, or international laws  
-❌ **Harassment** or intimidation of individuals or organizations  
-❌ **Competitive Intelligence Gathering** without authorization  
-❌ **Violating Privacy** or data protection laws  
-❌ **Any Purpose** that violates these Terms or applicable laws  
+❌ **Unauthorized Access** to systems, networks, applications, or data you do not own
+❌ **Malicious Hacking** or cracking activities
+❌ **Data Theft** or exfiltration of sensitive information
+❌ **Service Disruption** or denial of service attacks
+❌ **Bypassing Security Controls** without explicit authorization
+❌ **Illegal Activities** under applicable local, state, national, or international laws
+❌ **Harassment** or intimidation of individuals or organizations
+❌ **Competitive Intelligence Gathering** without authorization
+❌ **Violating Privacy** or data protection laws
+❌ **Any Purpose** that violates these Terms or applicable laws
 
 ### Authorization Requirement
 
@@ -66,34 +66,34 @@ You may **NOT** use Nethical Recon for:
 
 You are solely responsible for:
 
-✅ Ensuring your use of the Software is **lawful and authorized**  
-✅ Obtaining all **necessary permissions** before conducting security testing  
-✅ Complying with all **applicable laws and regulations**  
-✅ Following **organizational policies** and procedures  
-✅ Respecting **privacy** and data protection requirements  
-✅ Using the Software **ethically and responsibly**  
+✅ Ensuring your use of the Software is **lawful and authorized**
+✅ Obtaining all **necessary permissions** before conducting security testing
+✅ Complying with all **applicable laws and regulations**
+✅ Following **organizational policies** and procedures
+✅ Respecting **privacy** and data protection requirements
+✅ Using the Software **ethically and responsibly**
 
 ### Data Handling
 
 When using Nethical Recon, you are responsible for:
 
-✅ **Secure Storage** of scan results and discovered data  
-✅ **Proper Handling** of sensitive information discovered during testing  
-✅ **Compliance** with data protection regulations (GDPR, CCPA, etc.)  
-✅ **Secure Deletion** of data when no longer needed  
-✅ **Confidentiality** of results and findings  
-✅ **Responsible Disclosure** of vulnerabilities discovered  
+✅ **Secure Storage** of scan results and discovered data
+✅ **Proper Handling** of sensitive information discovered during testing
+✅ **Compliance** with data protection regulations (GDPR, CCPA, etc.)
+✅ **Secure Deletion** of data when no longer needed
+✅ **Confidentiality** of results and findings
+✅ **Responsible Disclosure** of vulnerabilities discovered
 
 ### System Security
 
 You must:
 
-✅ Keep the Software **updated** to the latest version  
-✅ Secure your **installation** and configuration  
-✅ Protect **credentials** and API keys  
-✅ Use **secure connections** (TLS/SSL) where applicable  
-✅ Implement **access controls** on scan results  
-✅ Monitor and **audit** Software usage  
+✅ Keep the Software **updated** to the latest version
+✅ Secure your **installation** and configuration
+✅ Protect **credentials** and API keys
+✅ Use **secure connections** (TLS/SSL) where applicable
+✅ Implement **access controls** on scan results
+✅ Monitor and **audit** Software usage
 
 ## Data Collection & Privacy
 
@@ -101,11 +101,11 @@ You must:
 
 Nethical Recon:
 
-✅ Stores scan results **locally** on your system (user-controlled)  
-✅ Does **NOT** transmit data to external servers (except configured integrations)  
-✅ Does **NOT** collect telemetry, usage statistics, or analytics  
-✅ Does **NOT** track users or their activities  
-✅ Respects user **privacy** and data ownership  
+✅ Stores scan results **locally** on your system (user-controlled)
+✅ Does **NOT** transmit data to external servers (except configured integrations)
+✅ Does **NOT** collect telemetry, usage statistics, or analytics
+✅ Does **NOT** track users or their activities
+✅ Respects user **privacy** and data ownership
 
 ### User Data
 
@@ -127,11 +127,11 @@ If you configure integrations with third-party services:
 
 If you process personal data while using Nethical Recon:
 
-✅ You must comply with applicable data protection laws (GDPR, CCPA, etc.)  
-✅ You must have a lawful basis for processing  
-✅ You must implement appropriate security measures  
-✅ You must respect data subject rights  
-✅ You must minimize data collection and retention  
+✅ You must comply with applicable data protection laws (GDPR, CCPA, etc.)
+✅ You must have a lawful basis for processing
+✅ You must implement appropriate security measures
+✅ You must respect data subject rights
+✅ You must minimize data collection and retention
 
 ## Intellectual Property
 
@@ -145,9 +145,9 @@ If you process personal data while using Nethical Recon:
 
 "Nethical Recon" and associated logos are trademarks. You may not:
 
-❌ Use trademarks without permission  
-❌ Imply endorsement or affiliation without authorization  
-❌ Use trademarks in a misleading manner  
+❌ Use trademarks without permission
+❌ Imply endorsement or affiliation without authorization
+❌ Use trademarks in a misleading manner
 
 ### Contributions
 
@@ -165,10 +165,10 @@ By submitting contributions to the project, you agree to license them under the 
 
 Before applying updates:
 
-✅ Review the **CHANGELOG.md** for changes and breaking updates  
-✅ **Backup** your configurations and data  
-✅ **Test** updates in non-production environments first  
-✅ Ensure **compatibility** with your infrastructure  
+✅ Review the **CHANGELOG.md** for changes and breaking updates
+✅ **Backup** your configurations and data
+✅ **Test** updates in non-production environments first
+✅ Ensure **compatibility** with your infrastructure
 
 ### No Guarantee
 
@@ -183,11 +183,11 @@ We do not guarantee:
 
 We disclaim all warranties, express or implied, including but not limited to:
 
-❌ Warranties of **merchantability**  
-❌ Warranties of **fitness for a particular purpose**  
-❌ Warranties of **non-infringement**  
-❌ Warranties that the Software will be **error-free** or **uninterrupted**  
-❌ Warranties regarding **accuracy** or **reliability** of results  
+❌ Warranties of **merchantability**
+❌ Warranties of **fitness for a particular purpose**
+❌ Warranties of **non-infringement**
+❌ Warranties that the Software will be **error-free** or **uninterrupted**
+❌ Warranties regarding **accuracy** or **reliability** of results
 
 **USE AT YOUR OWN RISK.**
 
@@ -195,10 +195,10 @@ We disclaim all warranties, express or implied, including but not limited to:
 
 To the maximum extent permitted by law:
 
-❌ We are **NOT LIABLE** for any direct, indirect, incidental, special, consequential, or punitive damages  
-❌ We are **NOT LIABLE** for loss of profits, data, use, or other intangible losses  
-❌ We are **NOT LIABLE** for legal consequences arising from your use  
-❌ We are **NOT LIABLE** for damages caused by security vulnerabilities, errors, or bugs  
+❌ We are **NOT LIABLE** for any direct, indirect, incidental, special, consequential, or punitive damages
+❌ We are **NOT LIABLE** for loss of profits, data, use, or other intangible losses
+❌ We are **NOT LIABLE** for legal consequences arising from your use
+❌ We are **NOT LIABLE** for damages caused by security vulnerabilities, errors, or bugs
 
 **This limitation applies even if we have been advised of the possibility of such damages.**
 
@@ -206,9 +206,9 @@ To the maximum extent permitted by law:
 
 You acknowledge and agree that:
 
-✅ You use the Software **at your own risk**  
-✅ You are **solely responsible** for any consequences  
-✅ You will **not hold us liable** for your actions or their results  
+✅ You use the Software **at your own risk**
+✅ You are **solely responsible** for any consequences
+✅ You will **not hold us liable** for your actions or their results
 
 ## Indemnification
 
@@ -226,19 +226,19 @@ You agree to **indemnify, defend, and hold harmless** the Nethical Recon project
 
 We reserve the right to:
 
-🚫 **Ban users** who violate these Terms  
-🚫 **Revoke access** to resources (marketplace, integrations, support)  
-🚫 **Report illegal activity** to law enforcement authorities  
-🚫 **Take legal action** for Terms violations  
+🚫 **Ban users** who violate these Terms
+🚫 **Revoke access** to resources (marketplace, integrations, support)
+🚫 **Report illegal activity** to law enforcement authorities
+🚫 **Take legal action** for Terms violations
 
 ### Your Responsibilities After Termination
 
 Upon termination, you must:
 
-✅ **Cease** all use of the Software  
-✅ **Delete** all copies of the Software  
-✅ **Securely delete** all scan results and data  
-✅ **Comply** with data handling obligations  
+✅ **Cease** all use of the Software
+✅ **Delete** all copies of the Software
+✅ **Securely delete** all scan results and data
+✅ **Comply** with data handling obligations
 
 Sections of these Terms that by their nature should survive (disclaimers, limitations of liability, indemnification) will continue to apply after termination.
 
@@ -278,10 +278,10 @@ Nethical Recon may be subject to export control laws and regulations, including:
 
 You represent and warrant that:
 
-✅ You are **not** located in an embargoed country  
-✅ You are **not** on any government prohibited or restricted party list  
-✅ You will **not** export or re-export the Software in violation of applicable laws  
-✅ You will obtain necessary export licenses if required  
+✅ You are **not** located in an embargoed country
+✅ You are **not** on any government prohibited or restricted party list
+✅ You will **not** export or re-export the Software in violation of applicable laws
+✅ You will obtain necessary export licenses if required
 
 ## Governing Law and Jurisdiction
 
@@ -323,9 +323,9 @@ You may not assign or transfer these Terms without our written consent. We may a
 
 For questions about these Terms:
 
-📧 **Email**: legal@nethical-recon.example  
-📧 **Security Issues**: security@nethical-recon.example  
-📧 **General Support**: See project documentation  
+📧 **Email**: legal@nethical-recon.example
+📧 **Security Issues**: security@nethical-recon.example
+📧 **General Support**: See project documentation
 
 ### Language
 
@@ -356,6 +356,6 @@ These Terms are provided in English. Any translations are for convenience only, 
 
 ---
 
-**Last Updated**: January 2026  
-**Version**: 6.0  
+**Last Updated**: January 2026
+**Version**: 6.0
 **Effective**: All users, all versions

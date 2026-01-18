@@ -12,31 +12,31 @@ We pledge to act and interact in ways that contribute to an open, welcoming, div
 
 Examples of behavior that contributes to a positive environment for our community include:
 
-✅ **Demonstrating empathy and kindness** toward other people  
-✅ **Being respectful** of differing opinions, viewpoints, and experiences  
-✅ **Giving and gracefully accepting** constructive feedback  
-✅ **Accepting responsibility** and apologizing to those affected by our mistakes, and learning from the experience  
-✅ **Focusing on what is best** not just for us as individuals, but for the overall community  
-✅ **Using welcoming and inclusive language**  
-✅ **Being collaborative** and supportive  
-✅ **Showing patience** with newcomers and those learning  
+✅ **Demonstrating empathy and kindness** toward other people
+✅ **Being respectful** of differing opinions, viewpoints, and experiences
+✅ **Giving and gracefully accepting** constructive feedback
+✅ **Accepting responsibility** and apologizing to those affected by our mistakes, and learning from the experience
+✅ **Focusing on what is best** not just for us as individuals, but for the overall community
+✅ **Using welcoming and inclusive language**
+✅ **Being collaborative** and supportive
+✅ **Showing patience** with newcomers and those learning
 
 ### Unacceptable Behavior
 
 Examples of unacceptable behavior include:
 
-❌ **Trolling, insulting or derogatory comments**, and personal or political attacks  
-❌ **Public or private harassment**  
-❌ **Publishing others' private information**, such as a physical or email address, without their explicit permission  
-❌ **Sexual attention or advances** of any kind  
-❌ **The use of sexualized language or imagery**, and sexual attention or advances of any kind  
-❌ **Violent threats or language** directed against another person  
-❌ **Discriminatory jokes and language**  
-❌ **Posting sexually explicit or violent material**  
-❌ **Deliberate intimidation, stalking, or following** (online or in person)  
-❌ **Advocating for, or encouraging**, any of the above behavior  
-❌ **Sustained disruption** of community discussions or events  
-❌ **Other conduct** which could reasonably be considered inappropriate in a professional setting  
+❌ **Trolling, insulting or derogatory comments**, and personal or political attacks
+❌ **Public or private harassment**
+❌ **Publishing others' private information**, such as a physical or email address, without their explicit permission
+❌ **Sexual attention or advances** of any kind
+❌ **The use of sexualized language or imagery**, and sexual attention or advances of any kind
+❌ **Violent threats or language** directed against another person
+❌ **Discriminatory jokes and language**
+❌ **Posting sexually explicit or violent material**
+❌ **Deliberate intimidation, stalking, or following** (online or in person)
+❌ **Advocating for, or encouraging**, any of the above behavior
+❌ **Sustained disruption** of community discussions or events
+❌ **Other conduct** which could reasonably be considered inappropriate in a professional setting
 
 ## Enforcement Responsibilities
 
@@ -81,11 +81,11 @@ When reporting, please include:
 
 When you file a report, we will:
 
-✅ **Acknowledge receipt** within 48 hours  
-✅ **Review and investigate** the incident thoroughly and fairly  
-✅ **Keep you informed** of our progress  
-✅ **Maintain confidentiality** to the extent possible  
-✅ **Take appropriate action** based on our findings  
+✅ **Acknowledge receipt** within 48 hours
+✅ **Review and investigate** the incident thoroughly and fairly
+✅ **Keep you informed** of our progress
+✅ **Maintain confidentiality** to the extent possible
+✅ **Take appropriate action** based on our findings
 
 ## Enforcement Guidelines
 
@@ -176,7 +176,7 @@ For answers to common questions about this code of conduct, see the FAQ at [http
 
 This Code of Conduct may be updated periodically. We will announce significant changes through project channels.
 
-**Last Updated**: January 2026  
+**Last Updated**: January 2026
 **Version**: 2.1 (based on Contributor Covenant 2.1)
 
 ---

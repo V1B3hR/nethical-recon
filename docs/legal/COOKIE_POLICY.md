@@ -1,7 +1,7 @@
 # Cookie Policy
 
-**Effective Date**: January 2026  
-**Last Updated**: January 2026  
+**Effective Date**: January 2026
+**Last Updated**: January 2026
 **Version**: 6.0
 
 ## Introduction
@@ -57,7 +57,7 @@ These cookies are essential for the web interface to function and cannot be disa
 | `csrf_token` | Cross-Site Request Forgery protection | Session | HTTP-only, Secure |
 | `auth_token` | API authentication token | Configurable | HTTP-only, Secure |
 
-**Legal Basis**: Legitimate interest (essential functionality)  
+**Legal Basis**: Legitimate interest (essential functionality)
 **Can be disabled**: No (site won't work without them)
 
 ### 2. Functional Cookies
@@ -70,7 +70,7 @@ These cookies enable enhanced functionality and personalization.
 | `recent_scans` | Quick access to recent scans | 30 days | Standard |
 | `sidebar_state` | Remember sidebar collapsed/expanded | 1 year | Standard |
 
-**Legal Basis**: Consent or legitimate interest  
+**Legal Basis**: Consent or legitimate interest
 **Can be disabled**: Yes (through settings)
 
 ### 3. Analytics Cookies (Optional)
@@ -83,7 +83,7 @@ If you configure analytics integrations:
 |---------|----------|----------|------|
 | Usage analytics | Your choice | Varies | Third-party |
 
-**Legal Basis**: Consent (opt-in)  
+**Legal Basis**: Consent (opt-in)
 **Can be disabled**: Yes (don't configure analytics)
 
 ### 4. Advertising Cookies
@@ -188,33 +188,33 @@ Besides cookies, web applications may use:
 
 ### Local Storage
 
-**Purpose**: Store larger amounts of data locally  
+**Purpose**: Store larger amounts of data locally
 **Usage in Nethical Recon**:
 - Cached scan results
 - UI preferences
 - Temporary data
 
-**Location**: Browser's local storage  
+**Location**: Browser's local storage
 **Persistence**: Until manually cleared
 
 ### Session Storage
 
-**Purpose**: Temporary storage for current session  
+**Purpose**: Temporary storage for current session
 **Usage in Nethical Recon**:
 - Form data during multi-step scans
 - Temporary UI state
 
-**Location**: Browser's session storage  
+**Location**: Browser's session storage
 **Persistence**: Until tab/window is closed
 
 ### IndexedDB
 
-**Purpose**: Client-side database for structured data  
+**Purpose**: Client-side database for structured data
 **Usage in Nethical Recon**:
 - Offline capability
 - Large dataset caching
 
-**Location**: Browser's IndexedDB  
+**Location**: Browser's IndexedDB
 **Persistence**: Until manually cleared
 
 ### Web Storage Management
@@ -300,11 +300,11 @@ Cookies are used solely for functionality and analytics (if configured).
 
 Nethical Recon implements cookie security best practices:
 
-🔒 **HttpOnly Flag**: Prevents JavaScript access (where appropriate)  
-🔒 **Secure Flag**: Only transmitted over HTTPS  
-🔒 **SameSite Attribute**: Protects against CSRF  
-🔒 **Short Expiration**: Sessions expire after inactivity  
-🔒 **Encryption**: Sensitive cookie data is encrypted  
+🔒 **HttpOnly Flag**: Prevents JavaScript access (where appropriate)
+🔒 **Secure Flag**: Only transmitted over HTTPS
+🔒 **SameSite Attribute**: Protects against CSRF
+🔒 **Short Expiration**: Sessions expire after inactivity
+🔒 **Encryption**: Sensitive cookie data is encrypted
 
 ### Recommendations
 
@@ -425,12 +425,12 @@ This Cookie Policy is provided for informational purposes and does not constitut
 
 ### Key Points
 
-✅ **Core software**: No cookies (CLI, API)  
-✅ **Web UI**: Minimal cookies for functionality  
-✅ **No tracking**: We don't track users or sell data  
-✅ **Control**: You control what cookies are set  
-✅ **Security**: Cookies are secured with best practices  
-✅ **Consent**: Required for non-essential cookies (EU)  
+✅ **Core software**: No cookies (CLI, API)
+✅ **Web UI**: Minimal cookies for functionality
+✅ **No tracking**: We don't track users or sell data
+✅ **Control**: You control what cookies are set
+✅ **Security**: Cookies are secured with best practices
+✅ **Consent**: Required for non-essential cookies (EU)
 
 ### Your Choices
 
@@ -442,8 +442,8 @@ This Cookie Policy is provided for informational purposes and does not constitut
 
 ---
 
-**Last Updated**: January 2026  
-**Version**: 6.0  
+**Last Updated**: January 2026
+**Version**: 6.0
 **Applies to**: Nethical Recon Web UI
 
 ---

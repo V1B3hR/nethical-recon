@@ -10,13 +10,13 @@ Nethical Recon is a security reconnaissance and vulnerability assessment tool de
 
 This tool is intended for:
 
-✅ **Security Professionals** conducting authorized security assessments  
-✅ **System Administrators** testing their own infrastructure  
-✅ **Organizations** performing security audits with proper authorization  
-✅ **Security Researchers** conducting ethical security research  
-✅ **Educational Institutions** teaching cybersecurity in controlled environments  
-✅ **Bug Bounty Hunters** working within authorized bug bounty programs  
-✅ **Red Teams** operating under formal rules of engagement  
+✅ **Security Professionals** conducting authorized security assessments
+✅ **System Administrators** testing their own infrastructure
+✅ **Organizations** performing security audits with proper authorization
+✅ **Security Researchers** conducting ethical security research
+✅ **Educational Institutions** teaching cybersecurity in controlled environments
+✅ **Bug Bounty Hunters** working within authorized bug bounty programs
+✅ **Red Teams** operating under formal rules of engagement
 
 ## ⚠️ Legal Use Only - WARNING
 
@@ -26,11 +26,11 @@ This tool is intended for:
 
 Users **MUST** obtain **explicit written authorization** before:
 
-❌ Scanning networks or systems they do not own  
-❌ Testing applications without explicit permission  
-❌ Accessing data or resources without authorization  
-❌ Performing any security testing on third-party systems  
-❌ Exploiting vulnerabilities on systems without permission  
+❌ Scanning networks or systems they do not own
+❌ Testing applications without explicit permission
+❌ Accessing data or resources without authorization
+❌ Performing any security testing on third-party systems
+❌ Exploiting vulnerabilities on systems without permission
 
 ### Legal Consequences
 
@@ -66,12 +66,12 @@ This software is provided **"AS IS"** without warranty of any kind, either expre
 
 The authors, contributors, and maintainers of Nethical Recon:
 
-❌ **Do NOT guarantee** the accuracy, reliability, completeness, or fitness for any particular purpose  
-❌ **Are NOT responsible** for any damages, losses, or consequences resulting from the use or inability to use this software  
-❌ **Are NOT liable** for direct, indirect, incidental, special, consequential, or punitive damages  
-❌ **Do NOT warrant** that the software will be error-free, uninterrupted, or free from vulnerabilities  
-❌ **Are NOT liable** for data loss, system damage, or legal consequences arising from your use  
-❌ **Do NOT endorse** illegal, unethical, or unauthorized use of this software  
+❌ **Do NOT guarantee** the accuracy, reliability, completeness, or fitness for any particular purpose
+❌ **Are NOT responsible** for any damages, losses, or consequences resulting from the use or inability to use this software
+❌ **Are NOT liable** for direct, indirect, incidental, special, consequential, or punitive damages
+❌ **Do NOT warrant** that the software will be error-free, uninterrupted, or free from vulnerabilities
+❌ **Are NOT liable** for data loss, system damage, or legal consequences arising from your use
+❌ **Do NOT endorse** illegal, unethical, or unauthorized use of this software
 
 ### Disclaimer of Accuracy
 
@@ -87,14 +87,14 @@ Nethical Recon may produce:
 
 By downloading, installing, or using Nethical Recon, you acknowledge and agree that:
 
-✅ **You are solely responsible** for ensuring your use is lawful and authorized  
-✅ **You will obtain all necessary authorizations** before conducting any security testing  
-✅ **You will comply** with all applicable laws, regulations, and organizational policies  
-✅ **You will not hold** the authors, contributors, or maintainers liable for your actions  
-✅ **You understand** that unauthorized access to computer systems is a crime  
-✅ **You accept full responsibility** for any consequences of your use of this software  
-✅ **You will use** this tool ethically and responsibly  
-✅ **You will not use** this tool for malicious, illegal, or unauthorized purposes  
+✅ **You are solely responsible** for ensuring your use is lawful and authorized
+✅ **You will obtain all necessary authorizations** before conducting any security testing
+✅ **You will comply** with all applicable laws, regulations, and organizational policies
+✅ **You will not hold** the authors, contributors, or maintainers liable for your actions
+✅ **You understand** that unauthorized access to computer systems is a crime
+✅ **You accept full responsibility** for any consequences of your use of this software
+✅ **You will use** this tool ethically and responsibly
+✅ **You will not use** this tool for malicious, illegal, or unauthorized purposes
 
 ## Compliance Requirements
 
@@ -254,13 +254,13 @@ If using Nethical Recon in an educational environment:
 
 When using Nethical Recon, you may encounter personal data. You must:
 
-✅ Process personal data lawfully and transparently  
-✅ Collect data only for specified, legitimate purposes  
-✅ Minimize data collection (collect only what's necessary)  
-✅ Ensure data accuracy  
-✅ Limit data retention (delete when no longer needed)  
-✅ Implement appropriate security measures  
-✅ Document data processing activities  
+✅ Process personal data lawfully and transparently
+✅ Collect data only for specified, legitimate purposes
+✅ Minimize data collection (collect only what's necessary)
+✅ Ensure data accuracy
+✅ Limit data retention (delete when no longer needed)
+✅ Implement appropriate security measures
+✅ Document data processing activities
 
 ### Sensitive Data
 
@@ -333,6 +333,6 @@ If you have questions about this disclaimer or legal requirements:
 
 ---
 
-**Last Updated**: January 2026  
-**Version**: 6.0  
+**Last Updated**: January 2026
+**Version**: 6.0
 **Applies to**: All versions of Nethical Recon

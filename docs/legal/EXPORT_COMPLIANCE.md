@@ -1,6 +1,6 @@
 # Export Compliance
 
-**Effective Date**: January 2026  
+**Effective Date**: January 2026
 **Version**: 6.0
 
 ## Overview
@@ -132,7 +132,7 @@ Applies to dual-use items (civilian and military use).
 
 #### Export Authorization
 
-**Within EU:** Generally no license required  
+**Within EU:** Generally no license required
 **Outside EU:** May require export authorization depending on:
 - Destination country
 - End-user
@@ -321,9 +321,9 @@ Nethical Recon may use encryption for:
 
 ### Encryption Strength
 
-**Symmetric:** AES-128, AES-256  
-**Asymmetric:** RSA-2048, RSA-4096, ECDSA  
-**Hashing:** SHA-256, SHA-512  
+**Symmetric:** AES-128, AES-256
+**Asymmetric:** RSA-2048, RSA-4096, ECDSA
+**Hashing:** SHA-256, SHA-512
 
 ## Deemed Export Considerations
 
@@ -437,15 +437,15 @@ If you become aware of export control violations:
 
 By using Nethical Recon, you acknowledge that:
 
-✅ You have read this export compliance document  
-✅ You understand your export compliance responsibilities  
-✅ You will comply with all applicable export control laws  
-✅ You will not violate sanctions or embargoes  
-✅ You accept full responsibility for your compliance  
+✅ You have read this export compliance document
+✅ You understand your export compliance responsibilities
+✅ You will comply with all applicable export control laws
+✅ You will not violate sanctions or embargoes
+✅ You accept full responsibility for your compliance
 
 ---
 
-**Last Updated**: January 2026  
+**Last Updated**: January 2026
 **Version**: 6.0
 
 ---

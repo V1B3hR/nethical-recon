@@ -20,11 +20,11 @@ By participating in this project, you agree to abide by our [Code of Conduct](CO
 
 ### Our Standards
 
-✅ **Be respectful and inclusive** of all contributors  
-✅ **Accept constructive criticism** gracefully  
-✅ **Focus on what's best** for the community  
-✅ **Show empathy** towards other community members  
-✅ **Use welcoming and inclusive language**  
+✅ **Be respectful and inclusive** of all contributors
+✅ **Accept constructive criticism** gracefully
+✅ **Focus on what's best** for the community
+✅ **Show empathy** towards other community members
+✅ **Use welcoming and inclusive language**
 
 ❌ **Harassment, discrimination, or unprofessional conduct will NOT be tolerated.**
 
@@ -270,10 +270,10 @@ class TestFeatureName:
         """Test basic functionality."""
         # Arrange
         expected = "result"
-        
+
         # Act
         actual = module.function()
-        
+
         # Assert
         assert actual == expected
 
@@ -368,11 +368,11 @@ By submitting a contribution to this project, you agree to the following:
 
 ### Your Agreement
 
-✅ **Original Work**: Your contribution is your original work or you have rights to contribute it  
-✅ **License Grant**: You grant a perpetual, worldwide, non-exclusive, royalty-free license to your contribution under the Apache 2.0 license  
-✅ **Patent Grant**: You grant a patent license for any patents you own that cover your contribution  
-✅ **No Obligation**: You understand your contribution may be used, modified, or not used at all  
-✅ **Relicensing**: You understand the project may be relicensed in the future (with community notice)  
+✅ **Original Work**: Your contribution is your original work or you have rights to contribute it
+✅ **License Grant**: You grant a perpetual, worldwide, non-exclusive, royalty-free license to your contribution under the Apache 2.0 license
+✅ **Patent Grant**: You grant a patent license for any patents you own that cover your contribution
+✅ **No Obligation**: You understand your contribution may be used, modified, or not used at all
+✅ **Relicensing**: You understand the project may be relicensed in the future (with community notice)
 
 ### No Separate Signature Required
 
@@ -496,5 +496,5 @@ Every contribution, no matter how small, makes Nethical Recon better. Thank you 
 
 ---
 
-**Last Updated**: January 2026  
+**Last Updated**: January 2026
 **Version**: 6.0

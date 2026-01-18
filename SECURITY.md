@@ -22,11 +22,11 @@ Please report security vulnerabilities through one of the following channels:
 - **🐛 GitHub Security Advisories** (preferred method)
   - Navigate to the [Security tab](https://github.com/V1B3hR/nethical-recon/security/advisories)
   - Click "Report a vulnerability"
-  
+
 - **📧 Email**: security@nethical-recon.example
   - For encrypted communication, use our PGP key (see below)
-  
-- **🔐 PGP Key**: 
+
+- **🔐 PGP Key**:
   ```
   [PGP PUBLIC KEY TO BE ADDED]
   Key ID: [TO BE GENERATED]
@@ -116,22 +116,22 @@ The following are generally not considered security vulnerabilities:
 
 We support good-faith security research and will not pursue legal action against researchers who:
 
-✅ Make a good-faith effort to avoid privacy violations, data destruction, and service disruption  
-✅ Only interact with accounts you own or with explicit permission from the account holder  
-✅ Do not exploit a vulnerability beyond the minimum necessary to demonstrate it  
-✅ Give us reasonable time to fix the issue before public disclosure  
-✅ Do not access, modify, or delete data belonging to others  
-✅ Comply with all applicable laws and regulations  
+✅ Make a good-faith effort to avoid privacy violations, data destruction, and service disruption
+✅ Only interact with accounts you own or with explicit permission from the account holder
+✅ Do not exploit a vulnerability beyond the minimum necessary to demonstrate it
+✅ Give us reasonable time to fix the issue before public disclosure
+✅ Do not access, modify, or delete data belonging to others
+✅ Comply with all applicable laws and regulations
 
 ### Our Commitments
 
 In return, we commit to:
 
-✅ Respond to your report promptly and keep you informed of our progress  
-✅ Work with you to understand and validate the issue  
-✅ Credit you for the discovery (unless you prefer to remain anonymous)  
-✅ Not pursue legal action against researchers who comply with this policy  
-✅ Consider your report for our security researcher recognition program  
+✅ Respond to your report promptly and keep you informed of our progress
+✅ Work with you to understand and validate the issue
+✅ Credit you for the discovery (unless you prefer to remain anonymous)
+✅ Not pursue legal action against researchers who comply with this policy
+✅ Consider your report for our security researcher recognition program
 
 ## Recognition Program
 
@@ -147,15 +147,15 @@ Security researchers who report valid vulnerabilities will be listed in our Secu
   - Featured recognition in release notes
   - Prominent placement in Hall of Fame
   - Potential bug bounty (future program)
-  
+
 - **🟠 High Severity**
   - Public acknowledgment in security advisory
   - Hall of Fame listing
-  
+
 - **🟡 Medium Severity**
   - Credits in changelog
   - Hall of Fame listing
-  
+
 - **🟢 Low Severity**
   - Internal recognition
   - Optional Hall of Fame listing
@@ -178,7 +178,7 @@ As a security tool, Nethical Recon users should follow these best practices:
 
 ## Security Updates
 
-Security updates are released as soon as possible after a vulnerability is confirmed and fixed. 
+Security updates are released as soon as possible after a vulnerability is confirmed and fixed.
 
 - **Critical/High**: Emergency patch release
 - **Medium/Low**: Included in next scheduled release
@@ -191,5 +191,5 @@ If you have questions about this security policy, please contact security@nethic
 
 ---
 
-**Last Updated**: January 2026  
+**Last Updated**: January 2026
 **Version**: 6.0

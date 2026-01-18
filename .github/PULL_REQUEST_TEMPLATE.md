@@ -53,10 +53,10 @@ Relates to #
 
 <!-- Provide details about your test configuration -->
 
-- **OS**: 
-- **Python Version**: 
-- **Database**: 
-- **Deployment Method**: 
+- **OS**:
+- **Python Version**:
+- **Database**:
+- **Deployment Method**:
 
 ### Test Results
 
@@ -163,8 +163,8 @@ OR
 ### Benchmarks (if applicable)
 
 ```
-Before: 
-After: 
+Before:
+After:
 ```
 
 ## Deployment Notes
